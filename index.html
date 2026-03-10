@@ -196,6 +196,18 @@ a{color:inherit;text-decoration:none}
 .detail-tips-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px}
 .detail-tips-title{font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px}
 
+/* CURRENCY TABS */
+.curr-tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);padding:0 16px}
+.curr-tab{flex:1;padding:10px 4px;font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;background:none;border:none;border-bottom:2.5px solid transparent;color:var(--text-dim);cursor:pointer;font-family:'Inter',sans-serif;transition:color .15s,border-color .15s;-webkit-tap-highlight-color:transparent}
+.curr-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* LOCAL CURRENCY COLOR */
+.field-label.loc{color:var(--loc)}
+.field-pfx.loc{color:var(--loc);background:rgba(var(--loc-rgb),.07)}
+.cur-input.loc:focus{border-color:var(--loc);box-shadow:0 0 0 3px rgba(var(--loc-rgb),.12)}
+.calc-pill.loc{background:rgba(var(--loc-rgb),.05)}
+.calc-pill.loc .calc-pill-val{color:var(--loc)}
+
 /* CONVERTER */
 .converter-header{text-align:center;padding:22px 16px 0;max-width:860px;margin:0 auto}
 .conv-eyebrow{font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px}
@@ -411,31 +423,53 @@ tbody td:first-child{text-align:left;font-weight:500}
     <div class="hero-title">Конвертер VND</div>
     <div class="hero-sub" id="conv-rate-sub">Загрузка актуального курса…</div>
   </div>
+
+  <!-- Валютные вкладки -->
+  <div class="curr-tabs" id="curr-tabs">
+    <button class="curr-tab active" data-cur="BYN">BYN</button>
+    <button class="curr-tab" data-cur="UAH">UAH</button>
+    <button class="curr-tab" data-cur="RUB">RUB</button>
+    <button class="curr-tab" data-cur="KZT">KZT</button>
+  </div>
+
   <div class="content">
+    <!-- Конвертер: VND / USD / выбранная валюта -->
     <div class="conv-block">
-      <div class="conv-hint">Введите сумму в любой валюте — остальные пересчитаются</div>
+      <div class="conv-hint" id="conv-hint">Введите сумму в любой валюте — остальные пересчитаются</div>
       <div class="inputs-grid">
         <div class="field-wrap"><div class="field-label vnd">VND</div><div class="field-inner"><span class="field-pfx vnd">VND</span><input class="cur-input vnd" id="inp-vnd" type="number" value="100000" min="0" step="1000"></div></div>
         <div class="field-wrap"><div class="field-label usd">USD</div><div class="field-inner"><span class="field-pfx usd">USD</span><input class="cur-input usd" id="inp-usd" type="number" min="0" step="0.01"></div></div>
-        <div class="field-wrap"><div class="field-label byn">BYN</div><div class="field-inner"><span class="field-pfx byn">BYN</span><input class="cur-input byn" id="inp-byn" type="number" min="0" step="0.01"></div></div>
+        <div class="field-wrap" id="inp-local-wrap"><div class="field-label loc" id="inp-local-label">BYN</div><div class="field-inner"><span class="field-pfx loc" id="inp-local-pfx">BYN</span><input class="cur-input loc" id="inp-loc" type="number" min="0" step="0.01"></div></div>
       </div>
       <div class="sync-note">↔ все три поля синхронизированы</div>
     </div>
+
+    <!-- Ползунок -->
     <div class="calc-section">
       <div class="calc-header"><span class="calc-title">Подсчёт · VND</span><span class="calc-display" id="calc-vnd">500 000 VND</span></div>
       <input type="range" id="vnd-slider" min="10000" max="5000000" step="10000" value="500000">
       <div class="calc-results">
         <div class="calc-pill usd"><div class="calc-pill-label">USD</div><div class="calc-pill-val" id="calc-usd">—</div></div>
-        <div class="calc-pill byn"><div class="calc-pill-label">BYN</div><div class="calc-pill-val" id="calc-byn">—</div></div>
+        <div class="calc-pill loc"><div class="calc-pill-label" id="calc-loc-label">BYN</div><div class="calc-pill-val" id="calc-loc">—</div></div>
       </div>
     </div>
+
+    <!-- Круглые суммы -->
     <div class="tbl-section">
       <div class="section-title">Круглые суммы</div>
-      <table id="conv-table"><thead><tr><th style="text-align:left">VND</th><th>USD</th><th>BYN</th></tr></thead><tbody></tbody></table>
+      <table id="conv-table">
+        <thead><tr><th style="text-align:left">VND</th><th>USD</th><th id="conv-tbl-loc-hdr">BYN</th></tr></thead>
+        <tbody></tbody>
+      </table>
     </div>
+
+    <!-- Типичные цены -->
     <div class="tbl-section">
       <div class="section-title">Типичные цены в Дананге</div>
-      <div class="tbl-wrap"><table id="prices-table"><thead><tr><th style="text-align:left">Товар / услуга</th><th>VND</th><th>USD</th><th>BYN</th></tr></thead><tbody></tbody></table></div>
+      <div class="tbl-wrap"><table id="prices-table">
+        <thead><tr><th style="text-align:left">Товар / услуга</th><th>VND</th><th>USD</th><th id="prices-tbl-loc-hdr">BYN</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
     </div>
     <p class="footnote" id="conv-footnote">Актуальный курс загружается…</p>
   </div>
@@ -1547,67 +1581,82 @@ function applyLF(){
 /* ═══════════════════════════════════════════
    CONVERTER LOGIC
 ═══════════════════════════════════════════ */
-/* ═══ CONVERTER — live rates ═══ */
-let USD_VND=26200, BYN_PER_USD=2.87, BYN_VND=USD_VND/BYN_PER_USD;
+/* ═══ CONVERTER — multi-currency ═══ */
 
-function fmtDate(d){const months=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`}
+// Currency configs: fallback rates (USD→each), display name, color
+const CURRENCIES = {
+  BYN: { name:'Белорусский рубль', fallback:2.87,  color:'#7A2318', rgb:'122,35,24',  fmt:(v,h)=>{ const n=v<.1?v.toFixed(3):v<10?v.toFixed(2):v.toFixed(1); return h?`<span class="cur-sym">BYN</span>${n}`:'BYN '+n } },
+  UAH: { name:'Украинская гривна', fallback:41.5,  color:'#1A5C9E', rgb:'26,92,158',  fmt:(v,h)=>{ const n=v<1?v.toFixed(2):v.toFixed(0); return h?`<span class="cur-sym">UAH</span>${n}`:'UAH '+n } },
+  RUB: { name:'Российский рубль',  fallback:90.5,  color:'#1A6B3A', rgb:'26,107,58',  fmt:(v,h)=>{ const n=v<1?v.toFixed(2):v.toFixed(0); return h?`<span class="cur-sym">RUB</span>${n}`:'RUB '+n } },
+  KZT: { name:'Казахский тенге',   fallback:520.0, color:'#7A6A00', rgb:'122,106,0',  fmt:(v,h)=>{ const n=v<1?v.toFixed(2):v.toFixed(0); return h?`<span class="cur-sym">KZT</span>${n}`:'KZT '+n } },
+};
 
-function applyRates(){
-  BYN_VND=USD_VND/BYN_PER_USD;
-  const today=new Date();
-  const ds=fmtDate(today);
-  const usdFmt=Math.round(USD_VND).toLocaleString('ru');
-  const bynFmt=Math.round(BYN_VND).toLocaleString('ru');
-  const sub=document.getElementById('conv-rate-sub');
-  if(sub) sub.textContent=`Курс на ${ds} · 1 USD = ${usdFmt} VND · 1 BYN ≈ ${bynFmt} VND`;
-  const fn=document.getElementById('conv-footnote');
-  if(fn) fn.textContent=`Курс на ${ds} · 1 USD ≈ ${usdFmt} VND · 1 BYN ≈ ${(USD_VND/BYN_VND).toFixed(3)} USD`;
-  // refresh inputs and tables
-  sfV(parseFloat(iV.value)||0);
-  sl.dispatchEvent(new Event('input'));
-  // rebuild round-sum table
-  const ct=document.querySelector('#conv-table tbody');
-  if(ct){ct.innerHTML='';[1000,5000,10000,20000,50000,100000,200000,500000,1000000,2000000,5000000,10000000].forEach(v=>{const tr=document.createElement('tr');tr.innerHTML=`<td class="vnd-col">${v.toLocaleString('ru')} <span class="cur-sym">VND</span></td><td class="usd-col">${fU(v/USD_VND,true)}</td><td class="byn-col">${fB(v/BYN_VND,true)}</td>`;tr.addEventListener('click',()=>fillVND(v));ct.appendChild(tr);})}
-  // rebuild prices table
-  const pt=document.querySelector('#prices-table tbody');
-  if(pt){pt.innerHTML='';prices.forEach(p=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${p.n}<span class="badge">${cL[p.c]}</span></td><td class="vnd-col">${p.v.toLocaleString('ru')} <span class="cur-sym">VND</span></td><td class="usd-col">${fU(p.v/USD_VND,true)}</td><td class="byn-col">${fB(p.v/BYN_VND,true)}</td>`;tr.addEventListener('click',()=>{document.querySelectorAll('#prices-table tbody tr').forEach(r=>r.classList.remove('highlight'));tr.classList.add('highlight');fillVND(p.v)});pt.appendChild(tr);})}
-}
+let USD_VND = 26200;
+let localRates = { BYN:2.87, UAH:41.5, RUB:90.5, KZT:520.0 };
+let activeCur = 'BYN';
 
-async function fetchRates(){
-  try{
-    // Frankfurter API — free, no key, CORS-friendly
-    const r=await fetch('https://api.frankfurter.app/latest?from=USD&to=VND,BYN',{signal:AbortSignal.timeout(5000)});
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const d=await r.json();
-    if(d.rates&&d.rates.VND) USD_VND=Math.round(d.rates.VND);
-    if(d.rates&&d.rates.BYN) BYN_PER_USD=1/d.rates.BYN; // BYN per USD
-  } catch(e){
-    // fallback: try exchangerate-api open endpoint
-    try{
-      const r2=await fetch('https://open.er-api.com/v6/latest/USD',{signal:AbortSignal.timeout(5000)});
-      const d2=await r2.json();
-      if(d2.rates&&d2.rates.VND) USD_VND=Math.round(d2.rates.VND);
-      if(d2.rates&&d2.rates.BYN) BYN_PER_USD=d2.rates.BYN;
-    } catch(e2){/* silent — use hardcoded fallback */}
-  }
-  applyRates();
-}
+function curVND(cur){ return USD_VND / localRates[cur]; }
+function fmtDate(d){ const m=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря']; return `${d.getDate()} ${m[d.getMonth()]} ${d.getFullYear()}` }
+function fU(v,h=false){ const n=v<.1?v.toFixed(3):v<10?v.toFixed(2):v.toFixed(1); return h?`<span class="cur-sym">$</span>${n}`:'$ '+n }
+function fL(v,h=false){ return CURRENCIES[activeCur].fmt(v,h) }
 
-function fU(v,h=false){const n=v<.1?v.toFixed(3):v<10?v.toFixed(2):v.toFixed(1);return h?`<span class="cur-sym">$</span>${n}`:'$ '+n}
-function fB(v,h=false){const n=v<.1?v.toFixed(3):v<10?v.toFixed(2):v.toFixed(1);return h?`<span class="cur-sym">BYN</span>${n}`:'BYN '+n}
-const iV=document.getElementById('inp-vnd'),iU=document.getElementById('inp-usd'),iB=document.getElementById('inp-byn');
+const iV=document.getElementById('inp-vnd');
+const iU=document.getElementById('inp-usd');
+const iL=document.getElementById('inp-loc');
 let upd=false;
-function sfV(v){if(upd)return;upd=true;iU.value=v?(v/USD_VND).toFixed(2):'';iB.value=v?(v/BYN_VND).toFixed(2):'';upd=false}
-function sfU(v){if(upd)return;upd=true;iV.value=v?Math.round(v*USD_VND):'';iB.value=v?(v*BYN_PER_USD).toFixed(2):'';upd=false}
-function sfB(v){if(upd)return;upd=true;iV.value=v?Math.round(v*BYN_VND):'';iU.value=v?(v/BYN_PER_USD).toFixed(2):'';upd=false}
+
+function sfV(v){
+  if(upd)return; upd=true;
+  const c=curVND(activeCur);
+  const dec=activeCur==='BYN'?2:0;
+  iU.value=v?(v/USD_VND).toFixed(2):'';
+  iL.value=v?(v/c).toFixed(dec):'';
+  upd=false;
+}
+function sfU(v){
+  if(upd)return; upd=true;
+  const dec=activeCur==='BYN'?2:0;
+  iV.value=v?Math.round(v*USD_VND):'';
+  iL.value=v?(v*localRates[activeCur]).toFixed(dec):'';
+  upd=false;
+}
+function sfL(v){
+  if(upd)return; upd=true;
+  const c=curVND(activeCur);
+  iV.value=v?Math.round(v*c):'';
+  iU.value=v?(v/localRates[activeCur]).toFixed(2):'';
+  upd=false;
+}
+
 iV.addEventListener('input',()=>sfV(parseFloat(iV.value)||0));
 iU.addEventListener('input',()=>sfU(parseFloat(iU.value)||0));
-iB.addEventListener('input',()=>sfB(parseFloat(iB.value)||0));
-sfV(100000);
+iL.addEventListener('input',()=>sfL(parseFloat(iL.value)||0));
+
 const sl=document.getElementById('vnd-slider');
-sl.addEventListener('input',()=>{const v=+sl.value;document.getElementById('calc-vnd').textContent=v.toLocaleString('ru')+' VND';document.getElementById('calc-usd').textContent=fU(v/USD_VND);document.getElementById('calc-byn').textContent=fB(v/BYN_VND)});
-sl.dispatchEvent(new Event('input'));
+sl.addEventListener('input',()=>{
+  const v=+sl.value;
+  const c=curVND(activeCur);
+  document.getElementById('calc-vnd').textContent=v.toLocaleString('ru')+' VND';
+  document.getElementById('calc-usd').textContent=fU(v/USD_VND);
+  document.getElementById('calc-loc').textContent=fL(v/c);
+});
+
 function fillVND(v){iV.value=v;sfV(v);goTo('page-converter')}
+
+function buildConvTable(){
+  const hdr=document.getElementById('conv-tbl-loc-hdr');
+  if(hdr) hdr.textContent=activeCur;
+  const c=curVND(activeCur);
+  const col=CURRENCIES[activeCur].color;
+  const ct=document.querySelector('#conv-table tbody');
+  if(!ct)return; ct.innerHTML='';
+  [1000,5000,10000,20000,50000,100000,200000,500000,1000000,2000000,5000000,10000000].forEach(v=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="vnd-col">${v.toLocaleString('ru')} <span class="cur-sym">VND</span></td><td class="usd-col">${fU(v/USD_VND,true)}</td><td style="color:${col};font-weight:600">${fL(v/c,true)}</td>`;
+    tr.addEventListener('click',()=>fillVND(v));
+    ct.appendChild(tr);
+  });
+}
 
 const prices=[
   {n:'Фо бо (суп)',c:'food',v:60000},{n:'Мыкуанг (лапша)',c:'food',v:45000},{n:'Баньми (сэндвич)',c:'food',v:28000},
@@ -1627,8 +1676,88 @@ const prices=[
 ];
 const cL={food:'Еда',cafe:'Кафе',market:'Рынок',transport:'Транспорт',hotel:'Жильё',leisure:'Досуг'};
 
-// Initial render with fallback, then try live rates
-applyRates();
+function buildPricesTable(){
+  const hdr=document.getElementById('prices-tbl-loc-hdr');
+  if(hdr) hdr.textContent=activeCur;
+  const c=curVND(activeCur);
+  const col=CURRENCIES[activeCur].color;
+  const pt=document.querySelector('#prices-table tbody');
+  if(!pt)return; pt.innerHTML='';
+  prices.forEach(p=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${p.n}<span class="badge">${cL[p.c]}</span></td><td class="vnd-col">${p.v.toLocaleString('ru')} <span class="cur-sym">VND</span></td><td class="usd-col">${fU(p.v/USD_VND,true)}</td><td style="color:${col};font-weight:600">${fL(p.v/c,true)}</td>`;
+    tr.addEventListener('click',()=>{
+      document.querySelectorAll('#prices-table tbody tr').forEach(r=>r.classList.remove('highlight'));
+      tr.classList.add('highlight'); fillVND(p.v);
+    });
+    pt.appendChild(tr);
+  });
+}
+
+function applyRates(){
+  const c=curVND(activeCur);
+  const today=new Date();
+  const ds=fmtDate(today);
+  const usdFmt=Math.round(USD_VND).toLocaleString('ru');
+  const locFmt=Math.round(c).toLocaleString('ru');
+  const sub=document.getElementById('conv-rate-sub');
+  if(sub) sub.textContent=`Курс на ${ds} · 1 USD = ${usdFmt} VND · 1 ${activeCur} ≈ ${locFmt} VND`;
+  const fn=document.getElementById('conv-footnote');
+  if(fn) fn.textContent=`Курс на ${ds} · 1 USD ≈ ${usdFmt} VND · 1 ${activeCur} ≈ ${fL(1/localRates[activeCur]*USD_VND).trim()}`;
+  sfV(parseFloat(iV.value)||0);
+  sl.dispatchEvent(new Event('input'));
+  buildConvTable();
+  buildPricesTable();
+}
+
+function switchCurrency(cur){
+  activeCur=cur;
+  const cfg=CURRENCIES[cur];
+  document.documentElement.style.setProperty('--loc', cfg.color);
+  document.documentElement.style.setProperty('--loc-rgb', cfg.rgb);
+  document.getElementById('inp-local-label').textContent=cur;
+  document.getElementById('inp-local-pfx').textContent=cur;
+  document.getElementById('calc-loc-label').textContent=cur;
+  document.querySelectorAll('.curr-tab').forEach(b=>b.classList.toggle('active',b.dataset.cur===cur));
+  applyRates();
+}
+
+async function fetchRates(){
+  try{
+    const r=await fetch('https://api.frankfurter.app/latest?from=USD&to=VND,BYN,UAH,RUB,KZT',{signal:AbortSignal.timeout(5000)});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    if(d.rates){
+      if(d.rates.VND) USD_VND=Math.round(d.rates.VND);
+      if(d.rates.BYN) localRates.BYN=d.rates.BYN;
+      if(d.rates.UAH) localRates.UAH=d.rates.UAH;
+      if(d.rates.RUB) localRates.RUB=d.rates.RUB;
+      if(d.rates.KZT) localRates.KZT=d.rates.KZT;
+    }
+  } catch(e){
+    try{
+      const r2=await fetch('https://open.er-api.com/v6/latest/USD',{signal:AbortSignal.timeout(5000)});
+      const d2=await r2.json();
+      if(d2.rates){
+        if(d2.rates.VND) USD_VND=Math.round(d2.rates.VND);
+        if(d2.rates.BYN) localRates.BYN=d2.rates.BYN;
+        if(d2.rates.UAH) localRates.UAH=d2.rates.UAH;
+        if(d2.rates.RUB) localRates.RUB=d2.rates.RUB;
+        if(d2.rates.KZT) localRates.KZT=d2.rates.KZT;
+      }
+    } catch(e2){}
+  }
+  applyRates();
+}
+
+document.getElementById('curr-tabs').addEventListener('click',e=>{
+  const btn=e.target.closest('.curr-tab');
+  if(btn) switchCurrency(btn.dataset.cur);
+});
+
+// Init: BYN by default
+switchCurrency('BYN');
+sfV(100000);
 fetchRates();
 
 /* ═══ PWA SERVICE WORKER ═══ */
