@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дананг — Гайд от Andy Kurt</title>
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Дананг">
+<meta name="theme-color" content="#DA251D">
+<link rel="apple-touch-icon" href="icon-192.png">
+<!-- /PWA -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F5F3F0; --surface:#FFF; --surface2:#F0EDE8; --border:#E2DDD8; --border2:#CEC8C0;
+  --text:#1A1714; --text-mid:#6B6560; --text-dim:#9E9890;
+  --accent:#2B2420; --vnd:#2E6644; --usd:#1C3A6B; --byn:#7A2318;
+  --tag-bg:#EDEBE8; --tab-h:70px; --hero-bg:#2B2420; --hero-text:#FFF;
+}
+[data-theme="dark"] {
+  --bg:#0F0D0C; --surface:#1C1916; --surface2:#252220; --border:#2E2A27; --border2:#3A3530;
+  --text:#F0EDE8; --text-mid:#9E9890; --text-dim:#5C5852;
+  --accent:#D4C9BC; --vnd:#5AAF7A; --usd:#6B9FDD; --byn:#D4695C;
+  --tag-bg:#252220; --hero-bg:#1C1916; --hero-text:#F0EDE8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;padding-bottom:var(--tab-h);transition:background .25s,color .25s;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* TOP BAR */
+.top-bar{position:sticky;top:0;z-index:200;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:52px}
+.top-left{display:flex;align-items:center;gap:9px;min-width:0}
+.top-logo{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;transition:background .25s}
+.top-title-wrap{display:flex;flex-direction:column;gap:1px;min-width:0;overflow:hidden}
+.top-title-main{font-size:.82rem;font-weight:700;letter-spacing:-.01em;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
+.top-title-sub{font-size:.58rem;font-weight:400;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.02em}
+.theme-btn{background:none;border:none;cursor:pointer;padding:6px;font-size:1.2rem;line-height:1;border-radius:8px;flex-shrink:0;transition:background .15s;-webkit-tap-highlight-color:transparent}
+.theme-btn:hover{background:var(--surface2)}
+.icon-sun{display:inline}
+.icon-moon{display:none}
+[data-theme="dark"] .icon-sun{display:none}
+[data-theme="dark"] .icon-moon{display:inline}
+
+/* PAGES */
+.page,.detail-page{display:none}
+.page.active,.detail-page.active{display:block}
+
+/* SECTION HERO */
+.section-hero{background:var(--hero-bg);color:var(--hero-text);padding:26px 20px 22px}
+[data-theme="dark"] .section-hero{background:var(--surface);border-bottom:1px solid var(--border)}
+/* Converter hero uses standard section-hero — dark like all others */
+.hero-eyebrow{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.5;margin-bottom:6px}
+.hero-title{font-size:clamp(1.4rem,5vw,2rem);font-weight:700;letter-spacing:-.025em;line-height:1.1;margin-bottom:6px}
+.hero-sub{font-size:.8rem;opacity:.65;line-height:1.5;max-width:560px}
+.hero-stats{display:flex;gap:18px;margin-top:14px;flex-wrap:wrap}
+.hero-stat-val{font-size:1.1rem;font-weight:700}
+.hero-stat-label{font-size:.62rem;opacity:.5;letter-spacing:.06em;text-transform:uppercase}
+
+/* TOP LOGO clickable */
+.top-logo{cursor:pointer}
+
+/* SIDEBAR */
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;opacity:0;pointer-events:none;transition:opacity .25s}
+.sidebar-overlay.open{opacity:1;pointer-events:auto}
+.sidebar{position:fixed;top:0;right:0;bottom:0;width:min(280px,82vw);background:var(--surface);z-index:401;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column;box-shadow:-4px 0 24px rgba(0,0,0,.18)}
+.sidebar.open{transform:translateX(0)}
+.sidebar-head{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 14px;border-bottom:1px solid var(--border)}
+.sidebar-title{font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mid)}
+.sidebar-close{background:none;border:none;cursor:pointer;font-size:1.2rem;padding:4px;border-radius:8px;color:var(--text-mid);-webkit-tap-highlight-color:transparent}
+.sidebar-close:hover{background:var(--surface2)}
+.sidebar-list{flex:1;padding:10px 0}
+.sidebar-item{display:flex;align-items:center;gap:13px;padding:13px 20px;cursor:pointer;transition:background .12s;border-bottom:1px solid var(--border);-webkit-tap-highlight-color:transparent}
+.sidebar-item:hover{background:var(--surface2)}
+.sidebar-item.active{background:var(--tag-bg)}
+.sidebar-icon{font-size:1.3rem;width:28px;text-align:center;flex-shrink:0}
+.sidebar-name{font-size:.9rem;font-weight:600}
+.sidebar-sub{font-size:.7rem;color:var(--text-mid);margin-top:1px}
+
+/* BURGER BTN */
+.burger-btn{background:none;border:none;cursor:pointer;padding:6px 8px;font-size:1.1rem;line-height:1;border-radius:8px;flex-shrink:0;transition:background .15s;-webkit-tap-highlight-color:transparent;display:flex;flex-direction:column;gap:4px;justify-content:center;align-items:center;width:36px;height:36px}
+.burger-btn:hover{background:var(--surface2)}
+.burger-line{display:block;width:18px;height:2px;background:var(--text-mid);border-radius:2px;transition:background .15s}
+.top-right{display:flex;align-items:center;gap:2px}
+
+/* CONTENT */
+.content{max-width:860px;margin:0 auto;padding:18px 16px 32px}
+
+/* SECTION TITLE */
+.section-title{font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ══ HOME GRID ══ */
+.home-header{padding:12px 16px 0;max-width:860px;margin:0 auto}
+.home-title{font-size:clamp(1.1rem,4vw,1.5rem);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin-bottom:2px}
+.home-sub{font-size:.75rem;color:var(--text-mid);margin-bottom:10px}
+
+/* Responsive home grid — fills space, no orphan tiles */
+.home-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
+  max-width:860px;
+  margin:0 auto;
+  padding:0 16px 14px;
+}
+@media(max-width:600px){
+  .home-grid{grid-template-columns:repeat(2,1fr)}
+  .home-tile.span2{grid-column:span 2}
+}
+@media(min-width:601px){
+  .home-tile.span2{grid-column:span 2}
+}
+
+.home-tile{
+  background:var(--surface);border:1px solid var(--border);border-radius:13px;
+  padding:23px 13px 22px;cursor:pointer;position:relative;
+  transition:transform .15s,box-shadow .15s,border-color .15s;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.home-tile:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.09);border-color:var(--border2)}
+[data-theme="dark"] .home-tile:hover{box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.tile-c1{background:var(--accent);color:var(--hero-text);border-color:transparent}
+[data-theme="dark"] .tile-c1{color:var(--bg)}
+.tile-c2{background:rgba(46,102,68,.08);border-color:rgba(46,102,68,.22)}
+.tile-c3{background:rgba(28,58,107,.07);border-color:rgba(28,58,107,.2)}
+.tile-c4{background:rgba(122,35,24,.07);border-color:rgba(122,35,24,.2)}
+.tile-c5{background:rgba(90,48,128,.07);border-color:rgba(90,48,128,.2)}
+.tile-c6{background:rgba(180,130,20,.07);border-color:rgba(180,130,20,.2)}
+.tile-c7{background:rgba(28,90,107,.07);border-color:rgba(28,90,107,.2)}
+.tile-c8{background:rgba(60,100,60,.07);border-color:rgba(60,100,60,.2)}
+.tile-c9{background:rgba(180,60,100,.07);border-color:rgba(180,60,100,.2)}
+.tile-header{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.tile-icon{font-size:1.15rem;line-height:1;flex-shrink:0}
+.tile-label{font-size:.54rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;opacity:.45;display:none}
+.tile-name{font-size:.82rem;font-weight:700;line-height:1.2;letter-spacing:-.01em}
+.tile-desc{font-size:.65rem;color:var(--text-mid);line-height:1.35}
+.tile-arr{position:absolute;top:9px;right:11px;font-size:.68rem;color:var(--text-dim);transition:transform .15s}
+.home-tile:hover .tile-arr{transform:translate(2px,-2px)}
+.tile-c1 .tile-name{color:#fff}
+.tile-c1 .tile-desc{color:rgba(255,255,255,.55)}
+.tile-c1 .tile-arr{color:rgba(255,255,255,.4)}
+[data-theme="dark"] .tile-c1 .tile-name{color:var(--bg)}
+[data-theme="dark"] .tile-c1 .tile-desc{color:rgba(15,13,12,.5)}
+.tile-badge{font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:100px;background:rgba(0,0,0,.08);color:var(--text-mid);display:inline-block;margin-top:6px}
+.tile-c1 .tile-badge{background:rgba(255,255,255,.18);color:rgba(255,255,255,.85)}
+
+/* CARDS */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-bottom:22px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s,border-color .15s}
+.card:hover{transform:translateY(-2px);box-shadow:0 5px 18px rgba(0,0,0,.08);border-color:var(--border2)}
+[data-theme="dark"] .card:hover{box-shadow:0 5px 18px rgba(0,0,0,.4)}
+.card-arr{position:absolute;top:14px;right:14px;font-size:.76rem;color:var(--text-dim);transition:transform .15s}
+.card:hover .card-arr{transform:translate(2px,-2px)}
+.card-tag{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+.tag-street{color:#856A00}.tag-cafe{color:var(--vnd)}.tag-resto{color:var(--byn)}.tag-free{color:var(--vnd)}
+.tag-atm{color:var(--usd)}.tag-beach{color:#1A6B8A}.tag-leisure{color:#5A3080}.tag-spa{color:#8A2050}
+.tag-park{color:var(--vnd)}.tag-euro{color:#1C3A6B}.tag-pp{color:#2E6644}.tag-delivery{color:#7A4000}
+.tag-exchange{color:#5A3080}.tag-pharma{color:#8A2050}
+[data-theme="dark"] .tag-beach{color:#5AAFC8}[data-theme="dark"] .tag-leisure{color:#A07FCC}
+[data-theme="dark"] .tag-spa{color:#CC6090}[data-theme="dark"] .tag-euro{color:#6B9FDD}
+[data-theme="dark"] .tag-delivery{color:#D4956B}[data-theme="dark"] .tag-exchange{color:#A07FCC}
+[data-theme="dark"] .tag-pharma{color:#CC6090}
+.card-name{font-size:.95rem;font-weight:700;margin-bottom:3px;line-height:1.3;padding-right:18px}
+.card-addr{font-size:.74rem;color:var(--text-mid);margin-bottom:7px;display:flex;align-items:flex-start;gap:4px}
+.card-addr::before{content:'📍';font-size:.68rem;flex-shrink:0;margin-top:1px}
+.card-desc{font-size:.76rem;color:var(--text-mid);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card-price{display:inline-block;margin-top:9px;font-size:.71rem;font-weight:600;color:var(--vnd);background:rgba(46,102,68,.1);padding:2px 8px;border-radius:100px}
+[data-theme="dark"] .card-price{background:rgba(90,175,122,.15)}
+.card-price.neutral{color:var(--text-mid);background:var(--tag-bg)}
+
+/* DETAIL PAGE */
+.detail-hero{background:var(--hero-bg);color:var(--hero-text);padding:24px 20px 22px}
+[data-theme="dark"] .detail-hero{background:var(--surface);border-bottom:1px solid var(--border)}
+.detail-back{display:inline-flex;align-items:center;gap:7px;font-size:.8rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:16px;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.35);color:#fff;font-family:inherit;cursor:pointer;padding:8px 16px 8px 12px;border-radius:100px;transition:background .15s;-webkit-tap-highlight-color:transparent}
+.detail-back:hover{background:rgba(255,255,255,.28)}
+[data-theme="dark"] .detail-back{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:var(--text)}
+.detail-tag{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.5;margin-bottom:5px}
+.detail-name{font-size:clamp(1.2rem,4vw,1.8rem);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin-bottom:5px}
+.detail-addr-hero{font-size:.8rem;opacity:.6}
+.detail-content{max-width:860px;margin:0 auto;padding:20px 16px 32px}
+.detail-desc-block{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px;font-size:.86rem;color:var(--text-mid);line-height:1.65}
+.detail-meta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px;margin-bottom:14px}
+.detail-meta-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:3px}
+.detail-meta-label{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim)}
+.detail-meta-val{font-size:.86rem;font-weight:600}
+.detail-actions{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:20px}
+.btn-action{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:10px;font-size:.8rem;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:opacity .15s;text-decoration:none}
+.btn-action:hover{opacity:.85}
+.btn-primary{background:var(--accent);color:var(--hero-text)}
+[data-theme="dark"] .btn-primary{color:var(--bg)}
+.btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border2)}
+.detail-tips-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.detail-tips-title{font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px}
+
+/* CONVERTER */
+.converter-header{text-align:center;padding:22px 16px 0;max-width:860px;margin:0 auto}
+.conv-eyebrow{font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px}
+.conv-title{font-size:clamp(1.4rem,4vw,2rem);font-weight:700;letter-spacing:-.03em}
+.conv-title em{font-style:normal;color:var(--text-mid);font-weight:300}
+.rates-row{display:inline-flex;margin-top:12px;border:1px solid var(--border2);border-radius:8px;overflow:hidden;background:var(--surface);flex-wrap:wrap;justify-content:center}
+.rate-item{padding:6px 12px;font-size:.74rem;font-weight:500;color:var(--text-mid);border-right:1px solid var(--border)}
+.rate-item:last-child{border-right:none}
+.rate-item b{color:var(--text);font-weight:600}
+.conv-block{background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:20px 16px 16px;margin-bottom:14px}
+.conv-hint{font-size:.74rem;color:var(--text-dim);text-align:center;margin-bottom:14px}
+.inputs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+@media(max-width:500px){.inputs-grid{grid-template-columns:1fr}}
+.field-wrap{display:flex;flex-direction:column;gap:5px}
+.field-label{font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.field-label.vnd{color:var(--vnd)}.field-label.usd{color:var(--usd)}.field-label.byn{color:var(--byn)}
+.field-inner{position:relative}
+.cur-input{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:10px 10px 10px 46px;font-size:.98rem;font-family:'Inter',sans-serif;font-weight:600;color:var(--text);background:var(--bg);outline:none;transition:border-color .18s,box-shadow .18s;text-align:right;-moz-appearance:textfield}
+.cur-input::-webkit-outer-spin-button,.cur-input::-webkit-inner-spin-button{-webkit-appearance:none}
+.cur-input.vnd:focus{border-color:var(--vnd);box-shadow:0 0 0 3px rgba(46,102,68,.12)}
+.cur-input.usd:focus{border-color:var(--usd);box-shadow:0 0 0 3px rgba(28,58,107,.12)}
+.cur-input.byn:focus{border-color:var(--byn);box-shadow:0 0 0 3px rgba(122,35,24,.12)}
+.field-pfx{position:absolute;left:0;top:0;bottom:0;width:42px;display:flex;align-items:center;justify-content:center;font-size:.64rem;font-weight:700;border-right:1.5px solid var(--border);pointer-events:none;border-radius:10px 0 0 10px}
+.field-pfx.vnd{color:var(--vnd);background:rgba(46,102,68,.07)}.field-pfx.usd{color:var(--usd);background:rgba(28,58,107,.07)}.field-pfx.byn{color:var(--byn);background:rgba(122,35,24,.07)}
+.sync-note{text-align:center;font-size:.68rem;color:var(--text-dim);margin-top:9px}
+.calc-section{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 18px;margin-bottom:14px}
+.calc-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px;flex-wrap:wrap;gap:5px}
+.calc-title{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mid)}
+.calc-display{font-size:1rem;font-weight:700}
+input[type="range"]{width:100%;accent-color:var(--accent);cursor:pointer;margin-bottom:9px;height:4px}
+.calc-results{display:flex;gap:9px;flex-wrap:wrap}
+.calc-pill{flex:1;min-width:90px;text-align:center;padding:9px;border-radius:10px;border:1px solid var(--border)}
+.calc-pill.usd{background:rgba(28,58,107,.05)}.calc-pill.byn{background:rgba(122,35,24,.05)}
+.calc-pill-label{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;color:var(--text-dim)}
+.calc-pill-val{font-size:.95rem;font-weight:700}
+.calc-pill.usd .calc-pill-val{color:var(--usd)}.calc-pill.byn .calc-pill-val{color:var(--byn)}
+.tbl-section{margin-bottom:14px}
+/* Prices table — 4 cols, compact */
+#prices-table{table-layout:fixed;width:100%}
+#prices-table thead th{padding:7px 6px;font-size:.58rem;letter-spacing:.04em}
+#prices-table thead th:first-child{width:44%}
+#prices-table thead th:not(:first-child){width:18.6%}
+#prices-table tbody td{padding:6px 6px;font-size:.72rem}
+#prices-table tbody td:first-child{font-size:.71rem;padding-right:4px}
+#prices-table .badge{font-size:.5rem;padding:1px 4px;margin-left:3px}
+#prices-table .cur-sym{font-size:.58rem}
+/* Conv-table — 3 cols */
+#conv-table thead th{padding:7px 8px;font-size:.6rem}
+#conv-table tbody td{padding:7px 8px;font-size:.78rem}
+table{width:100%;border-collapse:separate;border-spacing:0;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--surface)}
+thead th{background:var(--accent);color:rgba(255,255,255,.75);padding:9px 11px;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-align:right}
+[data-theme="dark"] thead th{color:rgba(15,13,12,.75)}
+thead th:first-child{text-align:left}
+tbody tr{transition:background .12s;cursor:pointer}
+tbody tr:hover{background:var(--tag-bg)!important}
+tbody tr:nth-child(odd){background:var(--surface)}
+tbody tr:nth-child(even){background:var(--surface2)}
+tbody tr.highlight{background:rgba(28,58,107,.07)!important;outline:1.5px solid var(--usd);outline-offset:-1.5px}
+tbody td{padding:8px 11px;font-size:.82rem;border-bottom:1px solid var(--border);text-align:right}
+tbody tr:last-child td{border-bottom:none}
+tbody td:first-child{text-align:left;font-weight:500}
+.vnd-col{color:var(--vnd);font-weight:600}.usd-col{color:var(--usd)}.byn-col{color:var(--byn)}
+.cur-sym{font-size:.64rem;font-weight:700;opacity:.65;margin-right:2px}
+.badge{font-size:.57rem;font-weight:700;padding:2px 6px;border-radius:100px;margin-left:5px;vertical-align:middle;background:var(--tag-bg);color:var(--text-mid)}
+.footnote{text-align:center;font-size:.7rem;color:var(--text-dim);margin-top:6px;padding-bottom:4px}
+
+/* FOOD FILTER */
+.cat-filter{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.cat-btn{padding:5px 13px;border-radius:100px;font-size:.7rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;border:1.5px solid var(--border2);background:var(--surface);color:var(--text-mid);cursor:pointer;font-family:inherit;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.cat-btn.active{background:var(--accent);color:var(--hero-text);border-color:var(--accent)}
+[data-theme="dark"] .cat-btn.active{color:var(--bg)}
+.food-cat-section{}.food-cat-section.hidden{display:none}
+
+/* ATM TABLE */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:14px;margin-bottom:18px}
+.atm-table{width:100%;border-collapse:separate;border-spacing:0;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--surface);min-width:340px}
+.atm-table thead th{background:var(--accent);color:rgba(255,255,255,.75);padding:8px 10px;font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;text-align:left;white-space:nowrap}
+[data-theme="dark"] .atm-table thead th{color:rgba(15,13,12,.75)}
+.atm-table tbody td{padding:8px 10px;font-size:.78rem;border-bottom:1px solid var(--border)}
+.atm-table tbody tr:last-child td{border-bottom:none}
+.atm-table tbody tr:nth-child(odd){background:var(--surface)}
+.atm-table tbody tr:nth-child(even){background:var(--surface2)}
+.fee-free{color:var(--vnd);font-weight:700}.fee-ok{color:var(--usd);font-weight:600}.fee-high{color:var(--byn);font-weight:600}
+
+/* TIPS BOX */
+.tips-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:18px}
+.tips-title{font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px}
+.tip-item{font-size:.8rem;color:var(--text-mid);line-height:1.5;padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:9px;align-items:flex-start}
+.tip-item:last-child{border-bottom:none}
+
+/* LANG */
+.lang-search{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;font-size:.88rem;font-family:inherit;color:var(--text);background:var(--surface);outline:none;margin-bottom:12px;transition:border-color .18s}
+.lang-search:focus{border-color:var(--border2)}
+.lang-search::placeholder{color:var(--text-dim)}
+.lang-tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:14px}
+.lang-table{width:100%;border-collapse:separate;border-spacing:0;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--surface);table-layout:fixed}
+.lang-table thead th{background:var(--accent);color:rgba(255,255,255,.75);padding:7px 8px;font-size:.59rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-align:left;white-space:nowrap}
+[data-theme="dark"] .lang-table thead th{color:rgba(15,13,12,.75)}
+.lang-table thead th:nth-child(1){width:34%}
+.lang-table thead th:nth-child(2){width:34%}
+.lang-table thead th:nth-child(3){width:32%}
+.lang-table tbody td{padding:7px 8px;font-size:.74rem;border-bottom:1px solid var(--border)}
+.lang-table tbody tr:last-child td{border-bottom:none}
+.lang-table tbody tr:nth-child(odd){background:var(--surface)}
+.lang-table tbody tr:nth-child(even){background:var(--surface2)}
+.lang-table tbody tr:hover{background:var(--tag-bg)!important}
+.col-viet{font-weight:700;color:var(--vnd);white-space:normal;word-break:break-word}
+.col-trans{color:var(--text-mid);font-style:italic;font-size:.68rem;white-space:normal;word-break:break-word}
+.col-ru{font-weight:500;font-size:.72rem}
+.lang-cat-row td{background:var(--tag-bg)!important;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);padding:5px 11px}
+.hidden-row{display:none}
+
+/* ADVICE */
+.advice-filter{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.advice-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:9px}
+.advice-cat-hdr{padding:10px 16px;background:var(--accent);color:rgba(255,255,255,.85);font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+[data-theme="dark"] .advice-cat-hdr{color:rgba(15,13,12,.75)}
+.advice-item{display:flex;gap:11px;align-items:flex-start;padding:11px 16px;border-bottom:1px solid var(--border)}
+.advice-item:last-child{border-bottom:none}
+.advice-num{font-size:.66rem;font-weight:700;color:var(--text-dim);min-width:20px;padding-top:2px}
+.advice-icon{font-size:.9rem;flex-shrink:0}
+.advice-text{font-size:.81rem;color:var(--text-mid);line-height:1.55}
+.advice-text strong{color:var(--text);font-weight:600}
+.adv-hidden{display:none}
+
+/* LEISURE */
+.sub-filter{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
+.sub-btn{padding:5px 13px;border-radius:100px;font-size:.7rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;border:1.5px solid var(--border2);background:var(--surface);color:var(--text-mid);cursor:pointer;font-family:inherit;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.sub-btn.active{background:var(--accent);color:var(--hero-text);border-color:var(--accent)}
+[data-theme="dark"] .sub-btn.active{color:var(--bg)}
+.leisure-sec.hidden{display:none}
+
+/* HISTORY */
+.hist-chapters{display:flex;flex-direction:column;gap:9px;margin-bottom:20px}
+.hist-chapter{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;cursor:pointer;transition:border-color .15s,box-shadow .15s;position:relative}
+.hist-chapter:hover{border-color:var(--border2);box-shadow:0 4px 14px rgba(0,0,0,.07)}
+.hist-ch-era{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px}
+.hist-ch-title{font-size:1rem;font-weight:700;margin-bottom:5px;padding-right:20px}
+.hist-ch-desc{font-size:.78rem;color:var(--text-mid);line-height:1.5}
+.hist-ch-arr{position:absolute;top:18px;right:18px;font-size:.8rem;color:var(--text-dim)}
+
+/* MEDICINE */
+.med-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:22px}
+.med-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s}
+.med-card:hover{transform:translateY(-2px);box-shadow:0 5px 18px rgba(0,0,0,.08)}
+.first-aid-section{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px}
+.first-aid-hdr{padding:10px 16px;background:var(--accent);color:rgba(255,255,255,.85);font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+[data-theme="dark"] .first-aid-hdr{color:rgba(15,13,12,.75)}
+.first-aid-item{display:flex;gap:11px;align-items:flex-start;padding:11px 16px;border-bottom:1px solid var(--border)}
+.first-aid-item:last-child{border-bottom:none}
+.first-aid-icon{font-size:1rem;flex-shrink:0}
+.first-aid-text{font-size:.81rem;color:var(--text-mid);line-height:1.55}
+.first-aid-text strong{color:var(--text);font-weight:600}
+
+/* TAB BAR */
+.tab-bar{position:fixed;bottom:0;left:0;right:0;height:var(--tab-h);background:var(--surface);border-top:1px solid var(--border2);display:flex;overflow-x:scroll;overflow-y:hidden;z-index:100;box-shadow:0 -2px 10px rgba(0,0,0,.06);-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-x;overscroll-behavior-x:contain}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{flex:0 0 auto;min-width:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;color:var(--text-dim);transition:color .15s;padding:0 8px;position:relative;-webkit-tap-highlight-color:transparent}
+.tab-btn.active{color:var(--accent)}
+.tab-btn.active .tab-lbl{font-weight:700}
+.tab-btn.active::after{content:'';position:absolute;bottom:7px;width:16px;height:2px;background:var(--accent);border-radius:2px}
+.tab-icon{font-size:1.15rem;line-height:1}
+.tab-lbl{font-size:.54rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-head">
+    <span class="sidebar-title">Все разделы</span>
+    <button class="sidebar-close" id="sidebar-close" aria-label="Закрыть">✕</button>
+  </div>
+  <div class="sidebar-list" id="sidebar-list"></div>
+</div>
+
+<div class="top-bar">
+  <div class="top-left" id="top-logo-area" style="cursor:pointer" onclick="goTo('page-home');closeSidebar()">
+    <div class="top-logo">🇻🇳</div>
+    <div class="top-title-wrap">
+      <span class="top-title-main">Дананг</span>
+      <span class="top-title-sub">Гайд от Andy Kurt</span>
+    </div>
+  </div>
+  <div class="top-right">
+    <button class="theme-btn" id="theme-btn" aria-label="Переключить тему">
+      <span class="icon-sun">☀️</span><span class="icon-moon">🌙</span>
+    </button>
+    <button class="burger-btn" id="burger-btn" aria-label="Меню">
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ HOME ═══════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="home-header">
+    <div class="home-title">Привет, добро пожаловать в Дананг 👋</div>
+    <div class="home-sub">Выбери нужный раздел</div>
+  </div>
+  <div class="home-grid" id="home-grid"></div>
+</div>
+
+<!-- ═══════════════════════════ КОНВЕРТЕР ═══════════════════════════ -->
+<div class="page" id="page-converter">
+  <div class="section-hero">
+    <div class="hero-eyebrow">Дананг · Финансы</div>
+    <div class="hero-title">Конвертер VND</div>
+    <div class="hero-sub" id="conv-rate-sub">Загрузка актуального курса…</div>
+  </div>
+  <div class="content">
+    <div class="conv-block">
+      <div class="conv-hint">Введите сумму в любой валюте — остальные пересчитаются</div>
+      <div class="inputs-grid">
+        <div class="field-wrap"><div class="field-label vnd">VND</div><div class="field-inner"><span class="field-pfx vnd">VND</span><input class="cur-input vnd" id="inp-vnd" type="number" value="100000" min="0" step="1000"></div></div>
+        <div class="field-wrap"><div class="field-label usd">USD</div><div class="field-inner"><span class="field-pfx usd">USD</span><input class="cur-input usd" id="inp-usd" type="number" min="0" step="0.01"></div></div>
+        <div class="field-wrap"><div class="field-label byn">BYN</div><div class="field-inner"><span class="field-pfx byn">BYN</span><input class="cur-input byn" id="inp-byn" type="number" min="0" step="0.01"></div></div>
+      </div>
+      <div class="sync-note">↔ все три поля синхронизированы</div>
+    </div>
+    <div class="calc-section">
+      <div class="calc-header"><span class="calc-title">Подсчёт · VND</span><span class="calc-display" id="calc-vnd">500 000 VND</span></div>
+      <input type="range" id="vnd-slider" min="10000" max="5000000" step="10000" value="500000">
+      <div class="calc-results">
+        <div class="calc-pill usd"><div class="calc-pill-label">USD</div><div class="calc-pill-val" id="calc-usd">—</div></div>
+        <div class="calc-pill byn"><div class="calc-pill-label">BYN</div><div class="calc-pill-val" id="calc-byn">—</div></div>
+      </div>
+    </div>
+    <div class="tbl-section">
+      <div class="section-title">Круглые суммы</div>
+      <table id="conv-table"><thead><tr><th style="text-align:left">VND</th><th>USD</th><th>BYN</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div class="tbl-section">
+      <div class="section-title">Типичные цены в Дананге</div>
+      <div class="tbl-wrap"><table id="prices-table"><thead><tr><th style="text-align:left">Товар / услуга</th><th>VND</th><th>USD</th><th>BYN</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <p class="footnote" id="conv-footnote">Актуальный курс загружается…</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ ГДЕ ПОЕСТЬ ═══════════════════════════ -->
+<div class="page" id="page-food">
+  <div class="section-hero">
+    <div class="hero-eyebrow">Дананг · Гастрономия</div>
+    <div class="hero-title">Где поесть</div>
+    <div class="hero-sub">80+ мест по 4 категориям — от уличной еды до доставки</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val">80+</div><div class="hero-stat-label">заведений</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">4</div><div class="hero-stat-label">категории</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="cat-filter" id="food-filter">
+      <button class="cat-btn active" data-cat="all">Все</button>
+      <button class="cat-btn" data-cat="asian">🍜 Азиатская</button>
+      <button class="cat-btn" data-cat="euro">🥐 Европейская</button>
+      <button class="cat-btn" data-cat="pp">🥗 ПП</button>
+      <button class="cat-btn" data-cat="delivery">🛵 Доставка</button>
+    </div>
+    <div class="food-cat-section" id="fcat-asian">
+      <div class="section-title">Азиатская кухня (ТОП-20)</div>
+      <div class="cards-grid" id="food-asian"></div>
+    </div>
+    <div class="food-cat-section hidden" id="fcat-euro">
+      <div class="section-title">Европейская кухня (ТОП-20)</div>
+      <div class="cards-grid" id="food-euro"></div>
+    </div>
+    <div class="food-cat-section hidden" id="fcat-pp">
+      <div class="section-title">Правильное питание (ТОП-20)</div>
+      <div class="cards-grid" id="food-pp"></div>
+    </div>
+    <div class="food-cat-section hidden" id="fcat-delivery">
+      <div class="section-title">Доставка еды (ТОП-20)</div>
+      <div class="cards-grid" id="food-delivery"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ КОВОРКИНГИ ═══════════════════════════ -->
+<div class="page" id="page-cowork">
+  <div class="section-hero">
+    <div class="hero-eyebrow">Дананг · Работа</div>
+    <div class="hero-title">Бесплатные коворкинги</div>
+    <div class="hero-sub">Кафе и пространства где можно работать за цену кофе</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val">20+</div><div class="hero-stat-label">мест</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">0 VND</div><div class="hero-stat-label">вход</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="section-title">Лучшие места для работы</div>
+    <div class="cards-grid" id="cowork-cards"></div>
+    <div class="tips-box">
+      <div class="tips-title">Негласные правила кафе</div>
+      <div class="tip-item"><span>☕</span>Всегда заказывай хотя бы что-то.</div>
+      <div class="tip-item"><span>📐</span>Не занимай стол на 4 в одиночку в час-пик.</div>
+      <div class="tip-item"><span>🎧</span>Zoom-созвоны — только в наушниках.</div>
+      <div class="tip-item"><span>🔌</span>Розетки — под столом или вдоль стен.</div>
+      <div class="tip-item"><span>💧</span>Бесплатный долив воды — просто попроси.</div>
+      <div class="tip-item"><span>📶</span>Пароль Wi-Fi — на чеке или у персонала.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ БАНКОМАТЫ ═══════════════════════════ -->
+<div class="page" id="page-atm">
+  <div class="section-hero">
+    <div class="hero-eyebrow">Дананг · Деньги</div>
+    <div class="hero-title">Банкоматы и обменники</div>
+    <div class="hero-sub">Где снять деньги без комиссии и выгодно обменять валюту</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val">3</div><div class="hero-stat-label">банка без комиссии</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">8</div><div class="hero-stat-label">обменников</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="section-title">Комиссии банков (иностранные карты)</div>
+    <div class="tbl-wrap">
+      <table class="atm-table">
+        <thead><tr><th>Банк</th><th>Комиссия</th><th>Лимит</th><th>Примечание</th></tr></thead>
+        <tbody>
+          <tr><td><strong>VPBank</strong></td><td><span class="fee-free">0 VND ✓</span></td><td>5 000 000</td><td>Лучший выбор</td></tr>
+          <tr><td><strong>ACB</strong></td><td><span class="fee-free">0 VND ✓</span></td><td>3 000 000</td><td>Проверено</td></tr>
+          <tr><td><strong>Eximbank</strong></td><td><span class="fee-free">0 VND ✓</span></td><td>3 000 000</td><td>Меньше ATM</td></tr>
+          <tr><td><strong>Sacombank</strong></td><td><span class="fee-ok">~45 000</span></td><td>5 000 000</td><td>Высокий лимит</td></tr>
+          <tr><td><strong>BIDV</strong></td><td><span class="fee-ok">~50 000</span></td><td>5 000 000</td><td>Много банкоматов</td></tr>
+          <tr><td><strong>Vietcombank</strong></td><td><span class="fee-ok">~50 000</span></td><td>5 000 000</td><td>Хороший курс</td></tr>
+          <tr><td><strong>TPBank</strong></td><td><span class="fee-high">~3.3% ✗</span></td><td>5 000 000</td><td>Самый дорогой!</td></tr>
+          <tr><td><strong>HSBC</strong></td><td><span class="fee-ok">~50 000</span></td><td>2 000 000</td><td>Лучший в аэропорту</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="section-title">Банкоматы — где найти</div>
+    <div class="cards-grid" id="atm-cards"></div>
+    <div class="section-title">Обменники</div>
+    <div class="cards-grid" id="exchange-cards"></div>
+    <div class="tips-box">
+      <div class="tips-title">Советы по наличным</div>
+      <div class="tip-item"><span>❌</span><span><strong>Всегда «Charge in VND»</strong> — не соглашайся на конвертацию банкомата.</span></div>
+      <div class="tip-item"><span>💵</span>Снимай крупными суммами — 5 млн за раз выгоднее при фиксированной комиссии.</div>
+      <div class="tip-item"><span>💱</span>Обменники дают курс лучше банков на 1–3%. Проверяй на сайте vietcombank.com.vn.</div>
+      <div class="tip-item"><span>✈️</span>В аэропорту — HSBC. Избегай TPBank. Обменники аэропорта — невыгодный курс.</div>
+      <div class="tip-item"><span>🎊</span>Перед Тет сними заранее — банкоматы опустошаются.</div>
+      <div class="tip-item"><span>💳</span>Рынки, уличная еда — только наличные.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ ДОСУГ ═══════════════════════════ -->
+<div class="page" id="page-leisure">
+  <div class="section-hero">
+    <div class="hero-eyebrow">Дананг · Отдых</div>
+    <div class="hero-title">Досуг</div>
+    <div class="hero-sub">Пляжи, массаж, достопримечательности, парки и развлечения</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val">100</div><div class="hero-stat-label">мест</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">5</div><div class="hero-stat-label">категорий</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="sub-filter" id="leisure-filter">
+      <button class="sub-btn active" data-sec="all">Все</button>
+      <button class="sub-btn" data-sec="beach">🏖️ Пляжи</button>
+      <button class="sub-btn" data-sec="spa">💆 Массаж</button>
+      <button class="sub-btn" data-sec="sights">🏛️ Места</button>
+      <button class="sub-btn" data-sec="parks">🌿 Парки</button>
+      <button class="sub-btn" data-sec="other">✨ Другое</button>
+    </div>
+    <div class="leisure-sec" id="sec-beach"><div class="section-title">Пляжи</div><div class="cards-grid" id="leisure-beach"></div></div>
+    <div class="leisure-sec" id="sec-spa"><div class="section-title">Массажные салоны</div><div class="cards-grid" id="leisure-spa"></div></div>
+    <div class="leisure-sec" id="sec-sights"><div class="section-title">Интересные места</div><div class="cards-grid" id="leisure-sights"></div></div>
+    <div class="leisure-sec" id="sec-parks"><div class="section-title">Парки и природа</div><div class="cards-grid" id="leisure-parks"></div></div>
+    <div class="leisure-sec" id="sec-other"><div class="section-title">Другое</div><div class="cards-grid" id="leisure-other"></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ ИСТОРИЯ ═══════════════════════════ -->
+<div class="page" id="page-history">
+  <div class="section-hero">
+    <div class="hero-eyebrow">Дананг · История</div>
+    <div class="hero-title">История города</div>
+    <div class="hero-sub">От государства Чампа до современного мегаполиса — 2000 лет истории</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val">8</div><div class="hero-stat-label">глав</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">2000+</div><div class="hero-stat-label">лет истории</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="hist-chapters" id="hist-chapters"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ ФАКТЫ ═══════════════════════════ -->
+<div class="page" id="page-facts">
+  <div class="section-hero">
+    <div class="hero-eyebrow">Дананг · Интересное</div>
+    <div class="hero-title">Факты</div>
+    <div class="hero-sub">100 интересных фактов о Дананге, вьетнамцах и их быте</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val">100</div><div class="hero-stat-label">фактов</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">8</div><div class="hero-stat-label">категорий</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="cat-filter" id="facts-filter"></div>
+    <div id="facts-list"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ МЕДИЦИНА ═══════════════════════════ -->
+<div class="page" id="page-medicine">
+  <div class="section-hero">
+    <div class="hero-eyebrow">Дананг · Здоровье</div>
+    <div class="hero-title">Медицина</div>
+    <div class="hero-sub">Аптеки, клиники, первая помощь и гайды по здоровью</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val">10</div><div class="hero-stat-label">аптек</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">3</div><div class="hero-stat-label">клиники</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="section-title">Аптеки (Nhà thuốc)</div>
+    <div class="med-grid" id="pharma-cards"></div>
+    <div class="section-title">Клиники и больницы</div>
+    <div class="med-grid" id="clinic-cards"></div>
+    <div id="med-guides"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ СОВЕТЫ ═══════════════════════════ -->
+<div class="page" id="page-tips">
+  <div class="section-hero">
+    <div class="hero-eyebrow">Дананг · Полезное</div>
+    <div class="hero-title">Советы</div>
+    <div class="hero-sub">100 важных советов по жизни и путешествию в Дананге</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val">100</div><div class="hero-stat-label">советов</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">10</div><div class="hero-stat-label">категорий</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="advice-filter" id="advice-filter"></div>
+    <div id="advice-list"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ ЯЗЫК ═══════════════════════════ -->
+<div class="page" id="page-lang">
+  <div class="section-hero">
+    <div class="hero-eyebrow">Дананг · Язык</div>
+    <div class="hero-title">Вьетнамский язык</div>
+    <div class="hero-sub">100 слов и фраз с транскрипцией и переводом</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val">100</div><div class="hero-stat-label">фраз</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">10</div><div class="hero-stat-label">тем</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <input class="lang-search" id="lang-search" type="text" placeholder="Поиск по слову или переводу...">
+    <div class="cat-filter" id="lang-filter"></div>
+    <div class="section-title">Словарь</div>
+    <div class="lang-tbl-wrap">
+      <table class="lang-table"><thead><tr><th>Вьетнамский</th><th>Транскрипция</th><th>Русский</th></tr></thead><tbody id="lang-tbody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL PAGE -->
+<div class="detail-page" id="detail-page">
+  <div class="detail-hero" id="detail-hero">
+    <button class="detail-back" id="detail-back">← Назад</button>
+    <div class="detail-tag" id="detail-tag"></div>
+    <div class="detail-name" id="detail-name"></div>
+    <div class="detail-addr-hero">📍 <span id="detail-addr"></span></div>
+  </div>
+  <div class="detail-content">
+    <div class="detail-actions" id="detail-actions"></div>
+    <div class="section-title">Описание</div>
+    <div class="detail-desc-block" id="detail-desc"></div>
+    <div class="detail-meta-grid" id="detail-meta"></div>
+    <div class="detail-tips-box" id="detail-tips-wrap" style="display:none">
+      <div class="detail-tips-title">Советы</div>
+      <div id="detail-tips"></div>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY DETAIL PAGE -->
+<div class="detail-page" id="hist-detail-page">
+  <div class="detail-hero">
+    <button class="detail-back" id="hist-back">← Назад</button>
+    <div class="detail-tag" id="hist-detail-era"></div>
+    <div class="detail-name" id="hist-detail-title"></div>
+  </div>
+  <div class="detail-content" id="hist-detail-body"></div>
+</div>
+
+<!-- TAB BAR -->
+<nav class="tab-bar">
+  <button class="tab-btn active" data-page="page-home"      onclick="switchTab(this)"><span class="tab-icon">🏠</span><span class="tab-lbl">Главная</span></button>
+  <button class="tab-btn" data-page="page-converter"  onclick="switchTab(this)"><span class="tab-icon">💱</span><span class="tab-lbl">Конвертер</span></button>
+  <button class="tab-btn" data-page="page-food"       onclick="switchTab(this)"><span class="tab-icon">🍜</span><span class="tab-lbl">Поесть</span></button>
+  <button class="tab-btn" data-page="page-cowork"     onclick="switchTab(this)"><span class="tab-icon">💻</span><span class="tab-lbl">Коворкинг</span></button>
+  <button class="tab-btn" data-page="page-atm"        onclick="switchTab(this)"><span class="tab-icon">🏧</span><span class="tab-lbl">Деньги</span></button>
+  <button class="tab-btn" data-page="page-tips"       onclick="switchTab(this)"><span class="tab-icon">💡</span><span class="tab-lbl">Советы</span></button>
+  <button class="tab-btn" data-page="page-medicine"   onclick="switchTab(this)"><span class="tab-icon">💊</span><span class="tab-lbl">Медицина</span></button>
+  <button class="tab-btn" data-page="page-leisure"    onclick="switchTab(this)"><span class="tab-icon">🎯</span><span class="tab-lbl">Досуг</span></button>
+  <button class="tab-btn" data-page="page-history"    onclick="switchTab(this)"><span class="tab-icon">📜</span><span class="tab-lbl">История</span></button>
+  <button class="tab-btn" data-page="page-facts"      onclick="switchTab(this)"><span class="tab-icon">💎</span><span class="tab-lbl">Факты</span></button>
+  <button class="tab-btn" data-page="page-lang"       onclick="switchTab(this)"><span class="tab-icon">🗣️</span><span class="tab-lbl">Язык</span></button>
+<script>
+/* ═══ THEME ═══ */
+const themeBtn=document.getElementById('theme-btn');
+let isDark=localStorage.getItem('theme')==='dark';
+function applyTheme(){document.documentElement.setAttribute('data-theme',isDark?'dark':'light');localStorage.setItem('theme',isDark?'dark':'light')}
+applyTheme();
+themeBtn.addEventListener('click',()=>{isDark=!isDark;applyTheme()});
+
+/* ═══ SIDEBAR ═══ */
+const sidebarNav=[
+  {page:'page-home',     icon:'🏠', name:'Главная',    sub:'Старт'},
+  {page:'page-converter',icon:'💱', name:'Конвертер',  sub:'USD · BYN · VND'},
+  {page:'page-food',     icon:'🍜', name:'Где поесть', sub:'80+ мест, 4 категории'},
+  {page:'page-cowork',   icon:'💻', name:'Коворкинг',  sub:'20+ кафе с Wi-Fi'},
+  {page:'page-atm',      icon:'🏧', name:'Деньги',     sub:'Банкоматы и обменники'},
+  {page:'page-tips',     icon:'💡', name:'Советы',     sub:'100 советов'},
+  {page:'page-medicine', icon:'💊', name:'Медицина',   sub:'Аптеки, клиники, помощь'},
+  {page:'page-leisure',  icon:'🎯', name:'Досуг',      sub:'100 мест и активностей'},
+  {page:'page-history',  icon:'📜', name:'История',    sub:'2000 лет Дананга'},
+  {page:'page-facts',    icon:'💎', name:'Факты',      sub:'100 фактов о Дананге'},
+  {page:'page-lang',     icon:'🗣️', name:'Язык',       sub:'100 вьетнамских фраз'},
+];
+const sidebarList=document.getElementById('sidebar-list');
+const sidebarEl=document.getElementById('sidebar');
+const overlayEl=document.getElementById('sidebar-overlay');
+function openSidebar(){
+  sidebarEl.classList.add('open');overlayEl.classList.add('open');
+  document.body.style.overflow='hidden';
+  sidebarList.querySelectorAll('.sidebar-item').forEach(el=>{
+    el.classList.toggle('active',el.dataset.page===currentTab);
+  });
+}
+function closeSidebar(){sidebarEl.classList.remove('open');overlayEl.classList.remove('open');document.body.style.overflow=''}
+document.getElementById('burger-btn').addEventListener('click',openSidebar);
+document.getElementById('sidebar-close').addEventListener('click',closeSidebar);
+overlayEl.addEventListener('click',closeSidebar);
+sidebarNav.forEach(item=>{
+  const el=document.createElement('div');el.className='sidebar-item';el.dataset.page=item.page;
+  el.innerHTML=`<span class="sidebar-icon">${item.icon}</span><div><div class="sidebar-name">${item.name}</div><div class="sidebar-sub">${item.sub}</div></div>`;
+  el.addEventListener('click',()=>{closeSidebar();goTo(item.page)});
+  sidebarList.appendChild(el);
+});
+
+/* ═══ NAVIGATION ═══ */
+let currentTab='page-home';
+function switchTab(btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('detail-page').classList.remove('active');
+  document.getElementById('hist-detail-page').classList.remove('active');
+  btn.classList.add('active');
+  currentTab=btn.dataset.page;
+  document.getElementById(currentTab).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  btn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+function goTo(pageId){
+  const btn=document.querySelector(`.tab-btn[data-page="${pageId}"]`);
+  if(btn) switchTab(btn);
+}
+
+/* ═══ DETAIL PAGE ═══ */
+function openDetail(item){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('detail-page').classList.add('active');
+  document.getElementById('detail-tag').textContent=item.tag||'';
+  document.getElementById('detail-name').textContent=item.name;
+  document.getElementById('detail-addr').textContent=item.addr||'';
+  document.getElementById('detail-desc').textContent=item.fullDesc||item.desc;
+  const mg=document.getElementById('detail-meta');mg.innerHTML='';
+  (item.meta||[]).forEach(m=>{mg.innerHTML+=`<div class="detail-meta-item"><div class="detail-meta-label">${m.label}</div><div class="detail-meta-val">${m.val}</div></div>`});
+  const ac=document.getElementById('detail-actions');ac.innerHTML='';
+  if(item.maps)ac.innerHTML+=`<a class="btn-action btn-primary" href="${item.maps}" target="_blank">🗺️ Открыть в Google Maps</a>`;
+  if(item.site)ac.innerHTML+=`<a class="btn-action btn-secondary" href="${item.site}" target="_blank">🌐 Сайт</a>`;
+  const tw=document.getElementById('detail-tips-wrap'),td=document.getElementById('detail-tips');
+  if(item.tips&&item.tips.length){td.innerHTML=item.tips.map(t=>`<div class="tip-item"><span>${t.icon}</span><span>${t.text}</span></div>`).join('');tw.style.display='block'}
+  else tw.style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('detail-back').addEventListener('click',()=>{
+  document.getElementById('detail-page').classList.remove('active');
+  document.getElementById(currentTab).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+/* ═══ HOME GRID ═══ */
+const homeItems=[
+  {page:'page-converter',icon:'💱',label:'Финансы',   name:'Конвертер',   desc:'USD · BYN · VND',              cls:'tile-c1 span2',badge:'1 USD = 26 200 VND'},
+  {page:'page-food',     icon:'🍜',label:'Гастрономия',name:'Где поесть', desc:'80+ мест, 4 категории',        cls:'tile-c2'},
+  {page:'page-cowork',   icon:'💻',label:'Работа',    name:'Коворкинг',   desc:'20+ кафе с Wi-Fi',             cls:'tile-c3'},
+  {page:'page-atm',      icon:'🏧',label:'Деньги',    name:'Банкоматы',   desc:'Нулевая комиссия + обменники', cls:'tile-c4'},
+  {page:'page-tips',     icon:'💡',label:'Полезное',  name:'Советы',      desc:'100 советов по жизни',         cls:'tile-c6'},
+  {page:'page-medicine', icon:'💊',label:'Здоровье',  name:'Медицина',    desc:'Аптеки, клиники, помощь',      cls:'tile-c9'},
+  {page:'page-leisure',  icon:'🎯',label:'Отдых',     name:'Досуг',       desc:'100 лучших мест',              cls:'tile-c5'},
+  {page:'page-history',  icon:'📜',label:'История',   name:'История',     desc:'2000 лет Дананга',             cls:'tile-c8'},
+  {page:'page-facts',    icon:'💎',label:'Интересное',name:'Факты',       desc:'100 фактов о Дананге',         cls:'tile-c7'},
+  {page:'page-lang',     icon:'🗣️',label:'Язык',      name:'Вьетнамский', desc:'100 слов и фраз',              cls:'tile-c3 span2'},
+];
+const grid=document.getElementById('home-grid');
+homeItems.forEach(item=>{
+  const d=document.createElement('div');
+  d.className=`home-tile ${item.cls}`;
+  d.innerHTML=`<span class="tile-arr">↗</span><div><div class="tile-header"><span class="tile-icon">${item.icon}</span><span class="tile-name">${item.name}</span></div><div class="tile-desc">${item.desc}</div></div>${item.badge?`<span class="tile-badge">${item.badge}</span>`:''}`;
+  d.addEventListener('click',()=>goTo(item.page));
+  grid.appendChild(d);
+});
+
+/* ═══ CARD HELPER ═══ */
+function makeCard(item,cid){
+  const d=document.createElement('div');d.className='card';
+  d.innerHTML=`<span class="card-arr">↗</span><div class="card-tag tag-${item.tc||'cafe'}">${item.tag}</div><div class="card-name">${item.name}</div><div class="card-addr">${item.addr||''}</div><div class="card-desc">${item.desc}</div>${item.price?`<span class="card-price ${item.price.startsWith('Бес')?'neutral':''}">${item.price}</span>`:''}`;
+  d.addEventListener('click',()=>openDetail(item));
+  document.getElementById(cid).appendChild(d);
+}
+
+/* ═══════════════════════════════════════════
+   DATA: FOOD — Азиатская кухня (20)
+═══════════════════════════════════════════ */
+[
+  {name:'Mì Quảng 1A',tag:'Вьетнамская',tc:'street',addr:'1 Hải Phòng',desc:'Культовая turmeric-лапша с креветками и яйцами — главное блюдо Дананга.',fullDesc:'Turmeric-лапша с креветками, свининой, яйцами и рисовым крекером. Культовый адрес Дананга.',price:'35–55 тыс.',maps:'https://maps.google.com/?q=Mi+Quang+1A+Da+Nang',meta:[{label:'Часы',val:'06:30–13:00'}]},
+  {name:'Bánh Xèo Bà Dưỡng',tag:'Вьетнамская',tc:'street',addr:'23 Hoàng Diệu',desc:'Хрустящие рисовые блины с креветками. Легендарный адрес.',fullDesc:'Рисовые блины с креветками, свининой и зеленью. Открыты до полудня.',price:'40–60 тыс.',maps:'https://maps.google.com/?q=Banh+Xeo+Ba+Duong+Da+Nang',meta:[{label:'Часы',val:'07:00–12:00'}],tips:[{icon:'⏰',text:'Приходи до 10:00.'}]},
+  {name:'Bún Chả Cá Hòn',tag:'Вьетнамская',tc:'street',addr:'Район My An',desc:'Суп-лапша с рыбными котлетами — кислый, сладкий, пряный бульон.',price:'40–60 тыс.',maps:'https://maps.google.com/?q=Bun+Cha+Ca+Da+Nang',meta:[{label:'Часы',val:'06:00–12:00'}]},
+  {name:'Phở Xưa',tag:'Вьетнамская · Фо',tc:'street',addr:'Hải Châu',desc:'Классическое фо-бо с наваристым говяжьим бульоном — один из лучших адресов.',price:'50–70 тыс.',maps:'https://maps.google.com/?q=Pho+Xua+Da+Nang',meta:[{label:'Часы',val:'06:00–11:00 / 17:00–21:00'}]},
+  {name:'Bún Bò Huế O Xuân',tag:'Вьетнамская',tc:'street',addr:'Ngũ Hành Sơn',desc:'Острый суп из Хюэ — лапша с говядиной и лемонграссом.',price:'40–60 тыс.',maps:'https://maps.google.com/?q=Bun+Bo+Hue+Da+Nang'},
+  {name:'Bánh Mì Cô Tiên',tag:'Уличная еда',tc:'street',addr:'Район An Thuong',desc:'Лучший баньми — хрустящий багет с паштетом и свининой.',price:'20–30 тыс.',maps:'https://maps.google.com/?q=Banh+Mi+Co+Tien+Da+Nang',tips:[{icon:'🌶️',text:'«Không cay» — без острого.'}]},
+  {name:'Madame Lan',tag:'Вьетнамская · Ресторан',tc:'resto',addr:'1 Hải Phòng',desc:'Элегантный ресторан у реки. Аутентичная кухня, красивая подача.',price:'150–350 тыс.',maps:'https://maps.google.com/?q=Madame+Lan+Da+Nang',tips:[{icon:'🌅',text:'Столик с видом на реку.'}]},
+  {name:'Bé Mặn Seafood',tag:'Морепродукты',tc:'resto',addr:'Пляж My Khe',desc:'Живые крабы, лобстеры, кальмары на гриле прямо у пляжа.',price:'200–600 тыс.',maps:'https://maps.google.com/?q=Be+Man+Seafood+Da+Nang',tips:[{icon:'⚖️',text:'Цена за вес — уточняй заранее.'}]},
+  {name:'Nhà Hàng Trúc Lâm Viên',tag:'Вьетнамская · Ресторан',tc:'resto',addr:'Ngũ Hành Sơn',desc:'Традиционная кухня в красивом деревянном интерьере с прудом.',price:'150–400 тыс.',maps:'https://maps.google.com/?q=Truc+Lam+Vien+Da+Nang'},
+  {name:'Gánh Hàng Rong',tag:'Уличная еда',tc:'street',addr:'Hải Châu',desc:'Знаменитая «тележка» с разными блюдами — com ga, bún thịt nướng.',price:'30–50 тыс.',maps:'https://maps.google.com/?q=Ganh+Hang+Rong+Da+Nang'},
+  {name:'Sushi World Da Nang',tag:'Японская',tc:'cafe',addr:'An Thuong',desc:'Конвейерные суши по доступным ценам — свежие рыба и морепродукты.',price:'150–300 тыс.',maps:'https://maps.google.com/?q=Sushi+World+Da+Nang'},
+  {name:'Korea Garden BBQ',tag:'Корейская',tc:'cafe',addr:'Phạm Văn Đồng',desc:'Корейское барбекю самсу и кальби — жаришь сам на столе.',price:'250–500 тыс.',maps:'https://maps.google.com/?q=Korea+Garden+BBQ+Da+Nang'},
+  {name:'Thái Express',tag:'Тайская',tc:'cafe',addr:'Nguyễn Văn Thoại',desc:'Том Ям, Пад Тай, карри — правильная тайская кухня в Дананге.',price:'120–200 тыс.',maps:'https://maps.google.com/?q=Thai+Express+Da+Nang'},
+  {name:'Cơm Gà Bà Buội',tag:'Вьетнамская',tc:'street',addr:'Trần Phú',desc:'Cơm gà — рис с куриным бульоном, фирменный стиль Хойан в Дананге.',price:'45–65 тыс.',maps:'https://maps.google.com/?q=Com+Ga+Ba+Buoi+Da+Nang'},
+  {name:'Bánh Canh Bà Ngọc',tag:'Вьетнамская',tc:'street',addr:'My An',desc:'Bánh canh — толстая рисовая лапша в наваристом бульоне с крабом.',price:'35–60 тыс.',maps:'https://maps.google.com/?q=Banh+Canh+Da+Nang'},
+  {name:'Hải Sản Biển Đông',tag:'Морепродукты',tc:'resto',addr:'Набережная',desc:'Большой ресторан с аквариумами — выбираешь живую рыбу сам.',price:'300–800 тыс.',maps:'https://maps.google.com/?q=Hai+San+Bien+Dong+Da+Nang'},
+  {name:'Bánh Tráng Cuốn Thịt Heo',tag:'Вьетнамская',tc:'street',addr:'Hai Chau',desc:'Рисовые блинчики со свининой — уникальное блюдо из Дананга.',price:'60–90 тыс.',maps:'https://maps.google.com/?q=Banh+Trang+Da+Nang'},
+  {name:'Quán Mì Quảng Ếch',tag:'Вьетнамская',tc:'street',addr:'Hải Châu',desc:'Мыкуанг с лягушачьими лапками — необычный местный вариант.',price:'45–70 тыс.',maps:'https://maps.google.com/?q=Mi+Quang+Ech+Da+Nang'},
+  {name:'Quán Cháo Lòng',tag:'Уличная еда',tc:'street',addr:'Thanh Khe',desc:'Рисовая каша с потрохами — типичный местный завтрак.',price:'25–40 тыс.',maps:'https://maps.google.com/?q=Chao+Long+Da+Nang',meta:[{label:'Часы',val:'05:30–10:00'}]},
+  {name:'Nem Lụi Bà Vũ',tag:'Вьетнамская',tc:'street',addr:'Hải Châu',desc:'Nem lụi — мясные шашлычки на лимонниковых палочках с рисовой бумагой.',price:'50–80 тыс.',maps:'https://maps.google.com/?q=Nem+Lui+Da+Nang'},
+].forEach(i=>makeCard(i,'food-asian'));
+
+/* ═══════════════════════════════════════════
+   DATA: FOOD — Европейская кухня (20)
+═══════════════════════════════════════════ */
+[
+  {name:'Le Rendez Vous',tag:'Французская',tc:'euro',addr:'72/17 Nguyễn Văn Thoại',desc:'Дегустационные меню с фуа-гра. Лучший ужин в городе.',price:'500–1200 тыс.',maps:'https://maps.google.com/?q=Le+Rendez+Vous+Da+Nang',meta:[{label:'Часы',val:'18:00–22:30'},{label:'Бронь',val:'Обязательна'}],tips:[{icon:'👔',text:'Дресс-код smart casual.'}]},
+  {name:'Tacos Da Nang',tag:'Мексиканская',tc:'euro',addr:'41 Nguyễn Thị Sỹ',desc:'Буррито, начос — лучшее мексиканское место Дананга.',price:'120–220 тыс.',maps:'https://maps.google.com/?q=Tacos+Da+Nang',meta:[{label:'Часы',val:'11:00–23:30'}]},
+  {name:'Waterfront Restaurant',tag:'Международная',tc:'euro',addr:'150–152 Bạch Đằng',desc:'Стейки, паста, морепродукты с видом на реку Хан.',price:'300–700 тыс.',maps:'https://maps.google.com/?q=Waterfront+Restaurant+Da+Nang'},
+  {name:'The Pub',tag:'Пивной ресторан',tc:'euro',addr:'An Thuong',desc:'Бургеры, пицца, крылышки и широкий выбор крафтового пива.',price:'150–350 тыс.',maps:'https://maps.google.com/?q=The+Pub+Da+Nang'},
+  {name:'Bosphorus Turkish Restaurant',tag:'Турецкая',tc:'euro',addr:'My An',desc:'Шаурма, кебаб, лаваш — настоящая турецкая кухня.',price:'150–300 тыс.',maps:'https://maps.google.com/?q=Bosphorus+Da+Nang'},
+  {name:'Fatfish Restaurant',tag:'Средиземноморская',tc:'euro',addr:'478 Trần Hưng Đạo',desc:'Паэлья, рыбные тарелки, хумус и греческие salad.',price:'200–500 тыс.',maps:'https://maps.google.com/?q=Fatfish+Da+Nang'},
+  {name:'Ortus Bistro & Beers',tag:'Европейская',tc:'euro',addr:'Tan Tra Beach',desc:'Бургеры, сэндвичи и крафтовое пиво прямо у скрытого пляжа.',price:'120–280 тыс.',maps:'https://maps.google.com/?q=Ortus+Bistro+Da+Nang'},
+  {name:'Italiano Da Nang',tag:'Итальянская',tc:'euro',addr:'Phạm Văn Đồng',desc:'Настоящая пицца в дровяной печи и паста от итальянского шефа.',price:'200–500 тыс.',maps:'https://maps.google.com/?q=Italiano+Da+Nang'},
+  {name:'Bread of Life',tag:'Сэндвичи · Кафе',tc:'euro',addr:'4 Đống Đa',desc:'Лучшие сэндвичи и завтраки в западном стиле, есть вегетарианское.',price:'80–180 тыс.',maps:'https://maps.google.com/?q=Bread+of+Life+Da+Nang'},
+  {name:'Pepperoni Pizza',tag:'Американская',tc:'euro',addr:'Phạm Văn Đồng',desc:'Классическая американская пицца с щедрыми топпингами.',price:'150–350 тыс.',maps:'https://maps.google.com/?q=Pepperoni+Pizza+Da+Nang'},
+  {name:'El Gaucho Steakhouse',tag:'Стейк-хаус',tc:'euro',addr:'Biển My Khe',desc:'Аргентинские стейки на углях — лучшее мясо в Дананге.',price:'400–900 тыс.',maps:'https://maps.google.com/?q=El+Gaucho+Da+Nang'},
+  {name:'Luna Pub & Grille',tag:'Американская',tc:'euro',addr:'An Thuong',desc:'Ребра BBQ, бургеры, крылышки Buffalo — классика американского паба.',price:'150–400 тыс.',maps:'https://maps.google.com/?q=Luna+Pub+Da+Nang'},
+  {name:'Indian Kitchen',tag:'Индийская',tc:'euro',addr:'My An',desc:'Карри, тандури, нааны — аутентичная северо-индийская кухня.',price:'120–280 тыс.',maps:'https://maps.google.com/?q=Indian+Kitchen+Da+Nang'},
+  {name:'Soul Kitchen Da Nang',tag:'Европейская · Кафе',tc:'euro',addr:'An Thuong',desc:'Яйца Бенедикт, авокадо-тост, смузи — идеальный западный завтрак.',price:'100–250 тыс.',maps:'https://maps.google.com/?q=Soul+Kitchen+Da+Nang'},
+  {name:'Ciao Bella',tag:'Итальянская',tc:'euro',addr:'Trần Hưng Đạo',desc:'Тирамису, паста карбонара, ризотто в уютном итальянском стиле.',price:'200–450 тыс.',maps:'https://maps.google.com/?q=Ciao+Bella+Da+Nang'},
+  {name:'Cargo Club (Hội An)',tag:'Фьюжн',tc:'euro',addr:'Hội An, 30 мин',desc:'Легендарный ресторан Хойана — вьетнамская и французская кухня.',price:'200–500 тыс.',maps:'https://maps.google.com/?q=Cargo+Club+Hoi+An'},
+  {name:'Burger Bro',tag:'Бургеры',tc:'euro',addr:'An Thuong',desc:'Крафтовые бургеры с сочными патти — лучший бургер в районе номадов.',price:'120–200 тыс.',maps:'https://maps.google.com/?q=Burger+Bro+Da+Nang'},
+  {name:'Big Man BBQ',tag:'BBQ · Американская',tc:'euro',addr:'Phạm Văn Đồng',desc:'Смоки рёбра, pulled pork, сочные стейки — американское BBQ.',price:'200–500 тыс.',maps:'https://maps.google.com/?q=Big+Man+BBQ+Da+Nang'},
+  {name:'Little India',tag:'Индийская',tc:'euro',addr:'My An',desc:'Вегетарианские тали, масала доса, свежевыжатые соки.',price:'100–250 тыс.',maps:'https://maps.google.com/?q=Little+India+Da+Nang'},
+  {name:'Pourquoi Pas Bistrot',tag:'Французская',tc:'euro',addr:'Nguyễn Văn Thoại',desc:'Крок-мсье, киш, французские десерты и вина.',price:'150–400 тыс.',maps:'https://maps.google.com/?q=Pourquoi+Pas+Da+Nang'},
+].forEach(i=>makeCard(i,'food-euro'));
+
+/* ═══════════════════════════════════════════
+   DATA: FOOD — ПП (20)
+═══════════════════════════════════════════ */
+[
+  {name:'Roots Plant-Based Cafe',tag:'Веган · ПП',tc:'pp',addr:'An Thuong',desc:'Смузи-боулы, авокадо-тосты, соки холодного отжима.',price:'60–130 тыс.',maps:'https://maps.google.com/?q=Roots+Cafe+Da+Nang'},
+  {name:'I Vegan',tag:'Веган',tc:'pp',addr:'An Thuong',desc:'100% растительное меню — бургеры, лапша, супы, десерты без животных продуктов.',price:'60–120 тыс.',maps:'https://maps.google.com/?q=I+Vegan+Da+Nang'},
+  {name:'Loving Hut',tag:'Веган',tc:'pp',addr:'Hải Châu',desc:'Сеть веган-ресторанов — большое меню, доступные цены.',price:'40–80 тыс.',maps:'https://maps.google.com/?q=Loving+Hut+Da+Nang'},
+  {name:'Danang Kitchen',tag:'ПП · Боулы',tc:'pp',addr:'An Thuong',desc:'Зерновые боулы, грилленые овощи, протеиновые смузи.',price:'80–150 тыс.',maps:'https://maps.google.com/?q=Danang+Kitchen'},
+  {name:'Fit Kitchen DN',tag:'ПП · Meal prep',tc:'pp',addr:'My An',desc:'Готовые ПП-боксы, низкокалорийные ланчи, подсчёт КБЖУ.',price:'80–150 тыс.',maps:'https://maps.google.com/?q=Fit+Kitchen+Da+Nang'},
+  {name:'The Green House',tag:'Вегетарианская',tc:'pp',addr:'Sơn Trà',desc:'Вегетарианская кухня с акцентом на буддийские традиции.',price:'40–90 тыс.',maps:'https://maps.google.com/?q=Green+House+Vegetarian+Da+Nang'},
+  {name:'Soul Food Da Nang',tag:'ПП · Кафе',tc:'pp',addr:'An Thuong',desc:'Гранола, йогуртовые парфе, ягодные смузи и зелёные детокс-соки.',price:'55–120 тыс.',maps:'https://maps.google.com/?q=Soul+Food+Da+Nang'},
+  {name:'Mama Pho',tag:'Суп · Лёгкое',tc:'pp',addr:'Hải Châu',desc:'Лёгкое домашнее фо с куриным бульоном — минимум жиров.',price:'45–65 тыс.',maps:'https://maps.google.com/?q=Mama+Pho+Da+Nang'},
+  {name:'Green Papaya Salad Bar',tag:'Салаты',tc:'pp',addr:'My An',desc:'Свежие салаты, тайские рулеты, азиатские дрессинги.',price:'70–130 тыс.',maps:'https://maps.google.com/?q=Green+Papaya+Da+Nang'},
+  {name:'Cơm Chay Thiên Bửu',tag:'Веган · Вьетнамский',tc:'pp',addr:'Thanh Khe',desc:'Традиционная вегетарианская вьетнамская кухня — по 20 тыс. VND.',price:'20–50 тыс.',maps:'https://maps.google.com/?q=Com+Chay+Da+Nang',meta:[{label:'Дни работы',val:'1-й и 15-й лунного мес.'}]},
+  {name:'Raw & Wild',tag:'Сыроедение',tc:'pp',addr:'An Thuong',desc:'Сырые десерты, raw-торты, ореховые боулы, суперфуды.',price:'80–180 тыс.',maps:'https://maps.google.com/?q=Raw+Wild+Da+Nang'},
+  {name:'The Whole Life',tag:'ПП · Healthy',tc:'pp',addr:'My An',desc:'Яичные боулы, лосось-гриль, овощные рагу без масла.',price:'90–170 тыс.',maps:'https://maps.google.com/?q=The+Whole+Life+Da+Nang'},
+  {name:'Shak Kitchen',tag:'Фреши · Смузи',tc:'pp',addr:'An Thuong',desc:'Тропические смузи, акай-боулы и свежевыжатые соки.',price:'50–100 тыс.',maps:'https://maps.google.com/?q=Shak+Kitchen+Da+Nang'},
+  {name:'Rau Câu Kiwi',tag:'Десерты · ПП',tc:'pp',addr:'Ngũ Hành Sơn',desc:'Желе из агар-агара с тропическими фруктами — лёгкие десерты.',price:'25–50 тыс.',maps:'https://maps.google.com/?q=Rau+Cau+Da+Nang'},
+  {name:'Ocean Cafe',tag:'Healthy · Берег',tc:'pp',addr:'Non Nuoc Beach',desc:'Рыба на гриле, свежие соки, кокосовые карри — у пляжа.',price:'80–200 тыс.',maps:'https://maps.google.com/?q=Ocean+Cafe+Da+Nang'},
+  {name:'Hoa Lư Vegetarian',tag:'Буддийская кухня',tc:'pp',addr:'Hải Châu',desc:'Бюджетный веган-ресторан в буддийском стиле — рис с овощами.',price:'25–50 тыс.',maps:'https://maps.google.com/?q=Hoa+Lu+Vegetarian+Da+Nang'},
+  {name:'Poke & Bowl DN',tag:'Поке-боулы',tc:'pp',addr:'An Thuong',desc:'Поке с лососем, тунцом, тофу на базе коричневого риса.',price:'90–160 тыс.',maps:'https://maps.google.com/?q=Poke+Bowl+Da+Nang'},
+  {name:'Cơm Chay Minh Đức',tag:'Веган',tc:'pp',addr:'My An',desc:'Ежедневные веган-ланчи с супом и 3 блюдами за 40 тыс.',price:'35–60 тыс.',maps:'https://maps.google.com/?q=Com+Chay+Minh+Duc+Da+Nang'},
+  {name:'Avocado Bar',tag:'Авокадо-кафе',tc:'pp',addr:'An Thuong',desc:'Авокадо-тосты, гуакамоле, авокадо-мороженое — всё из авокадо.',price:'70–140 тыс.',maps:'https://maps.google.com/?q=Avocado+Bar+Da+Nang'},
+  {name:'Detox Juice Bar',tag:'Детокс · Соки',tc:'pp',addr:'My An',desc:'Холодный отжим, детокс-программы, пшеничные ростки.',price:'50–90 тыс.',maps:'https://maps.google.com/?q=Detox+Juice+Bar+Da+Nang'},
+].forEach(i=>makeCard(i,'food-pp'));
+
+/* ═══════════════════════════════════════════
+   DATA: FOOD — Доставка (20)
+═══════════════════════════════════════════ */
+[
+  {name:'ShopeeFood',tag:'Агрегатор',tc:'delivery',addr:'Приложение / shopee.vn',desc:'Крупнейший агрегатор доставки во Вьетнаме. Огромный выбор ресторанов.',fullDesc:'Крупнейший агрегатор доставки. Широкий выбор, частые промо, оплата картой в приложении.',price:'Чек + 15–30 тыс. за доставку',site:'https://shopee.vn',meta:[{label:'Приложение',val:'iOS / Android'},{label:'Оплата',val:'Карта, наличные'}]},
+  {name:'GrabFood',tag:'Агрегатор',tc:'delivery',addr:'Приложение Grab',desc:'Встроенная доставка в Grab — быстро, удобно, оплата картой.',fullDesc:'Доставка через приложение Grab. Те же водители что и для поездок. Быстро, оплата картой.',price:'Чек + 15–25 тыс. за доставку',site:'https://grab.com',meta:[{label:'Время',val:'30–45 мин'},{label:'Оплата',val:'Карта, GrabPay'}]},
+  {name:'Baemin',tag:'Агрегатор',tc:'delivery',addr:'Приложение Baemin',desc:'Корейский агрегатор с хорошим UX и щедрыми промо-кодами.',fullDesc:'Корейский сервис доставки с красивым интерфейсом и частыми скидками.',price:'Чек + 10–25 тыс.',site:'https://baemin.vn',meta:[{label:'Промо-коды',val:'Часто в приложении'}]},
+  {name:'Now (Foody)',tag:'Агрегатор',tc:'delivery',addr:'now.vn / приложение',desc:'Один из первых агрегаторов Вьетнама — большой выбор кухонь.',price:'Чек + 15–30 тыс.',site:'https://now.vn'},
+  {name:'Pizza Home Da Nang',tag:'Пицца · Доставка',tc:'delivery',addr:'Phạm Văn Đồng',desc:'Лучшая пицца с доставкой — тонкое тесто, свежие топпинги.',price:'150–280 тыс.',maps:'https://maps.google.com/?q=Pizza+Home+Da+Nang',meta:[{label:'Доставка',val:'30–40 мин'}]},
+  {name:'Kentucky (KFC)',tag:'Фастфуд · Доставка',tc:'delivery',addr:'BigC / Vincom / ShopeeFood',desc:'KFC с доставкой через ShopeeFood или GrabFood.',price:'80–180 тыс.',meta:[{label:'Доставка',val:'через ShopeeFood/Grab'}]},
+  {name:'McDonald\'s Da Nang',tag:'Фастфуд · Доставка',tc:'delivery',addr:'Ngô Quyền',desc:'Макдоналдс с доставкой через приложения Grab и ShopeeFood.',price:'80–200 тыс.',maps:'https://maps.google.com/?q=McDonalds+Da+Nang',meta:[{label:'Доставка',val:'30–45 мин'}]},
+  {name:'Lotteria',tag:'Фастфуд · Доставка',tc:'delivery',addr:'Vincom Plaza',desc:'Корейский фастфуд — бургеры, картошка, рисовые бургеры.',price:'60–150 тыс.',maps:'https://maps.google.com/?q=Lotteria+Da+Nang'},
+  {name:'Sushi Tei (доставка)',tag:'Японская · Доставка',tc:'delivery',addr:'через ShopeeFood',desc:'Суши, роллы, рамен с доставкой от популярной сети.',price:'200–500 тыс.',meta:[{label:'Доставка',val:'через ShopeeFood'}]},
+  {name:'Cơm Tấm Bà Ký',tag:'Вьетнамская · Доставка',tc:'delivery',addr:'Thanh Khe / доставка',desc:'Сломанный рис com tam с яйцом и свининой — классика с доставкой.',price:'45–70 тыс.',maps:'https://maps.google.com/?q=Com+Tam+Ba+Ky+Da+Nang'},
+  {name:'Home Meal Prep DN',tag:'ПП · Доставка',tc:'delivery',addr:'My An / Instagram',desc:'Недельные ПП-боксы с КБЖУ — заказывай напрямую в Instagram.',price:'600–900 тыс./неделя',meta:[{label:'Канал',val:'Instagram @homemeal_dn'}]},
+  {name:'Bánh Mì Delivery',tag:'Баньми · Доставка',tc:'delivery',addr:'через Baemin / GrabFood',desc:'Быстрая доставка баньми прямо к двери — за 25–30 тыс.',price:'25–45 тыс.',meta:[{label:'Доставка',val:'через Baemin'}]},
+  {name:'Phở 24',tag:'Фо · Доставка',tc:'delivery',addr:'ShopeeFood / Grab',desc:'Сеть фо с доставкой — стабильное качество по всему городу.',price:'60–90 тыс.',meta:[{label:'Сеть',val:'по всему Дананге'}]},
+  {name:'Jollibee',tag:'Фастфуд · Доставка',tc:'delivery',addr:'Vincom / доставка',desc:'Филиппинский фастфуд — знаменитые Chickenjoy и Jolly Spaghetti.',price:'70–160 тыс.',maps:'https://maps.google.com/?q=Jollibee+Da+Nang'},
+  {name:'Kichi Kichi (доставка)',tag:'Корейская · Доставка',tc:'delivery',addr:'Vincom Plaza / ShopeeFood',desc:'Корейское шабу-шабу и барбекю — теперь с доставкой.',price:'200–400 тыс.',meta:[{label:'Доставка',val:'только через ShopeeFood'}]},
+  {name:'Dim Sum Da Nang',tag:'Китайская · Доставка',tc:'delivery',addr:'Hải Châu / доставка',desc:'Свежие дим-самы, байчоу, роллы с доставкой.',price:'100–250 тыс.',maps:'https://maps.google.com/?q=Dim+Sum+Da+Nang'},
+  {name:'Ăn Vặt Night Box',tag:'Снеки · Доставка',tc:'delivery',addr:'Grab / ShopeeFood (ночь)',desc:'Ночная доставка снеков — жареная кукуруза, баоцзы, яичные блины.',price:'30–80 тыс.',meta:[{label:'Часы',val:'22:00–04:00'}]},
+  {name:'Smoothie & Juice DN',tag:'Соки · Доставка',tc:'delivery',addr:'An Thuong / ShopeeFood',desc:'Тропические смузи и соки с доставкой к отелю или пляжу.',price:'35–70 тыс.',meta:[{label:'Доставка',val:'20–30 мин'}]},
+  {name:'Bánh Pizza Việt',tag:'Пицца Vietnamese',tc:'delivery',addr:'ShopeeFood',desc:'Вьетнамская пицца на рисовом тесте — нестандартно и вкусно.',price:'80–150 тыс.',meta:[{label:'Доставка',val:'через ShopeeFood'}]},
+  {name:'Curry Express',tag:'Карри · Доставка',tc:'delivery',addr:'My An / Baemin',desc:'Тайское и индийское карри с рисом — быстрая доставка, большие порции.',price:'80–160 тыс.',meta:[{label:'Доставка',val:'через Baemin'}]},
+].forEach(i=>makeCard(i,'food-delivery'));
+
+/* Food filter */
+document.getElementById('food-filter').addEventListener('click',e=>{
+  const btn=e.target.closest('.cat-btn');if(!btn)return;
+  const cat=btn.dataset.cat;
+  document.querySelectorAll('#food-filter .cat-btn').forEach(b=>b.classList.toggle('active',b===btn));
+  document.querySelectorAll('.food-cat-section').forEach(s=>{
+    if(cat==='all')s.classList.remove('hidden');
+    else s.classList.toggle('hidden',s.id!==`fcat-${cat}`);
+  });
+});
+
+/* ═══════════════════════════════════════════
+   DATA: COWORK (22)
+═══════════════════════════════════════════ */
+[
+  {name:'I Vegan (3-й этаж)',tag:'Бесплатно · Коворкинг',tc:'free',addr:'An Thuong',desc:'Единственный бесплатный коворкинг-этаж. Open-space, розетки, кондиционер.',price:'Бесплатно (за покупку)',maps:'https://maps.google.com/?q=I+Vegan+Da+Nang',meta:[{label:'Часы',val:'08:00–21:00'},{label:'Wi-Fi',val:'Стабильный'}]},
+  {name:'Gozar Coffee',tag:'Бесплатно · Кафе',tc:'free',addr:'An Thuong',desc:'Тихий рабочий этаж, сильный Wi-Fi, розетки у каждого стола.',price:'Бесплатно (за покупку)',maps:'https://maps.google.com/?q=Gozar+Coffee+Da+Nang',meta:[{label:'Часы',val:'07:00–22:00'},{label:'Wi-Fi',val:'Отличный'}]},
+  {name:'Roots Plant-Based',tag:'Бесплатно · Healthy',tc:'free',addr:'An Thuong',desc:'Несколько роутеров, много розеток, приятная здоровая еда.',price:'Бесплатно (за покупку)',maps:'https://maps.google.com/?q=Roots+Cafe+Da+Nang',meta:[{label:'Часы',val:'07:30–21:00'}]},
+  {name:'DNG Coffee',tag:'Бесплатно · Кафе',tc:'free',addr:'Центр, Hải Châu',desc:'Просторный индустриальный интерьер, сильный Wi-Fi и высокие потолки.',price:'Бесплатно (за покупку)',maps:'https://maps.google.com/?q=DNG+Coffee+Da+Nang',meta:[{label:'Часы',val:'07:00–21:00'}]},
+  {name:'Lighthouse Cafe',tag:'Бесплатно · Кафе',tc:'free',addr:'54 An Thượng 2',desc:'3 этажа в 5 мин от пляжа, стабильный Wi-Fi и розетки везде.',price:'Бесплатно (за покупку)',maps:'https://maps.google.com/?q=Lighthouse+Cafe+Da+Nang',meta:[{label:'Часы',val:'07:00–22:00'}]},
+  {name:'Trình Cà Phê',tag:'Бесплатно · Аутентичный',tc:'free',addr:'My An',desc:'Яичный кофе, кофе с авокадо. Местный колорит без туристической наценки.',price:'Бесплатно (за покупку)',maps:'https://maps.google.com/?q=Trinh+Ca+Phe+Da+Nang'},
+  {name:'XLIII Specialty Coffee',tag:'Specialty · Тихо',tc:'free',addr:'An Thuong',desc:'Минималистичная атмосфера, тихо, хороший specialty кофе.',price:'55–90 тыс.',maps:'https://maps.google.com/?q=XLIII+Coffee+Da+Nang',meta:[{label:'Часы',val:'08:00–21:00'}]},
+  {name:'The Vintage Emporium',tag:'Антикварное кафе',tc:'free',addr:'Hải Châu',desc:'Уютный ретро-интерьер, быстрый Wi-Fi, тихое место для работы.',price:'40–80 тыс.',maps:'https://maps.google.com/?q=Vintage+Emporium+Da+Nang'},
+  {name:'Cong Caphe',tag:'Ностальгический',tc:'free',addr:'Trần Phú',desc:'Сеть кафе в советско-вьетнамском стиле. Кокосовый кофе со льдом.',price:'35–70 тыс.',maps:'https://maps.google.com/?q=Cong+Caphe+Da+Nang',meta:[{label:'Сеть',val:'Несколько точек'}]},
+  {name:'Highlands Coffee',tag:'Сеть · Коворкинг',tc:'free',addr:'Vincom / BigC',desc:'Крупнейшая кофейная сеть Вьетнама — стабильный Wi-Fi и кондиционер.',price:'45–80 тыс.',maps:'https://maps.google.com/?q=Highlands+Coffee+Da+Nang',meta:[{label:'Сеть',val:'Несколько точек'}]},
+  {name:'The Coffee House',tag:'Сеть · Кафе',tc:'free',addr:'Nguyễn Văn Thoại',desc:'Популярная сеть, удобные кресла, быстрый Wi-Fi, есть розетки.',price:'45–85 тыс.',maps:'https://maps.google.com/?q=The+Coffee+House+Da+Nang'},
+  {name:'Starbucks Da Nang',tag:'Сеть · Надёжно',tc:'free',addr:'BigC / Vincom',desc:'Стабильный Wi-Fi, предсказуемый кофе, понятная среда для работы.',price:'80–150 тыс.',maps:'https://maps.google.com/?q=Starbucks+Da+Nang',meta:[{label:'Wi-Fi',val:'Стабильный'}]},
+  {name:'Salt Coffee',tag:'Бесплатно · Specialty',tc:'free',addr:'My An',desc:'Соленый кофе — фирменное блюдо Дананга. Тихое место, хороший Wi-Fi.',price:'45–80 тыс.',maps:'https://maps.google.com/?q=Salt+Coffee+Da+Nang'},
+  {name:'Mia Coffee House',tag:'Уютное кафе',tc:'free',addr:'An Thuong',desc:'Уютный деревянный интерьер, отличный кофе, дружелюбный персонал.',price:'40–75 тыс.',maps:'https://maps.google.com/?q=Mia+Coffee+Da+Nang'},
+  {name:'Pacific Coffee Co.',tag:'Гонконгский стиль',tc:'free',addr:'Hải Châu',desc:'Гонконгский стиль, сильный кофе, Wi-Fi и удобные стулья.',price:'50–90 тыс.',maps:'https://maps.google.com/?q=Pacific+Coffee+Da+Nang'},
+  {name:'Cafe Zoom',tag:'Бесплатно · Просторный',tc:'free',addr:'My An',desc:'Большой зал, много розеток, сильный Wi-Fi — популярен у фрилансеров.',price:'40–80 тыс.',maps:'https://maps.google.com/?q=Cafe+Zoom+Da+Nang'},
+  {name:'Paper Cafe',tag:'Арт · Кафе',tc:'free',addr:'Hải Châu',desc:'Арт-кафе с журналами и книгами. Тихая атмосфера для глубокой работы.',price:'40–75 тыс.',maps:'https://maps.google.com/?q=Paper+Cafe+Da+Nang'},
+  {name:'The Crane Coffee',tag:'Specialty · Тихо',tc:'free',addr:'Ngũ Hành Sơn',desc:'Маленькое тихое specialty-кафе с отличными фильтр-кофе.',price:'50–90 тыс.',maps:'https://maps.google.com/?q=The+Crane+Coffee+Da+Nang'},
+  {name:'Nest Coffee',tag:'Панорамный вид',tc:'free',addr:'Sơn Trà',desc:'Кафе с видом на море и полуостров Сон Чы — вдохновляет на работу.',price:'50–90 тыс.',maps:'https://maps.google.com/?q=Nest+Coffee+Da+Nang'},
+  {name:'Eco Green Cafe',tag:'Эко · Сад',tc:'free',addr:'Ngũ Hành Sơn',desc:'Кафе в тропическом саду — уединённые столики под деревьями.',price:'40–80 тыс.',maps:'https://maps.google.com/?q=Eco+Green+Cafe+Da+Nang'},
+  {name:'F-Studio Cowork',tag:'Платный · Профессиональный',tc:'free',addr:'Phạm Văn Đồng',desc:'Полноценный коворкинг — переговорные, принтер, выделенный интернет.',price:'100–200 тыс./день',maps:'https://maps.google.com/?q=coworking+Da+Nang',meta:[{label:'Услуги',val:'Принтер, переговорная'},{label:'Часы',val:'08:00–22:00'}]},
+  {name:'Work Zone Da Nang',tag:'Платный · Коворкинг',tc:'free',addr:'Hải Châu',desc:'Профессиональный коворкинг с кабинками для звонков и скоростным интернетом.',price:'150–300 тыс./день',maps:'https://maps.google.com/?q=coworking+space+Da+Nang',meta:[{label:'Интернет',val:'100 Мбит/с'},{label:'Кабинки',val:'Для звонков'}]},
+].forEach(i=>makeCard(i,'cowork-cards'));
+
+/* ═══════════════════════════════════════════
+   DATA: ATM
+═══════════════════════════════════════════ */
+[
+  {name:'Кластер An Thuong',tag:'Банкоматы',tc:'atm',addr:'Nguyễn Văn Thoại',desc:'VPBank и ACB без комиссии в пешей доступности от номадских кафе.',maps:'https://maps.google.com/?q=VPBank+ATM+An+Thuong',meta:[{label:'Банки',val:'VPBank, ACB, BIDV'},{label:'Комиссия',val:'0 VND (VPBank/ACB)'}]},
+  {name:'Vincom Plaza ATM',tag:'Банкоматы',tc:'atm',addr:'910A Ngô Quyền, Sơn Trà',desc:'Несколько банков на одном месте — удобно для сравнения.',maps:'https://maps.google.com/?q=Vincom+Plaza+Da+Nang',meta:[{label:'Банки',val:'VPBank, BIDV, ACB'}]},
+  {name:'Улица Trần Phú',tag:'Банкоматы',tc:'atm',addr:'Hải Châu',desc:'Центральная улица с отделениями всех крупных банков — банкоматы 24/7.',maps:'https://maps.google.com/?q=Tran+Phu+Da+Nang+bank',meta:[{label:'Банкоматы',val:'Круглосуточно'}]},
+].forEach(i=>makeCard(i,'atm-cards'));
+
+/* ═══════════════════════════════════════════
+   DATA: EXCHANGE (обменники)
+═══════════════════════════════════════════ */
+[
+  {name:'Tiệm Vàng Bảo Tín',tag:'Обменник · Золото',tc:'exchange',addr:'Trần Phú, Hải Châu',desc:'Ювелирный магазин с лучшим курсом USD/EUR в центре города.',fullDesc:'Ювелирный магазин с обменом валюты. Курс USD и EUR как правило выше банковского на 1–2%.',price:'Лучший курс',maps:'https://maps.google.com/?q=Bao+Tin+jewelry+Da+Nang',meta:[{label:'Валюты',val:'USD, EUR, GBP'},{label:'Часы',val:'08:00–20:00'}],tips:[{icon:'💱',text:'Приноси крупные купюры — за мелкие курс хуже.'}]},
+  {name:'Chợ Hàn Exchange',tag:'Обменник · Рынок',tc:'exchange',addr:'Рынок Хан, 1-й этаж',desc:'Обменники в рынке Хан — конкурентный курс, работают до вечера.',fullDesc:'На 1-м этаже рынка Хан несколько обменников. Можно сравнить курс между ними.',price:'Средний курс',maps:'https://maps.google.com/?q=Han+Market+Da+Nang',meta:[{label:'Часы',val:'07:00–18:00'},{label:'Торг',val:'Возможен'}]},
+  {name:'Vietcombank Exchange',tag:'Обменник · Банк',tc:'exchange',addr:'Trần Phú',desc:'Официальный обмен в банке — надёжно, но курс немного хуже рынка.',fullDesc:'Официальный обмен в отделении Vietcombank. Нужен паспорт. Надёжно, без рисков.',price:'Банковский курс',maps:'https://maps.google.com/?q=Vietcombank+Da+Nang',meta:[{label:'Документы',val:'Паспорт обязателен'},{label:'Часы',val:'08:00–17:00 (Пн–Пт)'}]},
+  {name:'Airport Exchange (HSBC)',tag:'Обменник · Аэропорт',tc:'exchange',addr:'Аэропорт Da Nang',desc:'HSBC в аэропорту — надёжно, но курс хуже города на 2–3%.',fullDesc:'Обменник в зоне прилёта аэропорта. Удобен при прилёте, но курс менее выгодный.',price:'Ниже рыночного',maps:'https://maps.google.com/?q=Da+Nang+airport',meta:[{label:'Совет',val:'Меняй минимум — доберись до города'}]},
+  {name:'Tiệm Vàng Kim Long',tag:'Обменник · Золото',tc:'exchange',addr:'Hải Châu',desc:'Ещё один надёжный ювелирный обменник с хорошим курсом.',fullDesc:'Ювелирный магазин с выгодным обменом USD и EUR. Популярен среди экспатов.',price:'Хороший курс',maps:'https://maps.google.com/?q=Kim+Long+jewelry+Da+Nang',meta:[{label:'Часы',val:'08:30–20:00'}]},
+  {name:'BigC Exchange Counter',tag:'Обменник · Супермаркет',tc:'exchange',addr:'BigC, Ngô Quyền',desc:'Обменник внутри гипермаркета BigC — удобно совместить с шоппингом.',fullDesc:'Стойка обмена валют внутри BigC. Работает в часы работы магазина.',price:'Средний курс',maps:'https://maps.google.com/?q=BigC+Da+Nang',meta:[{label:'Часы',val:'08:00–22:00'}]},
+].forEach(i=>makeCard(i,'exchange-cards'));
+
+/* ═══════════════════════════════════════════
+   DATA: LEISURE
+═══════════════════════════════════════════ */
+const leisureData={
+  beach:[
+    {name:'My Khe Beach',tag:'Пляж',tc:'beach',addr:'Sơn Trà',desc:'Главный пляж Дананга — 8 км белого песка, топ-6 Азии.',fullDesc:'8 км белого песка, тёплая вода, ровное дно. Утром — йога с местными, вечером — семьи.',maps:'https://maps.google.com/?q=My+Khe+Beach',meta:[{label:'Длина',val:'8 км'},{label:'Вход',val:'Бесплатно'}],tips:[{icon:'🕖',text:'До 8:00 или после 16:00.'},{icon:'🚩',text:'Красный флаг — купаться нельзя.'}]},
+    {name:'Bac My An Beach',tag:'Пляж',tc:'beach',addr:'Ngũ Hành Sơn',desc:'Тише My Khe — тот же белый песок, меньше людей.',maps:'https://maps.google.com/?q=Bac+My+An+Beach',meta:[{label:'Вход',val:'Бесплатно'}]},
+    {name:'Non Nuoc Beach',tag:'Пляж · Живописный',tc:'beach',addr:'Ngũ Hành Sơn',desc:'У Мраморных гор — почти пустой, входит в Forbes Top Beaches.',fullDesc:'У подножия Мраморных гор. Почти пустой даже в сезон. Один из красивейших пляжей Азии.',maps:'https://maps.google.com/?q=Non+Nuoc+Beach',meta:[{label:'До центра',val:'15–20 мин'}],tips:[{icon:'⚠️',text:'Волны сильнее, чем на My Khe.'}]},
+    {name:'Tan Tra Beach',tag:'Пляж · Скрытый',tc:'beach',addr:'К югу от Non Nuoc',desc:'Скрытый пляж с баром Ortus Bistro прямо на берегу.',maps:'https://maps.google.com/?q=Tan+Tra+Beach',meta:[{label:'Бар',val:'Ortus Bistro'}]},
+    {name:'Nam O Beach',tag:'Пляж · Рыбацкий',tc:'beach',addr:'Северо-запад города',desc:'Тихая рыбацкая деревня с нетронутым пляжем — аутентичный Вьетнам.',fullDesc:'Старинная рыбацкая деревня Нам О. Пляж почти без туристов. Красивые рассветы и лодки.',maps:'https://maps.google.com/?q=Nam+O+Beach+Da+Nang',meta:[{label:'Атмосфера',val:'Аутентичный'}]},
+    {name:'Xuan Thieu Beach',tag:'Пляж · Тихий',tc:'beach',addr:'Liên Chiểu',desc:'Спокойный пляж в северной части города — почти без туристов.',maps:'https://maps.google.com/?q=Xuan+Thieu+Beach+Da+Nang',meta:[{label:'Вход',val:'Бесплатно'}]},
+    {name:'My Khe Sunrise Point',tag:'Пляж · Рассвет',tc:'beach',addr:'Phạm Văn Đồng',desc:'Лучшая точка для рассвета — небо меняет цвет над морем.',fullDesc:'Пляж в районе отелей на Phạm Văn Đồng. Специально для фото рассвета — ориентация на восток.',maps:'https://maps.google.com/?q=My+Khe+Beach+sunrise',tips:[{icon:'⏰',text:'Приходи за 15 мин до восхода.'}]},
+    {name:'Furama Beach Club',tag:'Пляж · Клуб',tc:'beach',addr:'Bắc Mỹ An',desc:'Пляжный клуб пятизвёздочного курорта — шезлонги, бар, джакузи у моря.',price:'200–500 тыс. (day pass)',maps:'https://maps.google.com/?q=Furama+Resort+Da+Nang',meta:[{label:'Тип',val:'Платный клуб'}]},
+    {name:'Intercontinental Beach',tag:'Пляж · Курорт',tc:'beach',addr:'Sơn Trà Peninsula',desc:'Уединённый пляж полуострова Сон Чы — самый чистый в регионе.',maps:'https://maps.google.com/?q=InterContinental+Da+Nang+beach',meta:[{label:'Тип',val:'Полузакрытый'}]},
+    {name:'Thuan Phuoc Beach',tag:'Пляж · Панорама',tc:'beach',addr:'Рядом с мостом Тхуан Фыок',desc:'Небольшой пляж у подвесного моста с панорамой на залив.',maps:'https://maps.google.com/?q=Thuan+Phuoc+bridge+Da+Nang'},
+  ],
+  spa:[
+    {name:'Palmarosa Spa',tag:'Спа · Премиум',tc:'spa',addr:'Ngũ Hành Sơn',desc:'Лучший спа Дананга — горячие камни, ароматерапия, тайский массаж.',price:'300–800 тыс.',maps:'https://maps.google.com/?q=Palmarosa+Spa+Da+Nang',tips:[{icon:'📞',text:'Бронируй заранее.'}]},
+    {name:'Zen Spa',tag:'Спа · Традиционный',tc:'spa',addr:'An Thuong',desc:'Вьетнамский массаж в самом сердце номадского района.',price:'150–350 тыс.',maps:'https://maps.google.com/?q=Zen+Spa+Da+Nang'},
+    {name:'Массаж на пляже',tag:'Массаж · Пляжный',tc:'spa',addr:'My Khe Beach',desc:'Под шум волн прямо на песке — самый расслабляющий формат.',price:'100–200 тыс./час',maps:'https://maps.google.com/?q=My+Khe+Beach',tips:[{icon:'💬',text:'Торгуйся.'},{icon:'🌅',text:'Лучше вечером на закате.'}]},
+    {name:'The Reverie Spa',tag:'Спа · Люкс',tc:'spa',addr:'My An, Ngũ Hành Sơn',desc:'Джакузи, пар, тайский массаж — полноценный люкс-релакс.',price:'500–1200 тыс.',maps:'https://maps.google.com/?q=The+Reverie+Spa+Da+Nang'},
+    {name:'Furama Spa',tag:'Спа · Курорт',tc:'spa',addr:'Furama Resort, Bắc Mỹ An',desc:'Спа в 5-звёздочном курорте — рядом с морем, аюрведа и тайские техники.',price:'600–1500 тыс.',maps:'https://maps.google.com/?q=Furama+Spa+Da+Nang'},
+    {name:'Herbal Spa',tag:'Массаж · Травы',tc:'spa',addr:'An Thuong',desc:'Травяные компрессы, масляный массаж, фитотерапия по вьетнамским рецептам.',price:'200–450 тыс.',maps:'https://maps.google.com/?q=Herbal+Spa+Da+Nang'},
+    {name:'Nail & Spa An Thuong',tag:'Маникюр · Педикюр',tc:'spa',addr:'An Thuong',desc:'Маникюр, педикюр и массаж стоп — всё за 100–150 тыс. VND.',price:'80–150 тыс.',maps:'https://maps.google.com/?q=nail+spa+An+Thuong+Da+Nang'},
+    {name:'Retreat Spa',tag:'Спа · Холистик',tc:'spa',addr:'Phạm Văn Đồng',desc:'Холистический спа — йога-нидра, медитация, масляный массаж.',price:'350–700 тыс.',maps:'https://maps.google.com/?q=Retreat+Spa+Da+Nang'},
+    {name:'Fish Spa',tag:'Рыбный педикюр',tc:'spa',addr:'Набережная Хан',desc:'Рыбки чистят пятки — необычный опыт, есть на набережной.',price:'50–100 тыс.',maps:'https://maps.google.com/?q=fish+spa+Da+Nang'},
+    {name:'Couple Spa',tag:'Романтика · Спа',tc:'spa',addr:'My An',desc:'Совместный массаж для двоих — свечи, лепестки роз, джакузи.',price:'700–1500 тыс.',maps:'https://maps.google.com/?q=couple+spa+Da+Nang',tips:[{icon:'💐',text:'Подходит для романтических вечеров.'}]},
+  ],
+  sights:[
+    {name:'Мраморные горы',tag:'Природа · Культура',tc:'leisure',addr:'15 мин от центра',desc:'Пять известняковых гор с пагодами, пещерами и панорамными видами.',price:'40 тыс. (+15 лифт)',maps:'https://maps.google.com/?q=Marble+Mountains+Da+Nang',tips:[{icon:'👟',text:'Удобная обувь — много ступеней.'}]},
+    {name:'Мост Дракона',tag:'Архитектура · Фото',tc:'leisure',addr:'Набережная реки Хан',desc:'Шоу огня и воды каждую субботу и воскресенье в 21:00.',price:'Бесплатно',maps:'https://maps.google.com/?q=Dragon+Bridge+Da+Nang',tips:[{icon:'⏰',text:'Приходи за 20 мин.'}]},
+    {name:'Рынок Хан',tag:'Рынок · Шоппинг',tc:'leisure',addr:'119 Trần Phú',desc:'Лучший крытый рынок — морепродукты, ткани, сувениры, специи.',price:'Вход бесплатно',maps:'https://maps.google.com/?q=Han+Market+Da+Nang',tips:[{icon:'💬',text:'Цена завышена вдвое — торгуйся.'}]},
+    {name:'Музей Чам',tag:'Культура · История',tc:'leisure',addr:'2 Tháng 9',desc:'Крупнейшая коллекция скульптуры Чам — 2000 экспонатов I–XV вв.',price:'60 тыс.',maps:'https://maps.google.com/?q=Cham+Museum+Da+Nang',meta:[{label:'Часы',val:'07:00–17:00'}]},
+    {name:'Мост Золотых Рук',tag:'Архитектура · Фото',tc:'leisure',addr:'Ba Na Hills',desc:'Мост, удерживаемый гигантскими руками — самое фотографируемое место Вьетнама.',price:'входит в билет Бана Хиллс',maps:'https://maps.google.com/?q=Golden+Bridge+Ba+Na+Hills',tips:[{icon:'🌤️',text:'Приезжай рано — меньше очередей.'}]},
+    {name:'Музей Военной Истории',tag:'Музей · История',tc:'leisure',addr:'3 Duy Tân, Hải Châu',desc:'Американские вертолёты, танки и трофеи войны под открытым небом.',price:'20 тыс.',maps:'https://maps.google.com/?q=Military+Museum+Da+Nang',meta:[{label:'Часы',val:'07:30–17:00'}]},
+    {name:'Набережная реки Хан',tag:'Прогулка · Фото',tc:'leisure',addr:'Bạch Đằng',desc:'Самая красивая набережная Вьетнама — особенно вечером с огнями мостов.',price:'Бесплатно',maps:'https://maps.google.com/?q=Bach+Dang+Da+Nang',tips:[{icon:'🌆',text:'Лучше всего на закате и ночью.'}]},
+    {name:'Мост Love Lock',tag:'Романтика · Мост',tc:'leisure',addr:'Qua cầu Sông Hàn',desc:'Мост с замочками влюблённых и видом на Дракон мост.',price:'Бесплатно',maps:'https://maps.google.com/?q=love+lock+bridge+Da+Nang'},
+    {name:'Рынок Кон',tag:'Рынок · Аутентичный',tc:'leisure',addr:'290 Hùng Vương',desc:'Главный продуктовый рынок для местных — нет туристической наценки.',price:'Бесплатно',maps:'https://maps.google.com/?q=Con+Market+Da+Nang',tips:[{icon:'🥬',text:'Ранний рынок работает с 05:00.'}]},
+    {name:'Пагода Фап Лам',tag:'Храм · Буддизм',tc:'leisure',addr:'574 Ông Ích Khiêm',desc:'Главная буддийская пагода города — спокойствие и архитектурный шедевр.',price:'Бесплатно',maps:'https://maps.google.com/?q=Phap+Lam+Pagoda+Da+Nang',tips:[{icon:'👗',text:'Закрытая одежда обязательна.'}]},
+    {name:'Площадь 29 марта',tag:'Площадь · История',tc:'leisure',addr:'Hải Châu',desc:'Центральная площадь города с монументом освобождения 1975 года.',price:'Бесплатно',maps:'https://maps.google.com/?q=March+29+Square+Da+Nang'},
+    {name:'Смотровая Bà Nà Hills',tag:'Панорама · 1487 м',tc:'leisure',addr:'Ba Na Hills',desc:'Панорамный вид на весь Дананг и море с высоты 1487 метров.',price:'входит в билет',maps:'https://maps.google.com/?q=Ba+Na+Hills+viewpoint'},
+    {name:'Храм Cao Đài',tag:'Храм · Уникальный',tc:'leisure',addr:'Hải Châu',desc:'Храм религии Каодай — яркие цвета, уникальная эклектичная архитектура.',price:'Бесплатно',maps:'https://maps.google.com/?q=Cao+Dai+Temple+Da+Nang'},
+    {name:'Мост Трần Thị Lý',tag:'Архитектура',tc:'leisure',addr:'Sơn Trà',desc:'Вантовый мост с парусом — красивый и минималистичный символ города.',price:'Бесплатно',maps:'https://maps.google.com/?q=Tran+Thi+Ly+Bridge+Da+Nang'},
+    {name:'Смотровая Sơn Trà',tag:'Панорама',tc:'leisure',addr:'Полуостров Сон Чы',desc:'Открыточный вид на дугу пляжа My Khe — лучший обзор города.',price:'Бесплатно',maps:'https://maps.google.com/?q=Son+Tra+viewpoint',tips:[{icon:'🛵',text:'Нужен скутер — дорога серпантинная.'}]},
+    {name:'Музей Хо Ши Мина',tag:'Музей · Политика',tc:'leisure',addr:'3 Nguyễn Văn Trỗi',desc:'Личные вещи, фотографии и история жизни основателя Вьетнама.',price:'20 тыс.',maps:'https://maps.google.com/?q=Ho+Chi+Minh+Museum+Da+Nang'},
+    {name:'Arty Alley',tag:'Арт · Граффити',tc:'leisure',addr:'Hải Châu',desc:'Переулок с яркими муралами — instagram-точка местных художников.',price:'Бесплатно',maps:'https://maps.google.com/?q=Arty+Alley+Da+Nang'},
+    {name:'Sunworld Ba Na Hills',tag:'Аттракционы',tc:'leisure',addr:'Ba Na Hills',desc:'Альпийские горки, карусели, фан-зоны — полноценный тематический парк.',price:'600–850 тыс.',maps:'https://maps.google.com/?q=Sunworld+Ba+Na+Hills'},
+    {name:'Thien Mu на видовой',tag:'Архитектура',tc:'leisure',addr:'Набережная',desc:'Миниатюрная пагода у реки — место для медитативных фото.',price:'Бесплатно',maps:'https://maps.google.com/?q=Thien+Mu+Da+Nang'},
+    {name:'Храм Linh Ứng (Bãi Bụt)',tag:'Храм · Пляж',tc:'leisure',addr:'Sơn Trà, Bãi Bụt',desc:'Буддийский комплекс прямо у тихого пляжа Бай Бут.',price:'Бесплатно',maps:'https://maps.google.com/?q=Linh+Ung+Bai+But+Da+Nang'},
+    {name:'Рыбацкая деревня Нам О',tag:'Культура · Аутентично',tc:'leisure',addr:'Nam O, Liên Chiểu',desc:'Старейшая деревня Дананга — традиционный рыбный промысел и соус нước mắm.',price:'Бесплатно',maps:'https://maps.google.com/?q=Nam+O+fishing+village+Da+Nang',tips:[{icon:'🐟',text:'Попробуй местный соус нước mắm — делают здесь сотни лет.'}]},
+    {name:'Туннели Виетконга',tag:'История · Военное',tc:'leisure',addr:'Районы Hoà Vang',desc:'Подземные укрытия времён войны — реальная история сопротивления.',price:'50–100 тыс.',maps:'https://maps.google.com/?q=Viet+Cong+tunnels+Da+Nang'},
+    {name:'Французский квартал',tag:'Архитектура · История',tc:'leisure',addr:'Центр, Hải Châu',desc:'Колониальные здания XIX века — почта, суд, рынок Хан в стиле fin de siècle.',price:'Бесплатно',maps:'https://maps.google.com/?q=French+colonial+Da+Nang',tips:[{icon:'📸',text:'Лучшее освещение для фото — раннее утро.'}]},
+    {name:'Мост Sông Hàn поворотный',tag:'Инженерия · Фото',tc:'leisure',addr:'Hải Châu',desc:'Поворотный мост через реку Хан — разворачивается по ночам для судов.',price:'Бесплатно',maps:'https://maps.google.com/?q=Song+Han+swing+bridge+Da+Nang',meta:[{label:'Разворот',val:'00:00–00:30 (не каждую ночь)'}]},
+    {name:'Торговый центр Vincom',tag:'Шоппинг · ТЦ',tc:'leisure',addr:'910A Ngô Quyền',desc:'Главный ТЦ города — кино, рестораны, магазины, аквариум.',price:'Бесплатно (вход)',maps:'https://maps.google.com/?q=Vincom+Plaza+Da+Nang',meta:[{label:'Кино',val:'CGV Cinema'}]},
+    {name:'Торговый центр BigC',tag:'Шоппинг · Гипермаркет',tc:'leisure',addr:'Ngô Quyền',desc:'Французский гипермаркет — огромный выбор, лучшие цены на продукты.',price:'Бесплатно (вход)',maps:'https://maps.google.com/?q=BigC+Da+Nang',tips:[{icon:'🛒',text:'Лучшие цены на морепродукты — ранним утром.'}]},
+    {name:'Галерея Lê Bá Đảng',tag:'Искусство · Галерея',tc:'leisure',addr:'Hội An, 30 мин',desc:'Галерея знаменитого вьетнамского художника — живопись, скульптура, инсталляции.',price:'50 тыс.',maps:'https://maps.google.com/?q=Le+Ba+Dang+gallery+Hoi+An'},
+    {name:'Деревня керамики Thanh Hà',tag:'Ремёсла · Хойан',tc:'leisure',addr:'Hội An, 5 км',desc:'Деревня гончаров XV века — мастер-классы по лепке и уникальные сувениры.',price:'35 тыс. вход',maps:'https://maps.google.com/?q=Thanh+Ha+pottery+Hoi+An',tips:[{icon:'🏺',text:'Урок лепки — 100–150 тыс. VND.'}]},
+    {name:'Мыс Hải Vân — «Пик облаков»',tag:'Перевал · Панорама',tc:'leisure',addr:'45 мин от центра',desc:'Перевал Хай Ван с заброшенными бункерами и двумя заливами в одном кадре.',price:'50 тыс. (проезд)',maps:'https://maps.google.com/?q=Hai+Van+Pass+viewpoint',tips:[{icon:'☁️',text:'Иногда буквально в облаках — красиво в любую погоду.'}]},
+  ],
+  parks:[
+    {name:'Полуостров Сон Чы',tag:'Заповедник',tc:'park',addr:'10 мин от центра',desc:'Тропический лес с дикими красными лангурами и видами на город.',price:'Бесплатно',maps:'https://maps.google.com/?q=Son+Tra+Peninsula',tips:[{icon:'🐒',text:'Лангуры видны ранним утром.'},{icon:'🛵',text:'Скутер — лучший транспорт.'}]},
+    {name:'Asia Park',tag:'Парк · Аттракционы',tc:'park',addr:'1 Phan Đăng Lưu',desc:'Колесо обозрения Sun Wheel 110 м — вид на весь Дананг.',price:'200–350 тыс.',maps:'https://maps.google.com/?q=Asia+Park+Da+Nang',meta:[{label:'Часы',val:'15:00–22:00'}]},
+    {name:'Пагода Linh Ung',tag:'Культура · Природа',tc:'park',addr:'Полуостров Сон Чы',desc:'67-метровая Богиня Милосердия — видна из любой точки Дананга.',price:'Бесплатно',maps:'https://maps.google.com/?q=Linh+Ung+Pagoda',tips:[{icon:'👗',text:'Плечи и колени закрыть.'}]},
+    {name:'Парк Азиатских Игр',tag:'Парк · Спорт',tc:'park',addr:'Ngũ Hành Sơn',desc:'Зелёный парк с беговыми дорожками, фитнес-площадками и озером.',price:'Бесплатно',maps:'https://maps.google.com/?q=Asian+Games+Park+Da+Nang'},
+    {name:'Сад Скульптур APEC',tag:'Парк · Скульптуры',tc:'park',addr:'Набережная Бạch Đằng',desc:'Памятный сад к саммиту АТЭС 2017 — скульптуры и фонтаны у реки.',price:'Бесплатно',maps:'https://maps.google.com/?q=APEC+sculpture+park+Da+Nang'},
+    {name:'Thanh Tra Park',tag:'Парк · Природа',tc:'park',addr:'Liên Chiểu',desc:'Тихий парк с мангровыми зарослями и птицами — для уединения.',price:'Бесплатно',maps:'https://maps.google.com/?q=Thanh+Tra+Park+Da+Nang'},
+    {name:'Суан Тьеу Лесной Парк',tag:'Парк · Пикник',tc:'park',addr:'Liên Chiểu',desc:'Сосновый лес у пляжа — любимое место пикников местных семей.',price:'Бесплатно',maps:'https://maps.google.com/?q=Xuan+Thieu+park+Da+Nang'},
+    {name:'Центральный парк Хайтяу',tag:'Парк · Центр',tc:'park',addr:'Hải Châu',desc:'Городской парк с фонтанами, площадками для йоги и вечерним освещением.',price:'Бесплатно',maps:'https://maps.google.com/?q=central+park+Hai+Chau+Da+Nang'},
+    {name:'Заповедник реки Ку Де',tag:'Природа · Мангры',tc:'park',addr:'Hoà Vang',desc:'Мангровые заросли, редкие птицы и тишина — нетронутая природа.',price:'Бесплатно',maps:'https://maps.google.com/?q=Cu+De+River+Da+Nang',tips:[{icon:'🎣',text:'Рыбалка с местными лодочниками.'}]},
+    {name:'Детский парк Danapark',tag:'Семейный',tc:'park',addr:'Ngũ Hành Sơn',desc:'Водные горки, аттракционы и детский зоопарк — для семей с детьми.',price:'100–200 тыс.',maps:'https://maps.google.com/?q=Danapark+Da+Nang'},
+    {name:'Пляж Зоопарк и ботансад',tag:'Природа · Семейный',tc:'park',addr:'Hoà Vang',desc:'Небольшой зоопарк с вьетнамской фауной — питоны, олени, птицы.',price:'50–100 тыс.',maps:'https://maps.google.com/?q=zoo+botanical+garden+Da+Nang'},
+    {name:'Водопад Khe Lia',tag:'Водопад · Трекинг',tc:'park',addr:'Bà Nà Hills area, 25 км',desc:'Живописный водопад в джунглях — 2-часовой трек по тропическому лесу.',price:'100–200 тыс. (гид)',maps:'https://maps.google.com/?q=Khe+Lia+waterfall+Da+Nang',tips:[{icon:'👟',text:'Обязательно непромокаемая обувь.'}]},
+    {name:'Национальный парк Bạch Mã',tag:'Нацпарк · Хюэ',tc:'park',addr:'80 км, 1.5 часа',desc:'Горный нацпарк с водопадами, птицами и смотровой 1450 м над уровнем моря.',price:'60 тыс. вход',maps:'https://maps.google.com/?q=Bach+Ma+National+Park',meta:[{label:'До Дананга',val:'80 км, 1.5 ч'}]},
+    {name:'Лес летучих мышей Sơn Trà',tag:'Дикая природа',tc:'park',addr:'Полуостров Сон Чы',desc:'Каждый вечер тысячи летучих мышей вылетают из пещер — уникальное зрелище.',price:'Бесплатно',maps:'https://maps.google.com/?q=Son+Tra+bats+Da+Nang',meta:[{label:'Время',val:'18:00–19:00 (закат)'}]},
+    {name:'Парк у пляжа Xuan Thieu',tag:'Сосновый лес',tc:'park',addr:'Liên Chiểu',desc:'Сосновый лес прямо у песчаного пляжа — гамаки и пикники.',price:'Бесплатно',maps:'https://maps.google.com/?q=Xuan+Thieu+park+Da+Nang'},
+    {name:'Экотропа Sơn Trà',tag:'Экотропа · Бёрдвотчинг',tc:'park',addr:'Son Tra Peninsula',desc:'Маркированная тропа через джунгли с табличками редких растений и птиц.',price:'Бесплатно',maps:'https://maps.google.com/?q=Son+Tra+eco+trail',tips:[{icon:'🦜',text:'Встречается 287 видов птиц — возьми бинокль.'}]},
+    {name:'Берег реки Тыбон (Хойан)',tag:'Природа · Река',tc:'park',addr:'Hội An, 30 мин',desc:'Лодочная прогулка по реке Тыбон к деревням и плетёным лодкам.',price:'100–200 тыс.',maps:'https://maps.google.com/?q=Thu+Bon+River+Hoi+An'},
+    {name:'Рисовые поля Hoà Vang',tag:'Пейзаж · Поля',tc:'park',addr:'Hoà Vang, 20 км',desc:'Зелёные рисовые поля в горах — идеальный контраст с пляжем.',price:'Бесплатно',maps:'https://maps.google.com/?q=rice+fields+Hoa+Vang+Da+Nang',tips:[{icon:'🌾',text:'Лучший вид — июнь-июль, в сезон роста риса.'}]},
+    {name:'Вулканический остров Lý Sơn',tag:'Остров · Однодневный',tc:'park',addr:'4 ч на пароме',desc:'Вулканический остров с чесночными полями, скалами и бирюзовым морем.',price:'500–800 тыс. (паром+тур)',maps:'https://maps.google.com/?q=Ly+Son+Island+Vietnam',meta:[{label:'Паром из',val:'Quảng Ngãi, 4 ч'}]},
+    {name:'Каньон реки Ку Де',tag:'Каньон · Каяк',tc:'park',addr:'Hoà Vang, 30 км',desc:'Живописный горный каньон — сплав на каяках и скальные купели.',price:'400–800 тыс. (тур)',maps:'https://maps.google.com/?q=Cu+De+River+canyon+Da+Nang'},
+  ],
+  other:[
+    {name:'Старый город Хойан',tag:'ЮНЕСКО · 30 мин',tc:'leisure',addr:'Hội An, 30 км',desc:'Средневековый торговый порт с тысячами фонариков вечером.',price:'120 тыс. (5 объектов)',maps:'https://maps.google.com/?q=Hoi+An+Ancient+Town',tips:[{icon:'🌙',text:'Приезжай к закату.'},{icon:'🚲',text:'Велосипед — 50–80 тыс./день.'}]},
+    {name:'Бана Хиллс',tag:'Горный парк · 45 мин',tc:'leisure',addr:'25 км к западу',desc:'Золотой мост, французская деревня, рекордная канатная дорога.',price:'600–850 тыс.',maps:'https://maps.google.com/?q=Ba+Na+Hills',tips:[{icon:'🌤️',text:'Приезжай пораньше.'},{icon:'🧥',text:'Возьми куртку.'}]},
+    {name:'Сёрфинг My Khe',tag:'Активный отдых',tc:'leisure',addr:'My Khe Beach',desc:'Школы серфинга и аренда досок. Сезон — май–июль.',price:'150–400 тыс.',maps:'https://maps.google.com/?q=surfing+My+Khe',meta:[{label:'Сезон',val:'Май–июль'}]},
+    {name:'Ночной рынок',tag:'Рынок · Ночной',tc:'leisure',addr:'Набережная реки Хан',desc:'Уличная еда, сувениры и живая музыка по пятницам–воскресеньям.',price:'Бесплатно',maps:'https://maps.google.com/?q=Da+Nang+Night+Market',meta:[{label:'Дни',val:'Пт–Вс 18:00–23:00'}]},
+    {name:'Острова Чам (Cù Lao Chàm)',tag:'Острова · Снорклинг',tc:'leisure',addr:'40 мин на катере',desc:'Архипелаг из 8 островов — снорклинг, кораллы, черепахи.',price:'600–900 тыс. (тур)',maps:'https://maps.google.com/?q=Cham+Islands+Vietnam',meta:[{label:'Сезон',val:'Март–Август'}],tips:[{icon:'🐢',text:'Черепахи видны на рифах ранним утром.'}]},
+    {name:'Каньонинг в Бана',tag:'Экстрим',tc:'leisure',addr:'Горы Бана',desc:'Дюльфер по водопадам в джунглях — адреналин и красота природы.',price:'800–1500 тыс.',maps:'https://maps.google.com/?q=canyoning+Ba+Na+Da+Nang',meta:[{label:'Уровень',val:'Средний'}]},
+    {name:'Джипинг по горам',tag:'Экстрим · Джип',tc:'leisure',addr:'Hoà Vang',desc:'Внедорожный тур по горным деревням — джунгли и этнические меньшинства.',price:'1200–2500 тыс.',maps:'https://maps.google.com/?q=jeep+tour+Da+Nang'},
+    {name:'Дайвинг у островов Чам',tag:'Дайвинг',tc:'leisure',addr:'Cù Lao Chàm',desc:'Подводный мир с кораллами, рыбами-попугаями и черепахами.',price:'1200–2000 тыс.',maps:'https://maps.google.com/?q=diving+Cham+Islands',meta:[{label:'Сертификат',val:'PADI Open Water'}]},
+    {name:'Kayaking по реке Хан',tag:'Активный · Вода',tc:'leisure',addr:'Набережная Хан',desc:'Морской каяк на закате — панорама мостов и огни города.',price:'200–400 тыс.',maps:'https://maps.google.com/?q=kayak+Han+River+Da+Nang'},
+    {name:'Трек на вершину Hải Vân',tag:'Трекинг',tc:'leisure',addr:'Перевал Хай Ван',desc:'Перевал Хай Ван — горная тропа с видом на два залива сразу.',price:'Бесплатно (проезд ~50 тыс.)',maps:'https://maps.google.com/?q=Hai+Van+Pass',tips:[{icon:'🌅',text:'Лучший рассвет на всём побережье.'},{icon:'☔',text:'Часто облачно — зависит от погоды.'}]},
+    {name:'Велотур по полуострову',tag:'Велосипед · Природа',tc:'leisure',addr:'Полуостров Сон Чы',desc:'Велосипедный маршрут вокруг полуострова Сон Чы — 40 км через джунгли.',price:'100–200 тыс. (аренда)',maps:'https://maps.google.com/?q=Son+Tra+cycling'},
+    {name:'Stand-Up Paddleboard',tag:'SUP · Вода',tc:'leisure',addr:'My Khe Beach',desc:'SUP-доски — модный способ встретить закат стоя на воде.',price:'150–300 тыс./час',maps:'https://maps.google.com/?q=SUP+My+Khe+Da+Nang'},
+    {name:'Йога на пляже',tag:'Йога · Рассвет',tc:'leisure',addr:'My Khe Beach',desc:'Утренние занятия йогой на рассвете прямо у моря — стало традицией.',price:'100–200 тыс./класс',maps:'https://maps.google.com/?q=yoga+My+Khe+Da+Nang',meta:[{label:'Время',val:'06:00–07:30'}]},
+    {name:'Водопад Suoi Vang',tag:'Водопад · Природа',tc:'leisure',addr:'Bana Hills area',desc:'Живописный водопад в джунглях Бана — тропический треккинг.',price:'100–300 тыс. (гид)',maps:'https://maps.google.com/?q=Suoi+Vang+waterfall+Da+Nang'},
+    {name:'Рыбалка с местными',tag:'Рыбалка · Аутентично',tc:'leisure',addr:'Nam O / Thuan Phuoc',desc:'Рыбалка на традиционных лодках с местными рыбаками — уникальный опыт.',price:'300–600 тыс.',maps:'https://maps.google.com/?q=fishing+village+Da+Nang'},
+    {name:'Cooking Class Вьетнам',tag:'Кулинария',tc:'leisure',addr:'An Thuong / Hội An',desc:'Научись готовить фо, баньми и немлуи — мастер-классы с рынком.',price:'400–800 тыс.',maps:'https://maps.google.com/?q=cooking+class+Da+Nang',tips:[{icon:'🍳',text:'Лучшие классы — с походом на рынок утром.'}]},
+    {name:'Мотоциклетный тур по горам',tag:'Мототур',tc:'leisure',addr:'Выезд из центра',desc:'Однодневный тур на мотоцикле через перевал Хай Ван в Хюэ.',price:'800–1500 тыс.',maps:'https://maps.google.com/?q=motorbike+tour+Da+Nang+Hue'},
+    {name:'Закат с Linh Ung',tag:'Закат · Смотровая',tc:'leisure',addr:'Son Tra, Linh Ung',desc:'Закат над морем и городом с высоты пагоды — незабываемо.',price:'Бесплатно',maps:'https://maps.google.com/?q=Linh+Ung+Pagoda+sunset'},
+    {name:'Пивной тур по Bia Hoi',tag:'Гастротур · Пиво',tc:'leisure',addr:'Hải Châu',desc:'Тур по заведениям Bia Hoi — свежее пиво за 8–10 тыс. VND бокал.',price:'50–200 тыс.',maps:'https://maps.google.com/?q=Bia+Hoi+Da+Nang'},
+    {name:'Фестиваль фейерверков DIFF',tag:'Фестиваль',tc:'leisure',addr:'Набережная Хан',desc:'Международный фестиваль фейерверков — каждые выходные в апреле–июне.',price:'200–600 тыс. (трибуны)',maps:'https://maps.google.com/?q=DIFF+Da+Nang+fireworks',meta:[{label:'Период',val:'Апрель–Июнь'}]},
+    {name:'Тур по мастерским Мраморных гор',tag:'Ремёсла · Шоппинг',tc:'leisure',addr:'Ngũ Hành Sơn',desc:'Мастера вырезают буддийские статуи из мрамора — можно купить и заказать.',price:'Бесплатно (цех)',maps:'https://maps.google.com/?q=marble+craft+village+Da+Nang',tips:[{icon:'🛕',text:'Цены начинаются от 100 тыс. — торгуйся.'}]},
+    {name:'Рыбный аукцион на рассвете',tag:'Аутентично · Рынок',tc:'leisure',addr:'Пристань Thuan Phuoc',desc:'Ежедневный рыбный аукцион в 04:30 — рыбаки продают улов прямо с лодок.',price:'Бесплатно',maps:'https://maps.google.com/?q=fish+auction+Da+Nang',meta:[{label:'Время',val:'04:30–06:00'},],tips:[{icon:'⏰',text:'Начинается ещё в темноте.'}]},
+    {name:'Кинотеатр CGV Vincom',tag:'Кино',tc:'leisure',addr:'Vincom Plaza',desc:'Современный мультиплекс с IMAX — международные и вьетнамские фильмы.',price:'80–180 тыс.',maps:'https://maps.google.com/?q=CGV+Vincom+Da+Nang',meta:[{label:'Форматы',val:'2D, 3D, IMAX'}]},
+    {name:'Аттракцион Flying Swing',tag:'Аттракцион · Высота',tc:'leisure',addr:'Ba Na Hills',desc:'Качели на краю обрыва с видом на море — самый эффектный аттракцион.',price:'входит в билет Бана',maps:'https://maps.google.com/?q=Ba+Na+Hills+swing'},
+    {name:'Мотобайк-тур к этническим сёлам',tag:'Этнотур',tc:'leisure',addr:'Hoà Vang, горы',desc:'Экскурсия в горные сёла Ко Ту — традиционный быт и тканые изделия.',price:'600–1200 тыс.',maps:'https://maps.google.com/?q=Co+Tu+village+Da+Nang'},
+    {name:'Ночной тур по фонарям',tag:'Хойан · Ночь',tc:'leisure',addr:'Hội An, 30 мин',desc:'Ночная прогулка по Хойану с сотнями бумажных фонариков — магия.',price:'120 тыс. + тур ~200 тыс.',maps:'https://maps.google.com/?q=Hoi+An+lantern+night+tour',tips:[{icon:'🏮',text:'Запусти фонарик с желанием в реку — 25 тыс. VND.'}]},
+    {name:'Полёт на параплане',tag:'Экстрим · Небо',tc:'leisure',addr:'Son Tra / Ba Na Hills',desc:'Тандем-полёт на параплане над бухтой Дананга — 15–20 минут в воздухе.',price:'1000–2000 тыс.',maps:'https://maps.google.com/?q=paragliding+Da+Nang'},
+    {name:'Рыбная деревня Mỹ Khê',tag:'Рассвет · Аутентично',tc:'leisure',addr:'Вдоль My Khe Beach',desc:'Рассвет с рыбаками — традиционные корзинчатые лодки тхунг чай выходят в море.',price:'Бесплатно',maps:'https://maps.google.com/?q=basket+boat+fishing+My+Khe',tips:[{icon:'🚣',text:'Уникальные круглые плетёные лодки — тхунг чай.'}]},
+    {name:'Фотограф на пляже',tag:'Фотосессия',tc:'leisure',addr:'My Khe / Non Nuoc',desc:'Профессиональная фотосессия на закате у моря — от 500 тыс. VND за час.',price:'500–1500 тыс.',maps:'https://maps.google.com/?q=photographer+My+Khe+beach'},
+    {name:'Страйкбол и пейнтбол',tag:'Экстрим · Команда',tc:'leisure',addr:'Hải Châu',desc:'Командные игры в укреплённых лесных зонах — популярны у местной молодёжи.',price:'200–400 тыс.',maps:'https://maps.google.com/?q=paintball+Da+Nang'},
+    {name:'Скалодром в Дананге',tag:'Скалолазание',tc:'leisure',addr:'Центр',desc:'Крытый скалодром — хорошая тренировка и укрытие от жары.',price:'100–150 тыс.',maps:'https://maps.google.com/?q=climbing+gym+Da+Nang'},
+  ]
+};
+const ltcMap={beach:'beach',spa:'spa',sights:'leisure',parks:'park',other:'leisure'};
+Object.entries(leisureData).forEach(([sec,items])=>{items.forEach(item=>{item.tc=ltcMap[sec];makeCard(item,`leisure-${sec}`)})});
+document.getElementById('leisure-filter').addEventListener('click',e=>{
+  const btn=e.target.closest('.sub-btn');if(!btn)return;
+  const sec=btn.dataset.sec;
+  document.querySelectorAll('.sub-btn').forEach(b=>b.classList.toggle('active',b===btn));
+  document.querySelectorAll('.leisure-sec').forEach(el=>el.classList.toggle('hidden',sec!=='all'&&el.id!==`sec-${sec}`));
+});
+
+/* ═══════════════════════════════════════════
+   DATA: ФАКТЫ (100)
+═══════════════════════════════════════════ */
+const factsData=[
+  {cat:'🏙️ Город и география',items:[
+    'Дананг — третий по величине город Вьетнама с населением более 1,2 миллиона человек.',
+    'Официальное название — Thành phố Đà Nẵng. В переводе с языка чам означает «большая река».',
+    'Город расположен ровно на половине пути между Ханоем и Хошимином — 760 км в каждую сторону.',
+    'Береговая линия Дананга протянулась на 30 километров — от мыса Хай Ван до полуострова Сон Чы.',
+    'Площадь города — 1285 кв. км, из которых 40% занимают горы и леса.',
+    'Полуостров Сон Чы — единственный нетронутый тропический лес в черте мегаполиса в Юго-Восточной Азии.',
+    'В Дананге 9 мостов через реку Хан. Новые мосты появляются каждые несколько лет.',
+    'Мост Дракона — 666 метров длиной. Число 6 считается удачливым в вьетнамской культуре.',
+    'Аэропорт Дананга принимает более 15 миллионов пассажиров в год и входит в топ-3 аэропортов Вьетнама.',
+    'Город был практически полностью перестроен в 1997–2015 годах — снесено 90% старых зданий.',
+    'В Дананге нет ни одного светофора на набережной реки Хан — специально для красоты.',
+    'Горы Мраморные (Ngũ Hành Sơn) — пять холмов, каждый назван в честь одного из стихий: металл, дерево, вода, огонь, земля.',
+    'Пляж My Khe назван Forbes одним из шести самых красивых пляжей планеты в 2003 году.',
+  ]},
+  {cat:'👥 Люди и общество',items:[
+    'Средний возраст жителей Дананга — 29 лет. Это один из самых молодых городов Азии.',
+    'Около 98% населения Вьетнама — вьеты (kinh). Народ чам составляет менее 0,1% населения Дананга.',
+    'Вьетнам — единственная страна в мире, где принято ездить на скутере с ребёнком, собакой и диваном одновременно.',
+    'В Дананге живёт крупнейшая в Юго-Восточной Азии колония русскоязычных цифровых кочевников.',
+    'Типичная вьетнамская семья в Дананге — 4 поколения под одной крышей.',
+    'Вьетнамцы не говорят «нет» прямо — отказ выражается уклончиво или сменой темы.',
+    'Вьетнамское общество очень конфуцианское: старшие всегда правы, иерархия — всё.',
+    'На вьетнамских похоронах принято носить белое, а не чёрное.',
+    'Праздник Тет — не один день, а целая неделя. Весь Вьетнам буквально останавливается.',
+    'Большинство вьетнамцев имеют только три фамилии: Нгуен (39%), Чан (11%), Ле (9%).',
+    'Фамилия стоит первой, имя — последним. «Нгуен Ван Хунг» — это Хунг из семьи Нгуен.',
+    'В Дананге около 200 000 скутеров — примерно один на каждые 6 жителей.',
+  ]},
+  {cat:'🍜 Еда и кухня',items:[
+    'Мы Куанг (Mì Quảng) — главное блюдо Дананга. Его едят только здесь, в Хойане и окрестностях.',
+    'Bánh tráng cuốn thịt heo — блюдо, придуманное именно в Дананге: свинина, завёрнутая в рисовую бумагу.',
+    'Вьетнамский кофе — второй по крепости в мире после эфиопского. Сорт Робуста, двойная закладка.',
+    'Cà phê trứng (яичный кофе) изобретён в Ханое в 1946 году из-за нехватки молока — использовали взбитый желток.',
+    'Стакан пресного кокосового кофе со льдом — фирменный напиток именно Дананга.',
+    'Bia Hoi — самое дешёвое свежее пиво в мире. Варится ежедневно, хранится максимум 24 часа.',
+    'Рыбный соус (nước mắm) производится в соседнем Фанранге — ферментация 12–18 месяцев.',
+    'Вьетнамцы едят суп на завтрак. Фо-бо в 07:00 — абсолютная норма.',
+    'Вся уличная еда подаётся с огромным количеством свежей зелени: мяты, базилика, кориандра.',
+    'В Дананге более 500 заведений, подающих блюда именно из региональной кухни Центрального Вьетнама.',
+    'Острота вьетнамской кухни Центра — самая высокая в стране. Хюэ и Дананг известны жгучими блюдами.',
+    'Вьетнамцы потребляют больше риса на человека, чем жители любой другой страны мира.',
+    'Традиционный вьетнамский обед длится 2–3 часа — это социальный ритуал, а не просто еда.',
+  ]},
+  {cat:'🏍️ Транспорт и скутеры',items:[
+    'Во Вьетнаме зарегистрировано более 65 миллионов скутеров — почти по одному на каждого жителя.',
+    'Первое правило движения в Дананге: светофор — рекомендация, не приказ.',
+    'Правильный переход дороги: иди медленно и равномерно, не останавливаясь. Скутеры объедут сами.',
+    'Grab появился во Вьетнаме в 2014 году и полностью вытеснил традиционное такси за 5 лет.',
+    'В час пик (07:30–08:30 и 17:00–18:30) пробки в центре Дананга сопоставимы с московскими.',
+    'На скутере можно везти холодильник, 6 человек или живую свинью — всё это реальные фотографии с вьетнамских дорог.',
+    'Шлем обязателен по закону, но примерно треть водителей в глубинке его не носит.',
+    'Бензин во Вьетнаме стоит около 25 000 VND (~1 USD) за литр — одна из самых доступных цен в Азии.',
+    'Аренда скутера стоит 150–200 тыс. VND в день — дешевле, чем Grab на 10 км.',
+    'На перевале Хай Ван дует настолько сильный ветер, что скутеристов буквально сдувает с дороги.',
+  ]},
+  {cat:'💰 Деньги и экономика',items:[
+    'ВВП Вьетнама рос на 6–7% в год в 2010–2024 годах — один из самых быстрых темпов в мире.',
+    'Дананг входит в топ-3 городов Вьетнама по уровню жизни и доходов населения.',
+    'Туризм приносит Дананге более 2 миллиардов USD ежегодно.',
+    'Средняя зарплата местного жителя — 8–12 млн VND (~320–480 USD) в месяц.',
+    'Квартиры в Дананге дорожают на 10–15% в год — одна из самых быстрорастущих недвижимостей Азии.',
+    'Вьетнамский донг — одна из самых мелких по номиналу валют. 1 USD = 26 200 донгов.',
+    'Вьетнам входит в топ-20 стран мира по объёму экспорта. Главные товары — смартфоны Samsung, одежда, обувь.',
+    'Samsung производит 60% своих смартфонов во Вьетнаме — страна стала главной сборочной фабрикой марки.',
+    'Туристический налог в Дананге пока не введён, в отличие от Бали и Таиланда.',
+    'Стоимость жизни в Дананге — примерно треть от московской при сопоставимом комфорте.',
+  ]},
+  {cat:'🌿 Природа и климат',items:[
+    'Вьетнам — одна из 16 стран мира с мегабиоразнообразием. Здесь обитает более 16 000 видов растений.',
+    'Красный лангур с Сон Чы — один из 25 наиболее исчезающих приматов планеты. Живёт только здесь.',
+    'В Мраморных горах обитают летучие мыши, варандасы и редкие виды змей.',
+    'Острова Чам — морской заповедник с 165 видами кораллов и 202 видами рыб.',
+    'Дананг расположен в зоне тропического муссонного климата — два сезона вместо четырёх.',
+    'Сезон дождей в Дананге (октябрь–декабрь) приносит до 2000 мм осадков — больше, чем в Лондоне за год.',
+    'Температура воды у пляжей Дананга никогда не опускается ниже 24°C.',
+    'Тропические тайфуны проходят через Дананг в среднем раз в 2–3 года.',
+    'Горы Бана расположены в зоне облачного тропического леса — облака здесь 200+ дней в году.',
+    'Заповедник Сон Чы занимает 4439 гектаров — больше, чем весь центр города.',
+    'В Дананге зафиксировано самое большое разнообразие морских черепах во Вьетнаме.',
+  ]},
+  {cat:'🎭 Культура и традиции',items:[
+    'Языку вьетнамский — тоновый: одно слово «ma» имеет 6 разных значений в зависимости от тона.',
+    'Вьетнамский алфавит латинский — создан французскими миссионерами в XVII веке.',
+    'Ао Зай (áo dài) — национальный костюм. Женщины надевают его на праздники и в университеты.',
+    'Музыка дан бау (однострунный инструмент) — признана ЮНЕСКО нематериальным наследием человечества.',
+    'Традиционный театр туонг (Tuồng) — зародился именно в Центральном Вьетнаме, включая Дананг.',
+    'Фестиваль фонарей в Хойане проводится в полнолуние каждого месяца — не только в туристический сезон.',
+    'Курение благовоний в храмах — не просто традиция, а способ общения с предками.',
+    'Вьетнамцы верят в духов предков. В каждом доме есть алтарь с фотографиями умерших.',
+    'Красный цвет во Вьетнаме — цвет удачи. Жёлтый — цвет императора. Белый — цвет траура.',
+    'Цифра 4 считается несчастливой (звучит как «смерть»). Во многих отелях нет 4-го этажа.',
+    'Кукольный театр на воде (múa rối nước) — уникальное вьетнамское искусство, зародившееся 1000 лет назад.',
+    'Традиционная вьетнамская медицина (thuốc nam) до сих пор используется наравне с европейской.',
+  ]},
+  {cat:'🌍 Дананг и мир',items:[
+    'В 2017 году Дананг принял саммит АТЭС с участием Трампа, Путина и лидеров 21 страны.',
+    'Мост Золотых Рук в Бана Хиллс — самый фотографируемый мост в Instagram за 2018 год.',
+    'Дананг занимает 1-е место в рейтинге самых чистых городов Вьетнама 10 лет подряд.',
+    'Канатная дорога на Бана Хиллс — самая длинная непрерывная канатка в мире (5,8 км) по версии Книги рекордов Гиннесса.',
+    'Мировой рекорд Гиннесса: фестиваль фейерверков DIFF признан самым масштабным международным соревнованием по пиротехнике.',
+    'Дананг — единственный город Вьетнама, где отдельные районы полностью адаптированы для цифровых кочевников.',
+    'Forbes включил пляж My Khe в список самых красивых пляжей мира (2003, 2019).',
+    'Аэропорт Дананга был одной из крупнейших военных авиабаз в истории — здесь базировалось до 900 самолётов США.',
+    'Дананг стал первым городом Вьетнама с полностью обновлённой городской инфраструктурой за 20 лет.',
+    'В рейтинге Nomad List Дананг стабильно входит в топ-10 городов мира для удалённой работы.',
+    'В Дананге действуют прямые авиарейсы в более чем 20 городов: Москву, Алматы, Сеул, Токио, Сингапур.',
+    'Международный фестиваль фейерверков DIFF — единственный в мире, где страны-команды соревнуются несколько недель подряд.',
+    'Золотой мост на Бана Хиллс был построен всего за 1 год и обошёлся в 2 миллиона долларов.',
+    'Дананг входит в список городов ООН-Хабитат как образец устойчивого городского планирования.',
+    'Первый отель на пляже My Khe открылся в 2000 году. Сейчас их более 300 только на первой линии.',
+    'Вьетнам занимает 1-е место в мире по экспорту кофе сорта Робуста и 2-е по общему экспорту кофе.',
+    'Хойан (в 30 км от Дананга) признан лучшим городом мира для туристов по версии Travel+Leisure дважды.',
+    'В Дананге проводятся международные соревнования по триатлону Ironman — один из этапов мирового тура.',
+    'Скорость интернета в кафе Дананга в среднем выше, чем в большинстве европейских столиц.',
+  ]},
+];
+const fl=document.getElementById('facts-filter'),fll=document.getElementById('facts-list');
+const fab=document.createElement('button');fab.className='cat-btn active';fab.textContent='Все';fab.dataset.cat='all';fl.appendChild(fab);
+let fn=1;
+factsData.forEach((cat,ci)=>{
+  const fb=document.createElement('button');fb.className='cat-btn';fb.textContent=cat.cat;fb.dataset.cat=String(ci);fl.appendChild(fb);
+  const card=document.createElement('div');card.className='advice-card';card.dataset.cat=String(ci);
+  const hdr=document.createElement('div');hdr.className='advice-cat-hdr';hdr.textContent=cat.cat;card.appendChild(hdr);
+  cat.items.forEach(txt=>{
+    const row=document.createElement('div');row.className='advice-item';
+    row.innerHTML=`<span class="advice-num">${fn++}</span><span class="advice-icon">💎</span><span class="advice-text">${txt}</span>`;
+    card.appendChild(row);
+  });
+  fll.appendChild(card);
+});
+fl.addEventListener('click',e=>{
+  const btn=e.target.closest('.cat-btn');if(!btn)return;
+  const cat=btn.dataset.cat;
+  document.querySelectorAll('#facts-filter .cat-btn').forEach(b=>b.classList.toggle('active',b===btn));
+  document.querySelectorAll('#facts-list .advice-card').forEach(c=>c.classList.toggle('adv-hidden',cat!=='all'&&c.dataset.cat!==cat));
+});
+
+/* ═══════════════════════════════════════════
+   DATA: ИСТОРИЯ
+═══════════════════════════════════════════ */
+const histChapters=[
+  {era:'I–XV вв.',title:'Государство Чампа',brief:'Дананг как священный порт цивилизации Чам — храмы, торговля и культура.',body:`<p style="font-size:.86rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px">Территория современного Дананга с I по XV век была частью великого государства Чампа — индуистско-буддийской цивилизации, занимавшей большую часть нынешнего Центрального Вьетнама. Народ чам был искусными мореходами, торговцами и строителями.</p><p style="font-size:.86rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px">Бухта, ныне известная как Дананг, служила важным портом в региональной торговле. Через неё проходили товары из Китая, Индии и островной Юго-Восточной Азии. Чамы возвели многочисленные храмовые комплексы в честь бога Шивы — часть из них сохранилась до наших дней в Мраморных горах.</p><p style="font-size:.86rem;color:var(--text-mid);line-height:1.7">Скульптура Чам, представленная сегодня в Музее Чам (основан 1915 г.), демонстрирует высочайший уровень художественного мастерства. Более 2000 экспонатов охватывают период с I по XV век.</p>`},
+  {era:'XV–XVII вв.',title:'Приход вьетов. Порт Туран',brief:'Чампа завоёвано, бухта становится главными воротами Центрального Вьетнама.',body:`<p style="font-size:.86rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px">В 1471 году вьетнамский король Лe Тхань Тонг нанёс государству Чампа сокрушительное поражение. Чамы постепенно были вытеснены с большей части своих земель, а вьеты начали заселять побережье.</p><p style="font-size:.86rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px">Бухта получила название Туран (Tourane) в португальском произношении — от вьетнамского «Hải Khẩu» (морские ворота). Именно через Туран шли китайские и японские торговые суда в соседний Хойан — тогда главный торговый порт региона.</p><p style="font-size:.86rem;color:var(--text-mid);line-height:1.7">В XVII веке в Хойан появляется японская и китайская торговые общины — Дананг служил воротами в этот процветающий мировой порт.</p>`},
+  {era:'XVIII–XIX вв.',title:'Французское присутствие. Туран',brief:'Первые европейцы, миссионеры и предпосылки колонизации.',body:`<p style="font-size:.86rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px">В 1787 году бухта Туран была упомянута в секретном Версальском договоре — Франция получала права на порт в обмен на военную помощь вьетнамскому принцу. Хотя договор так и не был выполнен, это заложило основу французских амбиций.</p><p style="font-size:.86rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px">В 1858 году французский адмирал Риго де Женуй с 14 военными кораблями атаковал Туран — это стало началом французской колонизации Вьетнама. Несмотря на военное превосходство, французы встретили жёсткое сопротивление и болезни. Уже через год они были вынуждены уйти на юг.</p><p style="font-size:.86rem;color:var(--text-mid);line-height:1.7">В 1888 году Туран официально стал французской концессией. Французы начали масштабное строительство: прокладывали дороги, возводили здания в колониальном стиле, строили порт. Город приобрёл европейский облик.</p>`},
+  {era:'XX в. (1900–1945)',title:'Французский Индокитай',brief:'Туран превращается в современный колониальный город с инфраструктурой.',body:`<p style="font-size:.86rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px">В начале XX века Туран переживал бурное развитие. Французы построили железную дорогу, соединившую город с Хюэ на севере и Сайгоном на юге. Открылись больницы, школы и административные здания.</p><p style="font-size:.86rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px">Горный курорт Бана (будущий Бана Хиллс) был освоен французскими чиновниками как летняя резиденция — здесь они спасались от изнуряющей жары побережья. Французская деревня, которую сегодня можно увидеть в Ba Na Hills, воссоздаёт тот колониальный дух.</p><p style="font-size:.86rem;color:var(--text-mid);line-height:1.7">В годы Второй мировой войны Вьетнам был оккупирован Японией (1940–1945). 9 марта 1945 японцы разоружили французский гарнизон в Тurane за одну ночь.</p>`},
+  {era:'1945–1975',title:'Война. Американская база',brief:'Дананг в центре Вьетнамской войны — крупнейшая военная база США в регионе.',body:`<p style="font-size:.86rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px">8 марта 1965 года — исторический момент: в Дананге высадились первые американские боевые части (3500 морских пехотинцев). Это было первое официальное боевое развёртывание США во Вьетнаме. Местные девушки встречали солдат гирляндами цветов.</p><p style="font-size:.86rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px">Аэропорт Дананга превратился в одну из самых загруженных авиабаз в истории войн. В пиковые годы здесь совершалось более 2500 вылетов в сутки. Город вырос до 500 000 жителей, окружённых лагерями беженцев.</p><p style="font-size:.86rem;color:var(--text-mid);line-height:1.7">29 марта 1975 года — Дананг пал одним из первых крупных городов Юга. Северовьетнамские войска вошли в город практически без боя — это стало переломным моментом в финале войны.</p>`},
+  {era:'1975–1995',title:'Объединение и восстановление',brief:'После войны — трудные годы восстановления и начало рыночных реформ.',body:`<p style="font-size:.86rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px">После объединения Вьетнама в 1975 году Дананг вошёл в состав провинции Куангнам-Дананг. Это были тяжёлые годы: послевоенная разруха, международная изоляция, плановая экономика. Многие жители бежали за рубеж как «лодочные беженцы».</p><p style="font-size:.86rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px">В 1986 году Вьетнам объявил политику «Doi Moi» (обновление) — переход к рыночной экономике с сохранением политической системы. Это стало поворотным моментом.</p><p style="font-size:.86rem;color:var(--text-mid);line-height:1.7">В 1997 году Дананг был выделен в самостоятельный муниципалитет центрального подчинения — это дало городу административную и финансовую самостоятельность и открыло путь к стремительному развитию.</p>`},
+  {era:'1997–2010',title:'Экономический рывок',brief:'Из провинциального города — в один из быстрейших мегаполисов Азии.',body:`<p style="font-size:.86rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px">С получением статуса города центрального подчинения Дананг получил огромные инвестиции в инфраструктуру. За 10 лет было снесено и перестроено практически всё. Узкие переулки уступили место широким проспектам, а рыбацкие деревни — курортным отелям.</p><p style="font-size:.86rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px">Мост Дракона (открыт в 2013 году к саммиту АТЭС) стал символом нового Дананга. Вдоль реки Хан вырос современный деловой центр, а вдоль пляжа My Khe протянулась гряда пятизвёздочных отелей.</p><p style="font-size:.86rem;color:var(--text-mid);line-height:1.7">В 2000 году был открыт первый крупный международный пляжный курорт — Furama Resort. Началась эпоха массового туризма.</p>`},
+  {era:'2010–настоящее время',title:'Современный Дананг',brief:'Туристическая столица Центрального Вьетнама и магнит для цифровых кочевников.',body:`<p style="font-size:.86rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px">Сегодня Дананг — третий по величине город Вьетнама с населением более 1,2 млн человек. Международный аэропорт принимает прямые рейсы из десятков городов. Ежегодно город посещают более 8 миллионов туристов.</p><p style="font-size:.86rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px">В 2017 году Дананг принял саммит АТЭС (Азиатско-Тихоокеанское экономическое сотрудничество) с участием Трампа, Путина и лидеров 20 стран — это стало символом международного признания города.</p><p style="font-size:.86rem;color:var(--text-mid);line-height:1.7">Район An Thuong превратился в центр цифровых кочевников Азии — тысячи фрилансеров из России, Беларуси, Украины, Европы и США работают здесь в прибрежных кафе. Дананг стабильно входит в топ-5 городов мира для remote-работы.</p>`},
+];
+
+const hc=document.getElementById('hist-chapters');
+histChapters.forEach((ch,i)=>{
+  const d=document.createElement('div');d.className='hist-chapter';
+  d.innerHTML=`<span class="hist-ch-arr">↗</span><div class="hist-ch-era">${ch.era}</div><div class="hist-ch-title">${ch.title}</div><div class="hist-ch-desc">${ch.brief}</div>`;
+  d.addEventListener('click',()=>{
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('hist-detail-page').classList.add('active');
+    document.getElementById('hist-detail-era').textContent=ch.era;
+    document.getElementById('hist-detail-title').textContent=ch.title;
+    document.getElementById('hist-detail-body').innerHTML=`<div class="section-title">${ch.title}</div>${ch.body}`;
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+  hc.appendChild(d);
+});
+document.getElementById('hist-back').addEventListener('click',()=>{
+  document.getElementById('hist-detail-page').classList.remove('active');
+  document.getElementById(currentTab).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+/* ═══════════════════════════════════════════
+   DATA: МЕДИЦИНА — аптеки
+═══════════════════════════════════════════ */
+[
+  {name:'Long Châu Pharmacy',tag:'Аптека · Сеть',tc:'pharma',addr:'Nguyễn Văn Thoại, An Thuong',desc:'Крупнейшая аптечная сеть Вьетнама. Все лекарства, английский интерфейс приложения.',fullDesc:'Long Châu — крупнейшая аптечная сеть Вьетнама. Несколько точек в Дананге. Лекарства, витамины, медоборудование. Приложение с доставкой.',maps:'https://maps.google.com/?q=Long+Chau+Pharmacy+Da+Nang',meta:[{label:'Часы',val:'07:00–22:00'},{label:'Английский',val:'Частично'},{label:'Оплата',val:'Карта, наличные'}]},
+  {name:'Pharmacity',tag:'Аптека · Сеть',tc:'pharma',addr:'Phạm Văn Đồng',desc:'Современная аптека с удобным поиском лекарств по QR-коду.',maps:'https://maps.google.com/?q=Pharmacity+Da+Nang',meta:[{label:'Часы',val:'07:30–22:00'},{label:'Доставка',val:'Через приложение'}]},
+  {name:'An Khang Pharmacy',tag:'Аптека · Сеть',tc:'pharma',addr:'Hải Châu',desc:'Хорошие цены, доступные дженерики и витамины.',maps:'https://maps.google.com/?q=An+Khang+Pharmacy+Da+Nang',meta:[{label:'Часы',val:'07:00–21:30'}]},
+  {name:'Nhà Thuốc Bệnh Viện C',tag:'Аптека · При больнице',tc:'pharma',addr:'Больница C, Hải Châu',desc:'Аптека при городской больнице — рецептурные препараты, широкий выбор.',maps:'https://maps.google.com/?q=Benh+Vien+C+Da+Nang',meta:[{label:'Часы',val:'07:00–20:00'}]},
+  {name:'Nhà Thuốc 24/7 My Khe',tag:'Аптека · Круглосуточно',tc:'pharma',addr:'Район пляжа My Khe',desc:'Единственная круглосуточная аптека в туристическом районе.',maps:'https://maps.google.com/?q=nha+thuoc+24+My+Khe+Da+Nang',meta:[{label:'Часы',val:'Круглосуточно'},{label:'Район',val:'My Khe / An Thuong'}]},
+  {name:'Nhà Thuốc Tây An Thuong',tag:'Аптека · Район',tc:'pharma',addr:'An Thuong',desc:'Аптека в самом сердце номадского района — рядом со всеми кафе.',maps:'https://maps.google.com/?q=nha+thuoc+An+Thuong+Da+Nang',meta:[{label:'Часы',val:'07:00–21:00'}]},
+  {name:'Nhà Thuốc Nguyễn Văn Linh',tag:'Аптека · Районная',tc:'pharma',addr:'Nguyễn Văn Linh',desc:'Большой ассортимент, дружелюбный персонал, средние цены.',maps:'https://maps.google.com/?q=nha+thuoc+Nguyen+Van+Linh+Da+Nang'},
+  {name:'Nhà Thuốc Ngũ Hành Sơn',tag:'Аптека · Район',tc:'pharma',addr:'Ngũ Hành Sơn',desc:'Аптека рядом с Мраморными горами и Non Nuoc Beach.',maps:'https://maps.google.com/?q=nha+thuoc+Ngu+Hanh+Son+Da+Nang'},
+  {name:'Pharmacity Airport Area',tag:'Аптека · Аэропорт',tc:'pharma',addr:'Рядом с аэропортом',desc:'Удобна при прилёте и вылете — купить нужное быстро.',maps:'https://maps.google.com/?q=Pharmacity+near+Da+Nang+airport'},
+  {name:'Online Pharmacy (Long Châu App)',tag:'Доставка · Онлайн',tc:'pharma',addr:'Приложение / nhathuoclongchau.vn',desc:'Заказ и доставка лекарств за 2 часа через приложение.',fullDesc:'Приложение Long Châu позволяет заказать лекарства с доставкой на дом за 2 часа. Оплата картой.',site:'https://nhathuoclongchau.com.vn',meta:[{label:'Доставка',val:'2 часа'},{label:'Оплата',val:'Карта в приложении'}]},
+].forEach(i=>makeCard(i,'pharma-cards'));
+
+[
+  {name:'Family Medical Practice',tag:'Клиника · Иностранцы',tc:'pharma',addr:'96–98 Nguyễn Văn Linh',desc:'Лучшая клиника для иностранцев — русскоязычный персонал, все виды помощи.',fullDesc:'Главная клиника для иностранцев в Дананге. Опытные врачи, современное оборудование. Принимают все виды страховки.',maps:'https://maps.google.com/?q=Family+Medical+Practice+Da+Nang',site:'https://www.vietnammedicalpractice.com',meta:[{label:'Телефон',val:'+84 236 3582 699'},{label:'Приём',val:'24/7 экстренный'},{label:'Страховка',val:'Большинство принимают'}]},
+  {name:'Bệnh Viện C Da Nang',tag:'Больница · Государственная',tc:'pharma',addr:'Hải Châu',desc:'Главная городская больница — экстренная помощь 24/7, широкий спектр услуг.',maps:'https://maps.google.com/?q=Benh+Vien+C+Da+Nang',meta:[{label:'Телефон',val:'+84 236 3821 480'},{label:'Экстренная',val:'Круглосуточно'}]},
+  {name:'Hoan My Hospital',tag:'Больница · Частная',tc:'pharma',addr:'161 Nguyễn Văn Linh',desc:'Современная частная больница с хорошей диагностикой и доступными ценами.',maps:'https://maps.google.com/?q=Hoan+My+Hospital+Da+Nang',meta:[{label:'Телефон',val:'+84 236 3650 676'},{label:'Часы',val:'24/7'}]},
+].forEach(i=>makeCard(i,'clinic-cards'));
+
+/* Медицинские гайды */
+const medGuides=[
+  {icon:'🤢',title:'Гайд по пищевому отравлению',items:[
+    '<strong>Симптомы:</strong> тошнота, рвота, диарея, спазмы, температура через 2–48 ч после еды.',
+    '<strong>Шаг 1:</strong> Прекрати есть. Пей только воду или регидратирующий раствор (Oresol — в любой аптеке).',
+    '<strong>Шаг 2:</strong> Уголь активированный — 1 г на 10 кг веса. В Вьетнаме продаётся как «Than hoạt tính».',
+    '<strong>Шаг 3:</strong> Диета BRAT — бананы, рис, яблочное пюре, тост. Не ешь молочное, жирное, острое.',
+    '<strong>Шаг 4:</strong> Если температура выше 38.5°C или диарея с кровью — немедленно в клинику (Family Medical Practice).',
+    '<strong>Шаг 5:</strong> Антибиотики (Ciprofloxacin) — только по назначению врача. Не самолечись.',
+    '<strong>Профилактика:</strong> избегай льда неизвестного происхождения, мытых фруктов под кранной водой, уличного мяса которое долго стоит.',
+  ]},
+  {icon:'🌡️',title:'Тепловой удар и перегрев',items:[
+    '<strong>Симптомы лёгкого перегрева:</strong> усталость, головная боль, сухость рта, тёмная моча.',
+    '<strong>Тяжёлый тепловой удар:</strong> температура выше 40°C, спутанность сознания, отсутствие потоотделения — это экстренная ситуация, вызывай скорую.',
+    '<strong>Первая помощь:</strong> перейти в тень или кондиционер, снять лишнюю одежду, влажные полотенца на шею, запястья и лоб.',
+    '<strong>Пить:</strong> воду или изотоник каждые 15–20 минут небольшими глотками. Кокосовая вода отлично восполняет электролиты.',
+    '<strong>Профилактика:</strong> SPF 50+, головной убор, не выходить между 11:00 и 15:00, пить 2–3 л воды в день.',
+  ]},
+  {icon:'🦟',title:'Укусы насекомых и медузы',items:[
+    '<strong>Комары:</strong> используй репеллент DEET 20%+. Малярийный риск в Дананге низкий, но денге встречается. При температуре и сыпи — к врачу.',
+    '<strong>Медузы:</strong> промой место укуса морской водой (не пресной!). Удали щупальца пинцетом. Крем с гидрокортизоном снизит зуд.',
+    '<strong>Песочные блохи:</strong> на пляже надевай тапочки. Зуд от укусов — антигистаминный крем.',
+    '<strong>Осы и пчёлы:</strong> удали жало пластиковой картой (не давить). При аллергической реакции (отёк горла) — немедленно в скорую.',
+  ]},
+  {icon:'🩹',title:'Мелкие травмы',items:[
+    '<strong>Порезы от кораллов / скутера:</strong> промой перекисью водорода. В тропиках раны заживают медленнее из-за жары — используй антибактериальную мазь (Betadine).',
+    '<strong>Ожоги от солнца:</strong> гель алоэ вера (продаётся везде), холодный душ, не лопай пузыри.',
+    '<strong>Волдыри от ходьбы:</strong> заклей пластырем от мозолей перед прогулкой, а не после.',
+    '<strong>Падение со скутера:</strong> обработай ссадины. Если удар головой — даже без видимых повреждений обратись к врачу.',
+  ]},
+];
+const mg=document.getElementById('med-guides');
+medGuides.forEach(guide=>{
+  const sec=document.createElement('div');sec.className='first-aid-section';sec.style.marginBottom='14px';
+  const hdr=document.createElement('div');hdr.className='first-aid-hdr';hdr.textContent=`${guide.icon} ${guide.title}`;sec.appendChild(hdr);
+  guide.items.forEach(item=>{
+    const row=document.createElement('div');row.className='first-aid-item';
+    row.innerHTML=`<span class="first-aid-icon">${guide.icon}</span><span class="first-aid-text">${item}</span>`;
+    sec.appendChild(row);
+  });
+  mg.appendChild(sec);
+});
+
+/* ═══════════════════════════════════════════
+   DATA: СОВЕТЫ (100)
+═══════════════════════════════════════════ */
+const adviceData=[
+  {cat:'💰 Деньги и банкоматы',items:[
+    {i:'🏧',t:'<strong>VPBank и ACB — нулевая комиссия</strong> для иностранных карт. Ищи их в первую очередь.'},
+    {i:'❌',t:'<strong>Никогда не соглашайся на конвертацию в долларах</strong> — жми «Charge in VND».'},
+    {i:'💵',t:'Снимай крупными суммами — 5 млн за раз выгоднее пяти операций по 1 млн.'},
+    {i:'💳',t:'Рынки и уличная еда — только наличные. Карты берут в отелях и крупных ресторанах.'},
+    {i:'🎊',t:'Перед Тет сними деньги заранее — банкоматы опустошаются за сутки.'},
+    {i:'📉',t:'Курс в аэропортовых обменниках хуже. Лучше снять в банкомате по прилёту.'},
+    {i:'🛒',t:'На рынках торгуйся — стартовая цена для туристов завышена в 2–3 раза.'},
+    {i:'💱',t:'Ювелирные магазины дают лучший курс обмена USD/EUR, чем банки.'},
+    {i:'🔢',t:'Помни нули: 100 тыс. VND ≈ 4 USD. Считать несложно — делишь на 26 тысяч.'},
+    {i:'📱',t:'Приложение Wise или Revolut экономит на конвертации при оплате картой.'},
+  ]},
+  {cat:'🛵 Транспорт',items:[
+    {i:'📱',t:'<strong>Grab — главный транспорт.</strong> Цена фиксирована до поездки, не нужно торговаться.'},
+    {i:'🛵',t:'Аренда скутера — 150–200 тыс. VND/день. Проверь тормоза и фары перед выездом.'},
+    {i:'📸',t:'Сфотографируй скутер со всех сторон перед арендой — не плати за чужие царапины.'},
+    {i:'⛽',t:'Верни скутер с полным баком, иначе возьмут по двойному тарифу.'},
+    {i:'🌧️',t:'Держи дождевик на скутере — тропические дожди начинаются внезапно.'},
+    {i:'🏍️',t:'Международные права с категорией A рекомендуются — проверяют редко, но штрафы есть.'},
+    {i:'🚌',t:'Автобус #1 идёт вдоль пляжа — 7 тыс. VND. Медленно, но атмосферно.'},
+    {i:'✈️',t:'Такси из аэропорта: Grab дешевле таксиста у выхода в 1.5–2 раза.'},
+    {i:'🚲',t:'Аренда велосипеда — 50–80 тыс. VND/день. Отлично для Хойана и набережной.'},
+    {i:'🛺',t:'Традиционные такси (Tiên Sa, Vinasun) — включай счётчик или договаривайся о цене ДО поездки.'},
+  ]},
+  {cat:'🌡️ Погода и климат',items:[
+    {i:'🧴',t:'<strong>SPF 50+ обязателен</strong> — обгореть можно за 20 минут.'},
+    {i:'👒',t:'Шляпа с широкими полями или кепка — необходимость, не опция.'},
+    {i:'🧊',t:'С апреля по июнь кондиционеры в кафе очень мощные — возьми лёгкую кофту.'},
+    {i:'🌧️',t:'Октябрь–декабрь — сезон дождей. Держи зонт всегда с собой.'},
+    {i:'🏔️',t:'На Бана Хиллс на 10°C холоднее города — возьми куртку даже в июне.'},
+    {i:'💧',t:'Пей 2–3 литра воды в день — в жару незаметно теряешь много влаги.'},
+    {i:'🌀',t:'Сезон тайфунов — сентябрь–ноябрь. Следи за прогнозами на windy.com.'},
+    {i:'☀️',t:'Лучший сезон — март–июнь: тепло, сухо, море спокойное.'},
+    {i:'🌊',t:'С октября по январь на пляже сильные волны — не купаться, только гулять.'},
+    {i:'🌡️',t:'Температура круглый год 25–35°C. Зимой (дек–фев) бывает 20°C — береговые ветры.'},
+  ]},
+  {cat:'🍜 Еда и вода',items:[
+    {i:'🚱',t:'<strong>Не пей воду из крана.</strong> Покупай бутилированную или используй фильтр-бутылку.'},
+    {i:'🧊',t:'Лёд в кафе и ресторанах — как правило безопасен (из бутилированной воды).'},
+    {i:'🥢',t:'Кафе с пластиковыми стульями на тротуаре — часто самая свежая и вкусная еда.'},
+    {i:'🌶️',t:'«Không cay» (кхонг кай) — без острого. Вьетнамское острое — очень острое.'},
+    {i:'🌿',t:'Тщательно мой фрукты или покупай уже очищенные.'},
+    {i:'🥥',t:'Кокос — 25–40 тыс. VND. Лучший способ восполнить электролиты в жару.'},
+    {i:'🫙',t:'Привезённые из дома пробиотики помогут первые недели до адаптации кишечника.'},
+    {i:'🍺',t:'Bia Hoi — свежесваренное пиво за 5–10 тыс. VND бокал. Лучший аперитив Дананга.'},
+    {i:'🥗',t:'Говори «chay» (чай) — вегетарианское. Вьетнамская веган-культура хорошо развита.'},
+    {i:'🐟',t:'Морепродукты свежайшие — смело заказывай, но уточняй вес и цену до приготовления.'},
+  ]},
+  {cat:'🏖️ Пляж и активности',items:[
+    {i:'🚩',t:'<strong>Следи за флагами:</strong> красный — запрещено, жёлтый — осторожно, зелёный — безопасно.'},
+    {i:'🦺',t:'Спасатели на My Khe — 06:00–18:00. После 18:00 купаешься на свой риск.'},
+    {i:'💼',t:'На пляже не оставляй вещи без присмотра.'},
+    {i:'⏰',t:'Лучшее время — до 9:00 и после 16:00: нежарко, красивый свет.'},
+    {i:'🌊',t:'Rip current: если тянет в море — плыви параллельно берегу, не против течения.'},
+    {i:'🪼',t:'Медузы встречаются в мае–июне. При ужалении — морская вода, не пресная.'},
+    {i:'🏄',t:'Серфинг-сезон — май–июль. Уроки от 300–400 тыс. VND/2 часа.'},
+    {i:'🤿',t:'Снорклинг у островов Чам — однодневные туры от 800 тыс. VND.'},
+    {i:'🚴',t:'Велопрогулка по набережной реки Хан утром — бесплатно и очень красиво.'},
+    {i:'⛰️',t:'Поход на Бана Хиллс пешком (6 км, 1400 м подъём) — для подготовленных туристов.'},
+  ]},
+  {cat:'📱 Связь и технологии',items:[
+    {i:'📶',t:'<strong>SIM в аэропорту — Viettel или Vietnamobile.</strong> 10–20 ГБ за 200 тыс. VND/месяц.'},
+    {i:'💻',t:'Wi-Fi в кафе Дананга — обычно быстрый. Пароль спроси у персонала или на чеке.'},
+    {i:'🔐',t:'Используй VPN — некоторые сайты во Вьетнаме заблокированы (Facebook стабилен, но бывают сбои).'},
+    {i:'🗺️',t:'Скачай офлайн-карту в Maps.me или Google Maps заранее.'},
+    {i:'🔋',t:'Пауэрбанк обязателен — телефон с навигацией и камерой садится в жару быстро.'},
+    {i:'💡',t:'Напряжение в Вьетнаме 220V / 50Hz. Стандарт розеток — A/C (совместим с европейским).'},
+    {i:'📷',t:'Instagram-локации: закат с пагоды Linh Ung, мост дракона ночью, Non Nuoc Beach.'},
+    {i:'🤖',t:'Приложения must-have: Grab, ShopeeFood, Google Maps, Google Translate (с офлайн вьетнамским).'},
+    {i:'📺',t:'Viettel — лучшее покрытие 4G по всему городу и на трассах.'},
+    {i:'🔄',t:'Перенести SIM-карту без замены номера нельзя — покупай новую при каждом приезде.'},
+  ]},
+  {cat:'🏥 Здоровье',items:[
+    {i:'💊',t:'<strong>Аптеки (Nhà thuốc) везде.</strong> Большинство лекарств без рецепта — показывай название.'},
+    {i:'🦟',t:'Комары активны на рассвете и закате. Репеллент DEET 20%+ обязателен на природе.'},
+    {i:'🌡️',t:'Тепловой удар реален. При головокружении — немедленно в тень и пить воду.'},
+    {i:'🏥',t:'Family Medical Practice — лучшая клиника для иностранцев. Тел: +84 236 3582 699.'},
+    {i:'🩺',t:'Страховка с медицинским покрытием обязательна — без неё очень дорого.'},
+    {i:'🐕',t:'Избегай контакта с бездомными собаками и обезьянами — риск бешенства.'},
+    {i:'💉',t:'Рекомендованные прививки: гепатит A и B, тиф, бешенство (если едешь надолго).'},
+    {i:'😷',t:'Oresol (регидратация) + уголь активированный — обязательно в аптечке туриста.'},
+    {i:'🦷',t:'Стоматология в Дананге дешевле, чем в России, в 3–5 раз. Качество хорошее.'},
+    {i:'👁️',t:'Линзы и очки легко найти на оптических рынках. Очки под заказ — от 300 тыс. VND.'},
+  ]},
+  {cat:'🤝 Культура и общество',items:[
+    {i:'👗',t:'В храмах плечи и колени должны быть закрыты.'},
+    {i:'🙏',t:'Снимай обувь при входе в храм и часть домов — ориентируйся по обуви у порога.'},
+    {i:'😊',t:'«Xin chào» с улыбкой — открывает любые двери.'},
+    {i:'📷',t:'Перед фотографией людей спрашивай разрешения, особенно у пожилых.'},
+    {i:'🧘',t:'Громкий смех и бурные эмоции в общественных местах воспринимаются как невоспитанность.'},
+    {i:'🎁',t:'Торговаться принято на рынках, но не в кафе и ресторанах с ценниками.'},
+    {i:'🚭',t:'Курение запрещено в кафе, ресторанах и гостиницах. Штраф — 100–300 тыс. VND.'},
+    {i:'🍶',t:'Отказываться от угощения хозяев — невежливо. Попробуй хотя бы немного.'},
+    {i:'💵',t:'Давать и принимать деньги обеими руками — знак уважения.'},
+    {i:'🌙',t:'Лунный Новый год Тет (январь–февраль) — всё закрыто 3–7 дней. Готовься заранее.'},
+  ]},
+  {cat:'🏠 Жильё и быт',items:[
+    {i:'🏡',t:'Airbnb, Booking и местные группы Facebook дают лучшие цены на квартиры от хозяев.'},
+    {i:'🏘️',t:'Лучший район для жизни — An Thuong: пляж в 10 мин, кафе на каждом шагу.'},
+    {i:'💡',t:'Электричество по вьетнамским тарифам. Спроси у хозяина — включено ли в аренду.'},
+    {i:'🛒',t:'Ближайший супермаркет — BigC, Lotte Mart, VinMart. Цены сопоставимы с Беларусью.'},
+    {i:'🧴',t:'Бытовую химию, туалетные принадлежности легко найти в Go!Mart или BigC.'},
+    {i:'🐛',t:'Москитная сетка на окне — обязательна. Попроси хозяина установить, если её нет.'},
+    {i:'🌀',t:'Кондиционер — главный прибор. Не бойся использовать его ночью, это необходимость.'},
+    {i:'🚿',t:'Горячая вода от бойлера. Уточни у хозяина — некоторые дешёвые квартиры без него.'},
+    {i:'📦',t:'Посылки из Вьетнама в Россию и Беларусь идут 3–5 недель. Отправляй заранее.'},
+    {i:'🏋️',t:'Тренажёрные залы от 200 тыс. VND/месяц. Yoga-студии повсюду в An Thuong.'},
+  ]},
+  {cat:'💼 Для цифровых кочевников',items:[
+    {i:'🌍',t:'Виза для граждан РБ и РФ — 45 дней электронная (e-visa) без проблем. Продляется.'},
+    {i:'💼',t:'Для долгосрочного проживания оформляй e-visa на 90 дней с многократным въездом.'},
+    {i:'🏦',t:'Открыть счёт в вьетнамском банке (Vietcombank) можно с паспортом — займёт 1 день.'},
+    {i:'🧾',t:'Налоговое резидентство Вьетнама — если живёшь 183+ дней в году. Проконсультируйся.'},
+    {i:'👥',t:'Telegram-чат «Дананг для своих» — главное сообщество русскоязычных экспатов.'},
+    {i:'🌐',t:'Номадские встречи (meetups) проходят каждую неделю в An Thuong — следи в Telegram.'},
+    {i:'📋',t:'При аренде квартиры на месяц и более — заключай письменный договор.'},
+    {i:'🎒',t:'Мини-хранилище (storage) для вещей при поездках — от 100–200 тыс. VND/месяц.'},
+    {i:'🛂',t:'Visa run в Таиланд / Камбоджу — популярный вариант продления. Стоит 100–150 USD.'},
+    {i:'💡',t:'Дананг — один из лучших городов мира для remote-работы по версии Nomad List. Наслаждайся!'},
+  ]},
+];
+const al=document.getElementById('advice-list'),af=document.getElementById('advice-filter');
+const aab=document.createElement('button');aab.className='cat-btn active';aab.textContent='Все';aab.dataset.cat='all';af.appendChild(aab);
+let gn=1;
+adviceData.forEach((cat,ci)=>{
+  const fb=document.createElement('button');fb.className='cat-btn';fb.textContent=cat.cat;fb.dataset.cat=String(ci);af.appendChild(fb);
+  const card=document.createElement('div');card.className='advice-card';card.dataset.cat=String(ci);
+  const hdr=document.createElement('div');hdr.className='advice-cat-hdr';hdr.textContent=cat.cat;card.appendChild(hdr);
+  cat.items.forEach(item=>{
+    const row=document.createElement('div');row.className='advice-item';
+    row.innerHTML=`<span class="advice-num">${gn++}</span><span class="advice-icon">${item.i}</span><span class="advice-text">${item.t}</span>`;
+    card.appendChild(row);
+  });
+  al.appendChild(card);
+});
+af.addEventListener('click',e=>{
+  const btn=e.target.closest('.cat-btn');if(!btn)return;
+  const cat=btn.dataset.cat;
+  document.querySelectorAll('#advice-filter .cat-btn').forEach(b=>b.classList.toggle('active',b===btn));
+  document.querySelectorAll('.advice-card').forEach(c=>c.classList.toggle('adv-hidden',cat!=='all'&&c.dataset.cat!==cat));
+});
+
+/* ═══════════════════════════════════════════
+   DATA: ЯЗЫК
+═══════════════════════════════════════════ */
+const langData=[
+  {cat:'Приветствия',words:[['Xin chào','Синь чао','Привет'],['Cảm ơn','Кам эн','Спасибо'],['Không có gì','Кхонг ко зи','Пожалуйста'],['Xin lỗi','Синь лой','Извините'],['Tạm biệt','Там бьет','До свидания'],['Vâng / Dạ','Вынг / Да','Да (вежл.)'],['Không','Кхонг','Нет'],['Tôi không hiểu','Той кхонг хьеу','Не понимаю'],['Nói tiếng Anh không?','Ной тьенг Ань кхонг?','Говорите по-английски?'],['Nói chậm hơn','Ной чым хэн','Медленнее']]},
+  {cat:'Еда и кафе',words:[['Cho tôi xem menu','Чо той хем мэню','Меню, пожалуйста'],['Tôi muốn gọi món này','Той муон гой мон ной','Хочу это заказать'],['Không cay','Кхонг кай','Без острого'],['Rất ngon','Рат нгон','Очень вкусно'],['Tính tiền','Тинь тьен','Счёт'],['Nước','Ныок','Вода'],['Cà phê','Ка фе','Кофе'],['Bia','Биа','Пиво'],['Cơm','Кэм','Рис'],['Không có thịt','Кхонг ко тхит','Без мяса']]},
+  {cat:'Транспорт',words:[['Tôi muốn đi đến...','Той муон ди ден...','Хочу поехать в...'],['Bao nhiêu tiền?','Бао ньеу тьен?','Сколько стоит?'],['Dừng ở đây','Зынг э дэй','Остановите здесь'],['Xe máy','Хе май','Скутер'],['Taxi','Такси','Такси'],['Bãi biển','Бай бьен','Пляж'],['Sân bay','Сэн бай','Аэропорт'],['Khách sạn','Кхак сан','Отель'],['Trái / Phải','Чай / Фай','Лево / Право'],['Thẳng','Тханг','Прямо']]},
+  {cat:'Шоппинг',words:[['Cái này giá bao nhiêu?','Кай ной зиа бао ньеу?','Сколько стоит?'],['Đắt quá','Дат куа','Слишком дорого'],['Giảm giá được không?','Зям зиа дыок кхонг?','Скидку?'],['Tôi mua cái này','Той муа кай ной','Я возьму'],['Tôi không mua','Той кхонг муа','Не куплю'],['Tiền mặt','Тьен мат','Наличные'],['Thẻ tín dụng','Тхе тин зунг','Карта'],['Túi ni lông','Туй ни лонг','Пакет'],['Chợ','Чэ','Рынок'],['Siêu thị','Сьеу тхи','Супермаркет']]},
+  {cat:'Числа',words:[['Một','Мот','1'],['Hai','Хай','2'],['Ba','Ба','3'],['Bốn','Бон','4'],['Năm','Ным','5'],['Mười','Мыой','10'],['Một trăm','Мот чам','100'],['Một nghìn','Мот нгин','1 000'],['Một triệu','Мот чьеу','1 000 000'],['Nửa','Нюа','Половина']]},
+  {cat:'Здоровье',words:[['Cấp cứu!','Кап кыу!','Скорая!'],['Gọi cảnh sát!','Гой каня сат!','Полиция!'],['Tôi bị bệnh','Той би бенг','Я болен'],['Tôi bị đau','Той би дао','Больно'],['Bệnh viện','Бенг вьен','Больница'],['Nhà thuốc','Ня тхуок','Аптека'],['Bác sĩ','Бак си','Врач'],['Dị ứng với...','Зи ынг вой...','Аллергия на...'],['Giúp tôi với!','Зуп той вой!','Помогите!'],['Mất cắp!','Мат кап!','Украли!']]},
+  {cat:'Жильё',words:[['Phòng','Фонг','Комната'],['Còn phòng không?','Кон фонг кхонг?','Есть номера?'],['Nhận phòng','Нян фонг','Заселение'],['Trả phòng','Ча фонг','Выезд'],['Điều hòa','Дьеу хоа','Кондиционер'],['Wi-Fi','Вай Фай','Wi-Fi'],['Mật khẩu','Мат кхао','Пароль'],['Khăn tắm','Кхан там','Полотенце'],['Hồ bơi','Хо бой','Бассейн'],['Dọn phòng','Зон фонг','Уборка']]},
+  {cat:'Пляж',words:[['Bơi','Бой','Плавать'],['Sóng lớn','Сонг лэн','Большие волны'],['Ô che nắng','О че нанг','Зонт от солнца'],['Ghế nằm','Ге нам','Шезлонг'],['Kem chống nắng','Кем чонг нанг','Крем от солнца'],['Lặn biển','Лан бьен','Дайвинг'],['Câu cá','Кэу ка','Рыбалка'],['Núi','Нуй','Гора'],['Thác nước','Тхак ныок','Водопад'],['Đi bộ','Ди бо','Поход']]},
+  {cat:'Время',words:[['Hôm nay','Хом най','Сегодня'],['Ngày mai','Нгай май','Завтра'],['Hôm qua','Хом куа','Вчера'],['Mấy giờ rồi?','Мэй зо зой?','Который час?'],['Trời nóng','Чой нонг','Жарко'],['Trời mưa','Чой мыа','Дождь'],['Trời nắng','Чой нанг','Солнечно'],['Mùa mưa','Муа мыа','Сезон дождей'],['Sáng / Chiều / Tối','Санг/Чьеу/Той','Утро/День/Вечер'],['Tuần','Туан','Неделя']]},
+  {cat:'Связь',words:[['Điện thoại','Дьен тхоай','Телефон'],['Sạc','Шак','Зарядное'],['Cắm sạc','Кам шак','Зарядить'],['Mạng','Манг','Интернет'],['SIM card','Сим кард','Сим-карта'],['Gọi điện','Гой дьен','Позвонить'],['Tin nhắn','Тин нян','Сообщение'],['Chụp ảnh','Чуп ань','Сфотографировать'],['Pin','Пин','Батарея'],['Cửa hàng điện thoại','Кыа хан дьен тхоай','Магазин телефонов']]},
+];
+const ltb=document.getElementById('lang-tbody'),lfd=document.getElementById('lang-filter');
+const lab=document.createElement('button');lab.className='cat-btn active';lab.textContent='Все';lab.dataset.cat='all';lfd.appendChild(lab);
+langData.forEach(cat=>{
+  const btn=document.createElement('button');btn.className='cat-btn';btn.textContent=cat.cat;btn.dataset.cat=cat.cat;lfd.appendChild(btn);
+  const cr=document.createElement('tr');cr.className='lang-cat-row';cr.dataset.cat=cat.cat;cr.innerHTML=`<td colspan="3">${cat.cat}</td>`;ltb.appendChild(cr);
+  cat.words.forEach(([v,t,r])=>{
+    const tr=document.createElement('tr');tr.dataset.cat=cat.cat;tr.dataset.search=(v+' '+t+' '+r).toLowerCase();
+    tr.innerHTML=`<td class="col-viet">${v}</td><td class="col-trans">${t}</td><td class="col-ru">${r}</td>`;
+    ltb.appendChild(tr);
+  });
+});
+let aLF='all';
+lfd.addEventListener('click',e=>{
+  const btn=e.target.closest('.cat-btn');if(!btn)return;
+  aLF=btn.dataset.cat;
+  document.querySelectorAll('#lang-filter .cat-btn').forEach(b=>b.classList.toggle('active',b===btn));
+  applyLF();
+});
+document.getElementById('lang-search').addEventListener('input',applyLF);
+function applyLF(){
+  const q=document.getElementById('lang-search').value.toLowerCase();
+  document.querySelectorAll('#lang-tbody tr').forEach(tr=>{
+    const cm=aLF==='all'||tr.dataset.cat===aLF,sm=!q||(tr.dataset.search&&tr.dataset.search.includes(q));
+    if(tr.classList.contains('lang-cat-row'))tr.classList.toggle('hidden-row',aLF!=='all'&&tr.dataset.cat!==aLF);
+    else tr.classList.toggle('hidden-row',!cm||!sm);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   CONVERTER LOGIC
+═══════════════════════════════════════════ */
+/* ═══ CONVERTER — live rates ═══ */
+let USD_VND=26200, BYN_PER_USD=2.87, BYN_VND=USD_VND/BYN_PER_USD;
+
+function fmtDate(d){const months=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`}
+
+function applyRates(){
+  BYN_VND=USD_VND/BYN_PER_USD;
+  const today=new Date();
+  const ds=fmtDate(today);
+  const usdFmt=Math.round(USD_VND).toLocaleString('ru');
+  const bynFmt=Math.round(BYN_VND).toLocaleString('ru');
+  const sub=document.getElementById('conv-rate-sub');
+  if(sub) sub.textContent=`Курс на ${ds} · 1 USD = ${usdFmt} VND · 1 BYN ≈ ${bynFmt} VND`;
+  const fn=document.getElementById('conv-footnote');
+  if(fn) fn.textContent=`Курс на ${ds} · 1 USD ≈ ${usdFmt} VND · 1 BYN ≈ ${(USD_VND/BYN_VND).toFixed(3)} USD`;
+  // refresh inputs and tables
+  sfV(parseFloat(iV.value)||0);
+  sl.dispatchEvent(new Event('input'));
+  // rebuild round-sum table
+  const ct=document.querySelector('#conv-table tbody');
+  if(ct){ct.innerHTML='';[1000,5000,10000,20000,50000,100000,200000,500000,1000000,2000000,5000000,10000000].forEach(v=>{const tr=document.createElement('tr');tr.innerHTML=`<td class="vnd-col">${v.toLocaleString('ru')} <span class="cur-sym">VND</span></td><td class="usd-col">${fU(v/USD_VND,true)}</td><td class="byn-col">${fB(v/BYN_VND,true)}</td>`;tr.addEventListener('click',()=>fillVND(v));ct.appendChild(tr);})}
+  // rebuild prices table
+  const pt=document.querySelector('#prices-table tbody');
+  if(pt){pt.innerHTML='';prices.forEach(p=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${p.n}<span class="badge">${cL[p.c]}</span></td><td class="vnd-col">${p.v.toLocaleString('ru')} <span class="cur-sym">VND</span></td><td class="usd-col">${fU(p.v/USD_VND,true)}</td><td class="byn-col">${fB(p.v/BYN_VND,true)}</td>`;tr.addEventListener('click',()=>{document.querySelectorAll('#prices-table tbody tr').forEach(r=>r.classList.remove('highlight'));tr.classList.add('highlight');fillVND(p.v)});pt.appendChild(tr);})}
+}
+
+async function fetchRates(){
+  try{
+    // Frankfurter API — free, no key, CORS-friendly
+    const r=await fetch('https://api.frankfurter.app/latest?from=USD&to=VND,BYN',{signal:AbortSignal.timeout(5000)});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    if(d.rates&&d.rates.VND) USD_VND=Math.round(d.rates.VND);
+    if(d.rates&&d.rates.BYN) BYN_PER_USD=1/d.rates.BYN; // BYN per USD
+  } catch(e){
+    // fallback: try exchangerate-api open endpoint
+    try{
+      const r2=await fetch('https://open.er-api.com/v6/latest/USD',{signal:AbortSignal.timeout(5000)});
+      const d2=await r2.json();
+      if(d2.rates&&d2.rates.VND) USD_VND=Math.round(d2.rates.VND);
+      if(d2.rates&&d2.rates.BYN) BYN_PER_USD=d2.rates.BYN;
+    } catch(e2){/* silent — use hardcoded fallback */}
+  }
+  applyRates();
+}
+
+function fU(v,h=false){const n=v<.1?v.toFixed(3):v<10?v.toFixed(2):v.toFixed(1);return h?`<span class="cur-sym">$</span>${n}`:'$ '+n}
+function fB(v,h=false){const n=v<.1?v.toFixed(3):v<10?v.toFixed(2):v.toFixed(1);return h?`<span class="cur-sym">BYN</span>${n}`:'BYN '+n}
+const iV=document.getElementById('inp-vnd'),iU=document.getElementById('inp-usd'),iB=document.getElementById('inp-byn');
+let upd=false;
+function sfV(v){if(upd)return;upd=true;iU.value=v?(v/USD_VND).toFixed(2):'';iB.value=v?(v/BYN_VND).toFixed(2):'';upd=false}
+function sfU(v){if(upd)return;upd=true;iV.value=v?Math.round(v*USD_VND):'';iB.value=v?(v*BYN_PER_USD).toFixed(2):'';upd=false}
+function sfB(v){if(upd)return;upd=true;iV.value=v?Math.round(v*BYN_VND):'';iU.value=v?(v/BYN_PER_USD).toFixed(2):'';upd=false}
+iV.addEventListener('input',()=>sfV(parseFloat(iV.value)||0));
+iU.addEventListener('input',()=>sfU(parseFloat(iU.value)||0));
+iB.addEventListener('input',()=>sfB(parseFloat(iB.value)||0));
+sfV(100000);
+const sl=document.getElementById('vnd-slider');
+sl.addEventListener('input',()=>{const v=+sl.value;document.getElementById('calc-vnd').textContent=v.toLocaleString('ru')+' VND';document.getElementById('calc-usd').textContent=fU(v/USD_VND);document.getElementById('calc-byn').textContent=fB(v/BYN_VND)});
+sl.dispatchEvent(new Event('input'));
+function fillVND(v){iV.value=v;sfV(v);goTo('page-converter')}
+
+const prices=[
+  {n:'Фо бо (суп)',c:'food',v:60000},{n:'Мыкуанг (лапша)',c:'food',v:45000},{n:'Баньми (сэндвич)',c:'food',v:28000},
+  {n:'Бун-бо-хюэ',c:'food',v:50000},{n:'Рис с куриным бульоном',c:'food',v:45000},{n:'Свежий сок',c:'cafe',v:25000},
+  {n:'Кофе вьетнамский',c:'cafe',v:35000},{n:'Кофе с авокадо',c:'cafe',v:55000},{n:'Пиво Bia Hoi',c:'cafe',v:8000},
+  {n:'Пиво 333 (бутылка)',c:'cafe',v:25000},{n:'Кокос на пляже',c:'market',v:30000},{n:'Смузи',c:'cafe',v:50000},
+  {n:'Обед в кафе',c:'food',v:80000},{n:'Обед в ресторане',c:'food',v:250000},{n:'Ужин морепродукты',c:'food',v:500000},
+  {n:'Манго (1 кг)',c:'market',v:40000},{n:'Арбуз (1 кг)',c:'market',v:15000},{n:'Роллы суши (8 шт)',c:'food',v:120000},
+  {n:'Пицца (средняя)',c:'food',v:180000},{n:'Буррито',c:'food',v:140000},{n:'Grab (5 км)',c:'transport',v:80000},
+  {n:'Grab (10 км)',c:'transport',v:140000},{n:'Скутер (1 день)',c:'transport',v:160000},{n:'Велосипед (1 день)',c:'transport',v:70000},
+  {n:'Такси аэропорт–центр',c:'transport',v:200000},{n:'Массаж (1 час)',c:'leisure',v:250000},{n:'Маникюр',c:'leisure',v:120000},
+  {n:'Педикюр',c:'leisure',v:150000},{n:'Стрижка (мужская)',c:'leisure',v:80000},{n:'Йога (1 класс)',c:'leisure',v:100000},
+  {n:'Хостел (ночь)',c:'hotel',v:220000},{n:'Бюджет-отель (ночь)',c:'hotel',v:400000},{n:'Квартира (1 мес.)',c:'hotel',v:7000000},
+  {n:'Апартаменты 3★ (ночь)',c:'hotel',v:900000},{n:'Вода 500 мл',c:'market',v:8000},{n:'Вода 1.5 л',c:'market',v:15000},
+  {n:'SIM-карта (месяц)',c:'market',v:200000},{n:'Стиральная машина (услуга)',c:'market',v:25000},{n:'Вход Мраморные горы',c:'leisure',v:40000},
+  {n:'Вход музей Чам',c:'leisure',v:60000},
+];
+const cL={food:'Еда',cafe:'Кафе',market:'Рынок',transport:'Транспорт',hotel:'Жильё',leisure:'Досуг'};
+
+// Initial render with fallback, then try live rates
+applyRates();
+fetchRates();
+
+/* ═══ PWA SERVICE WORKER ═══ */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .catch(e => console.log('SW reg failed:', e));
+  });
+}
+</script>
+</body>
+</html>
