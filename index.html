@@ -196,6 +196,24 @@ a{color:inherit;text-decoration:none}
 .detail-tips-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px}
 .detail-tips-title{font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px}
 
+/* CONTACT PAGE */
+.contact-wip{display:flex;gap:14px;align-items:flex-start;background:rgba(255,180,0,.10);border:1.5px solid rgba(255,180,0,.35);border-radius:14px;padding:16px;margin-bottom:22px}
+.contact-wip-icon{font-size:1.6rem;flex-shrink:0;line-height:1}
+.contact-wip-text{display:flex;flex-direction:column;gap:5px}
+.contact-wip-text strong{font-size:.88rem;color:var(--text)}
+.contact-wip-text span{font-size:.78rem;color:var(--text-mid);line-height:1.55}
+.contact-card{display:flex;align-items:center;gap:14px;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:16px;text-decoration:none;color:var(--text);transition:border-color .15s,transform .15s;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.contact-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.contact-card-icon{width:42px;height:42px;border-radius:12px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.contact-card-body{flex:1;min-width:0}
+.contact-card-name{font-size:.92rem;font-weight:700;color:var(--accent);margin-bottom:3px}
+.contact-card-desc{font-size:.75rem;color:var(--text-mid)}
+.contact-card-arr{font-size:1.1rem;color:var(--text-dim);flex-shrink:0}
+.contact-soon-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.contact-soon-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:var(--surface);border:1.5px dashed var(--border2);border-radius:13px;padding:20px 12px;opacity:.55}
+.contact-soon-icon{font-size:1.5rem;line-height:1}
+.contact-soon-label{font-size:.72rem;font-weight:600;color:var(--text-mid);letter-spacing:.04em;text-align:center}
+
 /* CURRENCY TABS */
 .curr-tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);padding:0 16px}
 .curr-tab{flex:1;padding:10px 4px;font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;background:none;border:none;border-bottom:2.5px solid transparent;color:var(--text-dim);cursor:pointer;font-family:'Inter',sans-serif;transition:color .15s,border-color .15s;-webkit-tap-highlight-color:transparent}
@@ -480,34 +498,44 @@ tbody td:first-child{text-align:left;font-weight:500}
   <div class="section-hero">
     <div class="hero-eyebrow">Дананг · Гастрономия</div>
     <div class="hero-title">Где поесть</div>
-    <div class="hero-sub">80+ мест по 4 категориям — от уличной еды до доставки</div>
+    <div class="hero-sub">120+ мест по 6 категориям — от уличной еды до доставки</div>
     <div class="hero-stats">
-      <div class="hero-stat"><div class="hero-stat-val">80+</div><div class="hero-stat-label">заведений</div></div>
-      <div class="hero-stat"><div class="hero-stat-val">4</div><div class="hero-stat-label">категории</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">120+</div><div class="hero-stat-label">заведений</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">6</div><div class="hero-stat-label">категорий</div></div>
     </div>
   </div>
   <div class="content">
     <div class="cat-filter" id="food-filter">
       <button class="cat-btn active" data-cat="all">Все</button>
+      <button class="cat-btn" data-cat="viet">🇻🇳 Вьетнамская</button>
       <button class="cat-btn" data-cat="asian">🍜 Азиатская</button>
       <button class="cat-btn" data-cat="euro">🥐 Европейская</button>
+      <button class="cat-btn" data-cat="slav">🥟 Славянская</button>
       <button class="cat-btn" data-cat="pp">🥗 ПП</button>
       <button class="cat-btn" data-cat="delivery">🛵 Доставка</button>
     </div>
-    <div class="food-cat-section" id="fcat-asian">
-      <div class="section-title">Азиатская кухня (ТОП-20)</div>
+    <div class="food-cat-section" id="fcat-viet">
+      <div class="section-title">Вьетнамская кухня</div>
+      <div class="cards-grid" id="food-viet"></div>
+    </div>
+    <div class="food-cat-section hidden" id="fcat-asian">
+      <div class="section-title">Азиатская кухня (не вьетнамская)</div>
       <div class="cards-grid" id="food-asian"></div>
     </div>
     <div class="food-cat-section hidden" id="fcat-euro">
-      <div class="section-title">Европейская кухня (ТОП-20)</div>
+      <div class="section-title">Европейская кухня</div>
       <div class="cards-grid" id="food-euro"></div>
     </div>
+    <div class="food-cat-section hidden" id="fcat-slav">
+      <div class="section-title">Славянская кухня</div>
+      <div class="cards-grid" id="food-slav"></div>
+    </div>
     <div class="food-cat-section hidden" id="fcat-pp">
-      <div class="section-title">Правильное питание (ТОП-20)</div>
+      <div class="section-title">Правильное питание</div>
       <div class="cards-grid" id="food-pp"></div>
     </div>
     <div class="food-cat-section hidden" id="fcat-delivery">
-      <div class="section-title">Доставка еды (ТОП-20)</div>
+      <div class="section-title">Доставка еды</div>
       <div class="cards-grid" id="food-delivery"></div>
     </div>
   </div>
@@ -669,15 +697,32 @@ tbody td:first-child{text-align:left;font-weight:500}
   <div class="section-hero">
     <div class="hero-eyebrow">Дананг · Полезное</div>
     <div class="hero-title">Советы</div>
-    <div class="hero-sub">100 важных советов по жизни и путешествию в Дананге</div>
+    <div class="hero-sub">150+ советов по 15 категориям — от банкоматов до лайфхаков</div>
     <div class="hero-stats">
-      <div class="hero-stat"><div class="hero-stat-val">100</div><div class="hero-stat-label">советов</div></div>
-      <div class="hero-stat"><div class="hero-stat-val">10</div><div class="hero-stat-label">категорий</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">150+</div><div class="hero-stat-label">советов</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">15</div><div class="hero-stat-label">категорий</div></div>
     </div>
   </div>
   <div class="content">
     <div class="advice-filter" id="advice-filter"></div>
     <div id="advice-list"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ КАНАЛЫ ═══════════════════════════ -->
+<div class="page" id="page-channels">
+  <div class="section-hero">
+    <div class="hero-eyebrow">Дананг · Сообщество</div>
+    <div class="hero-title">Каналы и группы</div>
+    <div class="hero-sub">Телеграм и Фейсбук — жильё, комьюнити, новости Вьетнама</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val">50+</div><div class="hero-stat-label">каналов</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">3</div><div class="hero-stat-label">категории</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="cat-filter" id="chan-filter"></div>
+    <div id="chan-list"></div>
   </div>
 </div>
 
@@ -699,6 +744,59 @@ tbody td:first-child{text-align:left;font-weight:500}
     <div class="lang-tbl-wrap">
       <table class="lang-table"><thead><tr><th>Вьетнамский</th><th>Транскрипция</th><th>Русский</th></tr></thead><tbody id="lang-tbody"></tbody></table>
     </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ СВЯЗАТЬСЯ ═══════════════════════════ -->
+<div class="page" id="page-contact">
+  <div class="section-hero">
+    <div class="hero-eyebrow">Дананг · Контакты</div>
+    <div class="hero-title">Связаться</div>
+    <div class="hero-sub">Автор гайда — Andy Kurt</div>
+  </div>
+  <div class="content">
+
+    <!-- WIP banner -->
+    <div class="contact-wip">
+      <div class="contact-wip-icon">🚧</div>
+      <div class="contact-wip-text">
+        <strong>Приложение в процессе сборки</strong>
+        <span>Этот раздел будет обновлён — появятся полные контакты, информация об авторе и возможность поддержать проект.</span>
+      </div>
+    </div>
+
+    <!-- Telegram -->
+    <div class="section-title">Telegram</div>
+    <a class="contact-card" href="https://t.me/andykurt_dsgn" target="_blank" rel="noopener">
+      <div class="contact-card-icon">✈️</div>
+      <div class="contact-card-body">
+        <div class="contact-card-name">@andykurt_dsgn</div>
+        <div class="contact-card-desc">Написать автору напрямую в Телеграм</div>
+      </div>
+      <div class="contact-card-arr">↗</div>
+    </a>
+
+    <!-- Coming soon blocks -->
+    <div class="section-title" style="margin-top:24px">Скоро появится</div>
+    <div class="contact-soon-grid">
+      <div class="contact-soon-item">
+        <div class="contact-soon-icon">👤</div>
+        <div class="contact-soon-label">О себе</div>
+      </div>
+      <div class="contact-soon-item">
+        <div class="contact-soon-icon">🔗</div>
+        <div class="contact-soon-label">Все контакты</div>
+      </div>
+      <div class="contact-soon-item">
+        <div class="contact-soon-icon">₿</div>
+        <div class="contact-soon-label">Крипто-донат</div>
+      </div>
+      <div class="contact-soon-item">
+        <div class="contact-soon-icon">📋</div>
+        <div class="contact-soon-label">Копировать кошелёк</div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -744,7 +842,9 @@ tbody td:first-child{text-align:left;font-weight:500}
   <button class="tab-btn" data-page="page-leisure"    onclick="switchTab(this)"><span class="tab-icon">🎯</span><span class="tab-lbl">Досуг</span></button>
   <button class="tab-btn" data-page="page-history"    onclick="switchTab(this)"><span class="tab-icon">📜</span><span class="tab-lbl">История</span></button>
   <button class="tab-btn" data-page="page-facts"      onclick="switchTab(this)"><span class="tab-icon">💎</span><span class="tab-lbl">Факты</span></button>
+  <button class="tab-btn" data-page="page-channels"   onclick="switchTab(this)"><span class="tab-icon">✈️</span><span class="tab-lbl">Каналы</span></button>
   <button class="tab-btn" data-page="page-lang"       onclick="switchTab(this)"><span class="tab-icon">🗣️</span><span class="tab-lbl">Язык</span></button>
+  <button class="tab-btn" data-page="page-contact"    onclick="switchTab(this)"><span class="tab-icon">✌️</span><span class="tab-lbl">Связаться</span></button>
 <script>
 /* ═══ THEME ═══ */
 const themeBtn=document.getElementById('theme-btn');
@@ -757,15 +857,17 @@ themeBtn.addEventListener('click',()=>{isDark=!isDark;applyTheme()});
 const sidebarNav=[
   {page:'page-home',     icon:'🏠', name:'Главная',    sub:'Старт'},
   {page:'page-converter',icon:'💱', name:'Конвертер',  sub:'USD · BYN · VND'},
-  {page:'page-food',     icon:'🍜', name:'Где поесть', sub:'80+ мест, 4 категории'},
+  {page:'page-food',     icon:'🍜', name:'Где поесть', sub:'120+ мест, 6 категорий'},
   {page:'page-cowork',   icon:'💻', name:'Коворкинг',  sub:'20+ кафе с Wi-Fi'},
   {page:'page-atm',      icon:'🏧', name:'Деньги',     sub:'Банкоматы и обменники'},
-  {page:'page-tips',     icon:'💡', name:'Советы',     sub:'100 советов'},
+  {page:'page-tips',     icon:'💡', name:'Советы',     sub:'150+ советов'},
   {page:'page-medicine', icon:'💊', name:'Медицина',   sub:'Аптеки, клиники, помощь'},
   {page:'page-leisure',  icon:'🎯', name:'Досуг',      sub:'100 мест и активностей'},
   {page:'page-history',  icon:'📜', name:'История',    sub:'2000 лет Дананга'},
   {page:'page-facts',    icon:'💎', name:'Факты',      sub:'100 фактов о Дананге'},
+  {page:'page-channels', icon:'✈️', name:'Каналы',     sub:'Группы, комьюнити, чаты'},
   {page:'page-lang',     icon:'🗣️', name:'Язык',       sub:'100 вьетнамских фраз'},
+  {page:'page-contact',   icon:'✌️', name:'Связаться',  sub:'@andykurt_dsgn'},
 ];
 const sidebarList=document.getElementById('sidebar-list');
 const sidebarEl=document.getElementById('sidebar');
@@ -833,15 +935,17 @@ document.getElementById('detail-back').addEventListener('click',()=>{
 /* ═══ HOME GRID ═══ */
 const homeItems=[
   {page:'page-converter',icon:'💱',label:'Финансы',   name:'Конвертер',   desc:'USD · BYN · VND',              cls:'tile-c1 span2',badge:'1 USD = 26 200 VND'},
-  {page:'page-food',     icon:'🍜',label:'Гастрономия',name:'Где поесть', desc:'80+ мест, 4 категории',        cls:'tile-c2'},
+  {page:'page-food',     icon:'🍜',label:'Гастрономия',name:'Где поесть', desc:'120+ мест, 6 категорий',        cls:'tile-c2'},
   {page:'page-cowork',   icon:'💻',label:'Работа',    name:'Коворкинг',   desc:'20+ кафе с Wi-Fi',             cls:'tile-c3'},
   {page:'page-atm',      icon:'🏧',label:'Деньги',    name:'Банкоматы',   desc:'Нулевая комиссия + обменники', cls:'tile-c4'},
-  {page:'page-tips',     icon:'💡',label:'Полезное',  name:'Советы',      desc:'100 советов по жизни',         cls:'tile-c6'},
+  {page:'page-tips',     icon:'💡',label:'Полезное',  name:'Советы',      desc:'150+ советов по жизни',         cls:'tile-c6'},
   {page:'page-medicine', icon:'💊',label:'Здоровье',  name:'Медицина',    desc:'Аптеки, клиники, помощь',      cls:'tile-c9'},
   {page:'page-leisure',  icon:'🎯',label:'Отдых',     name:'Досуг',       desc:'100 лучших мест',              cls:'tile-c5'},
   {page:'page-history',  icon:'📜',label:'История',   name:'История',     desc:'2000 лет Дананга',             cls:'tile-c8'},
   {page:'page-facts',    icon:'💎',label:'Интересное',name:'Факты',       desc:'100 фактов о Дананге',         cls:'tile-c7'},
+  {page:'page-channels', icon:'✈️',label:'Сообщество',name:'Каналы',       desc:'50+ групп и каналов',          cls:'tile-c4'},
   {page:'page-lang',     icon:'🗣️',label:'Язык',      name:'Вьетнамский', desc:'100 слов и фраз',              cls:'tile-c3 span2'},
+  {page:'page-contact',   icon:'✌️',label:'Контакты', name:'Связаться',   desc:'@andykurt_dsgn · донат · о себе', cls:'tile-c5 span2'},
 ];
 const grid=document.getElementById('home-grid');
 homeItems.forEach(item=>{
@@ -861,11 +965,11 @@ function makeCard(item,cid){
 }
 
 /* ═══════════════════════════════════════════
-   DATA: FOOD — Азиатская кухня (20)
+   DATA: FOOD — Вьетнамская кухня (14 из бывшей Азиатской)
 ═══════════════════════════════════════════ */
 [
-  {name:'Mì Quảng 1A',tag:'Вьетнамская',tc:'street',addr:'1 Hải Phòng',desc:'Культовая turmeric-лапша с креветками и яйцами — главное блюдо Дананга.',fullDesc:'Turmeric-лапша с креветками, свининой, яйцами и рисовым крекером. Культовый адрес Дананга.',price:'35–55 тыс.',maps:'https://maps.google.com/?q=Mi+Quang+1A+Da+Nang',meta:[{label:'Часы',val:'06:30–13:00'}]},
-  {name:'Bánh Xèo Bà Dưỡng',tag:'Вьетнамская',tc:'street',addr:'23 Hoàng Diệu',desc:'Хрустящие рисовые блины с креветками. Легендарный адрес.',fullDesc:'Рисовые блины с креветками, свининой и зеленью. Открыты до полудня.',price:'40–60 тыс.',maps:'https://maps.google.com/?q=Banh+Xeo+Ba+Duong+Da+Nang',meta:[{label:'Часы',val:'07:00–12:00'}],tips:[{icon:'⏰',text:'Приходи до 10:00.'}]},
+  {name:'Mì Quảng 1A',tag:'Вьетнамская',tc:'street',addr:'1 Hải Phòng',desc:'Культовая turmeric-лапша с креветками и яйцами — главное блюдо Дананга.',fullDesc:'Turmeric-лапша с креветками, свининой, яйцами и рисовым крекером. Культовый адрес.',price:'35–55 тыс.',maps:'https://maps.google.com/?q=Mi+Quang+1A+Da+Nang',meta:[{label:'Часы',val:'06:30–13:00'}]},
+  {name:'Bánh Xèo Bà Dưỡng',tag:'Вьетнамская',tc:'street',addr:'23 Hoàng Diệu',desc:'Хрустящие рисовые блины с креветками. Легендарный адрес.',price:'40–60 тыс.',maps:'https://maps.google.com/?q=Banh+Xeo+Ba+Duong+Da+Nang',meta:[{label:'Часы',val:'07:00–12:00'}],tips:[{icon:'⏰',text:'Приходи до 10:00.'}]},
   {name:'Bún Chả Cá Hòn',tag:'Вьетнамская',tc:'street',addr:'Район My An',desc:'Суп-лапша с рыбными котлетами — кислый, сладкий, пряный бульон.',price:'40–60 тыс.',maps:'https://maps.google.com/?q=Bun+Cha+Ca+Da+Nang',meta:[{label:'Часы',val:'06:00–12:00'}]},
   {name:'Phở Xưa',tag:'Вьетнамская · Фо',tc:'street',addr:'Hải Châu',desc:'Классическое фо-бо с наваристым говяжьим бульоном — один из лучших адресов.',price:'50–70 тыс.',maps:'https://maps.google.com/?q=Pho+Xua+Da+Nang',meta:[{label:'Часы',val:'06:00–11:00 / 17:00–21:00'}]},
   {name:'Bún Bò Huế O Xuân',tag:'Вьетнамская',tc:'street',addr:'Ngũ Hành Sơn',desc:'Острый суп из Хюэ — лапша с говядиной и лемонграссом.',price:'40–60 тыс.',maps:'https://maps.google.com/?q=Bun+Bo+Hue+Da+Nang'},
@@ -873,18 +977,56 @@ function makeCard(item,cid){
   {name:'Madame Lan',tag:'Вьетнамская · Ресторан',tc:'resto',addr:'1 Hải Phòng',desc:'Элегантный ресторан у реки. Аутентичная кухня, красивая подача.',price:'150–350 тыс.',maps:'https://maps.google.com/?q=Madame+Lan+Da+Nang',tips:[{icon:'🌅',text:'Столик с видом на реку.'}]},
   {name:'Bé Mặn Seafood',tag:'Морепродукты',tc:'resto',addr:'Пляж My Khe',desc:'Живые крабы, лобстеры, кальмары на гриле прямо у пляжа.',price:'200–600 тыс.',maps:'https://maps.google.com/?q=Be+Man+Seafood+Da+Nang',tips:[{icon:'⚖️',text:'Цена за вес — уточняй заранее.'}]},
   {name:'Nhà Hàng Trúc Lâm Viên',tag:'Вьетнамская · Ресторан',tc:'resto',addr:'Ngũ Hành Sơn',desc:'Традиционная кухня в красивом деревянном интерьере с прудом.',price:'150–400 тыс.',maps:'https://maps.google.com/?q=Truc+Lam+Vien+Da+Nang'},
-  {name:'Gánh Hàng Rong',tag:'Уличная еда',tc:'street',addr:'Hải Châu',desc:'Знаменитая «тележка» с разными блюдами — com ga, bún thịt nướng.',price:'30–50 тыс.',maps:'https://maps.google.com/?q=Ganh+Hang+Rong+Da+Nang'},
-  {name:'Sushi World Da Nang',tag:'Японская',tc:'cafe',addr:'An Thuong',desc:'Конвейерные суши по доступным ценам — свежие рыба и морепродукты.',price:'150–300 тыс.',maps:'https://maps.google.com/?q=Sushi+World+Da+Nang'},
-  {name:'Korea Garden BBQ',tag:'Корейская',tc:'cafe',addr:'Phạm Văn Đồng',desc:'Корейское барбекю самсу и кальби — жаришь сам на столе.',price:'250–500 тыс.',maps:'https://maps.google.com/?q=Korea+Garden+BBQ+Da+Nang'},
-  {name:'Thái Express',tag:'Тайская',tc:'cafe',addr:'Nguyễn Văn Thoại',desc:'Том Ям, Пад Тай, карри — правильная тайская кухня в Дананге.',price:'120–200 тыс.',maps:'https://maps.google.com/?q=Thai+Express+Da+Nang'},
   {name:'Cơm Gà Bà Buội',tag:'Вьетнамская',tc:'street',addr:'Trần Phú',desc:'Cơm gà — рис с куриным бульоном, фирменный стиль Хойан в Дананге.',price:'45–65 тыс.',maps:'https://maps.google.com/?q=Com+Ga+Ba+Buoi+Da+Nang'},
   {name:'Bánh Canh Bà Ngọc',tag:'Вьетнамская',tc:'street',addr:'My An',desc:'Bánh canh — толстая рисовая лапша в наваристом бульоне с крабом.',price:'35–60 тыс.',maps:'https://maps.google.com/?q=Banh+Canh+Da+Nang'},
-  {name:'Hải Sản Biển Đông',tag:'Морепродукты',tc:'resto',addr:'Набережная',desc:'Большой ресторан с аквариумами — выбираешь живую рыбу сам.',price:'300–800 тыс.',maps:'https://maps.google.com/?q=Hai+San+Bien+Dong+Da+Nang'},
   {name:'Bánh Tráng Cuốn Thịt Heo',tag:'Вьетнамская',tc:'street',addr:'Hai Chau',desc:'Рисовые блинчики со свининой — уникальное блюдо из Дананга.',price:'60–90 тыс.',maps:'https://maps.google.com/?q=Banh+Trang+Da+Nang'},
-  {name:'Quán Mì Quảng Ếch',tag:'Вьетнамская',tc:'street',addr:'Hải Châu',desc:'Мыкуанг с лягушачьими лапками — необычный местный вариант.',price:'45–70 тыс.',maps:'https://maps.google.com/?q=Mi+Quang+Ech+Da+Nang'},
   {name:'Quán Cháo Lòng',tag:'Уличная еда',tc:'street',addr:'Thanh Khe',desc:'Рисовая каша с потрохами — типичный местный завтрак.',price:'25–40 тыс.',maps:'https://maps.google.com/?q=Chao+Long+Da+Nang',meta:[{label:'Часы',val:'05:30–10:00'}]},
   {name:'Nem Lụi Bà Vũ',tag:'Вьетнамская',tc:'street',addr:'Hải Châu',desc:'Nem lụi — мясные шашлычки на лимонниковых палочках с рисовой бумагой.',price:'50–80 тыс.',maps:'https://maps.google.com/?q=Nem+Lui+Da+Nang'},
+  {name:'Hải Sản Biển Đông',tag:'Морепродукты',tc:'resto',addr:'Набережная',desc:'Большой ресторан с аквариумами — выбираешь живую рыбу сам.',price:'300–800 тыс.',maps:'https://maps.google.com/?q=Hai+San+Bien+Dong+Da+Nang'},
+  {name:'Gánh Hàng Rong',tag:'Уличная еда',tc:'street',addr:'Hải Châu',desc:'Знаменитая «тележка» с com ga, bún thịt nướng и другими блюдами.',price:'30–50 тыс.',maps:'https://maps.google.com/?q=Ganh+Hang+Rong+Da+Nang'},
+  {name:'Quán Mì Quảng Ếch',tag:'Вьетнамская',tc:'street',addr:'Hải Châu',desc:'Мыкуанг с лягушачьими лапками — необычный местный вариант.',price:'45–70 тыс.',maps:'https://maps.google.com/?q=Mi+Quang+Ech+Da+Nang'},
+  {name:'Phở 2000 Da Nang',tag:'Вьетнамская · Фо',tc:'street',addr:'Hải Châu',desc:'Уличное фо 24/7 — популярно у местных после полуночи.',price:'45–65 тыс.',maps:'https://maps.google.com/?q=Pho+2000+Da+Nang',meta:[{label:'Часы',val:'24/7'}]},
+  {name:'Bún Thịt Nướng Cô Ba',tag:'Вьетнамская',tc:'street',addr:'My An',desc:'Холодная рисовая лапша с жареной свининой и свежей зеленью.',price:'35–55 тыс.',maps:'https://maps.google.com/?q=Bun+Thit+Nuong+Da+Nang'},
+  {name:'Bánh Cuốn Nóng',tag:'Вьетнамская',tc:'street',addr:'Thanh Khe',desc:'Горячие паровые рулеты из рисового теста с грибами и фаршем.',price:'30–50 тыс.',maps:'https://maps.google.com/?q=Banh+Cuon+Da+Nang',meta:[{label:'Часы',val:'06:00–11:00'}]},
+].forEach(i=>makeCard(i,'food-viet'));
+
+/* ═══════════════════════════════════════════
+   DATA: FOOD — Азиатская кухня (не вьетнамская, 14)
+═══════════════════════════════════════════ */
+[
+  {name:'Sushi World Da Nang',tag:'Японская',tc:'cafe',addr:'An Thuong',desc:'Конвейерные суши по доступным ценам — свежая рыба и морепродукты.',price:'150–300 тыс.',maps:'https://maps.google.com/?q=Sushi+World+Da+Nang'},
+  {name:'Korea Garden BBQ',tag:'Корейская',tc:'cafe',addr:'Phạm Văn Đồng',desc:'Корейское барбекю самсу и кальби — жаришь сам на столе.',price:'250–500 тыс.',maps:'https://maps.google.com/?q=Korea+Garden+BBQ+Da+Nang'},
+  {name:'Thái Express',tag:'Тайская',tc:'cafe',addr:'Nguyễn Văn Thoại',desc:'Том Ям, Пад Тай, карри — правильная тайская кухня в Дананге.',price:'120–200 тыс.',maps:'https://maps.google.com/?q=Thai+Express+Da+Nang'},
+  {name:'China Town Restaurant',tag:'Китайская',tc:'cafe',addr:'Hải Châu',desc:'Дим-самы, утка по-пекински, вонтоны — классическая кантонская кухня.',price:'150–350 тыс.',maps:'https://maps.google.com/?q=China+Town+Da+Nang'},
+  {name:'Siam Thai Cuisine',tag:'Тайская',tc:'cafe',addr:'My An',desc:'Зелёный карри, манго-рис, тайские супы — аутентично и ароматно.',price:'130–250 тыс.',maps:'https://maps.google.com/?q=Siam+Thai+Da+Nang'},
+  {name:'Tokyo Sushi Bar',tag:'Японская',tc:'cafe',addr:'An Thuong',desc:'Роллы, сашими, рамен и тако-яки. Уютное место в районе номадов.',price:'180–400 тыс.',maps:'https://maps.google.com/?q=Tokyo+Sushi+Bar+Da+Nang'},
+  {name:'Hong Kong Dim Sum',tag:'Китайская',tc:'cafe',addr:'Hải Châu',desc:'Дим-самы на пару, char siu bao, рисовая лапша в гонконгском стиле.',price:'100–250 тыс.',maps:'https://maps.google.com/?q=Hong+Kong+Dim+Sum+Da+Nang'},
+  {name:'Kichi Kichi',tag:'Корейская · Шабу',tc:'cafe',addr:'Vincom Plaza',desc:'All-you-can-eat корейское шабу-шабу — бульон, мясо, овощи.',price:'299 тыс. (фиксировано)',maps:'https://maps.google.com/?q=Kichi+Kichi+Da+Nang',tips:[{icon:'💡',text:'Приходи голодным — безлимит.'}]},
+  {name:'Phuket Thai',tag:'Тайская',tc:'cafe',addr:'Phạm Văn Đồng',desc:'Пад тай, том ка, карри — большие порции и умеренные цены.',price:'100–200 тыс.',maps:'https://maps.google.com/?q=Phuket+Thai+Da+Nang'},
+  {name:'Manila BBQ Filipino',tag:'Филиппинская',tc:'cafe',addr:'My An',desc:'Сисиг, лечон-манок, арроз кальдо — редкая филиппинская кухня в Дананге.',price:'130–280 тыс.',maps:'https://maps.google.com/?q=Manila+BBQ+Da+Nang'},
+  {name:'Osaka Ramen',tag:'Японская · Рамен',tc:'cafe',addr:'An Thuong',desc:'Тонкоцу, мисо и шойю рамен. Яйцо аджитама и чашу в подарок.',price:'120–200 тыс.',maps:'https://maps.google.com/?q=Osaka+Ramen+Da+Nang'},
+  {name:'Golden Dragon',tag:'Китайская',tc:'resto',addr:'Ngũ Hành Sơn',desc:'Банкетный китайский ресторан — пекинская утка, акулий плавник.',price:'300–800 тыс.',maps:'https://maps.google.com/?q=Golden+Dragon+Da+Nang'},
+  {name:'Curry Leaf Indian',tag:'Индийская',tc:'cafe',addr:'An Thuong',desc:'Баттер чикен, нааны в тандыре, масала дал — северо-индийская кухня.',price:'120–270 тыс.',maps:'https://maps.google.com/?q=Curry+Leaf+Da+Nang'},
+  {name:'Lotteria',tag:'Корейский фастфуд',tc:'cafe',addr:'Vincom Plaza',desc:'Рисовые бургеры, хрустящая курица — корейский фастфуд для перекуса.',price:'60–150 тыс.',maps:'https://maps.google.com/?q=Lotteria+Da+Nang'},
 ].forEach(i=>makeCard(i,'food-asian'));
+
+/* ═══════════════════════════════════════════
+   DATA: FOOD — Славянская кухня (12)
+═══════════════════════════════════════════ */
+[
+  {name:'Чайхона Дананг',tag:'Русская · СНГ',tc:'cafe',addr:'An Thuong, Nguyễn Văn Thoại',desc:'Борщ, вареники, пельмени и селёдка под шубой — любимое место русскоязычных эмигрантов.',fullDesc:'Уютное кафе с домашней русской кухней. Меню на русском, русские сотрудники. Борщ, вареники, оливье. Популярное место встречи экспатов.',price:'100–250 тыс.',maps:'https://maps.google.com/?q=Chaikhona+Da+Nang',meta:[{label:'Язык',val:'Русское меню'},{label:'Часы',val:'10:00–22:00'}],tips:[{icon:'🫕',text:'Борщ со сметаной — почти как дома.'}]},
+  {name:'Русский Дом',tag:'Русская · Бар',tc:'cafe',addr:'My Khe Beach area',desc:'Русскоязычный бар-ресторан: шашлык, окрошка, квас и водка.',fullDesc:'Бар с русским меню, спортивными трансляциями и регулярными встречами русскоязычного комьюнити.',price:'120–300 тыс.',maps:'https://maps.google.com/?q=Russian+House+Da+Nang',meta:[{label:'Мероприятия',val:'Еженедельные встречи'}]},
+  {name:'Borsch & Pelmeni',tag:'Украинская · Русская',tc:'cafe',addr:'An Thuong',desc:'Украинский борщ, вареники с вишней, деруны и сало с чесноком.',fullDesc:'Небольшое кафе с украинской и русской кухней. Домашняя атмосфера, готовят эмигранты. Борщ с пампушками — хит.',price:'100–220 тыс.',maps:'https://maps.google.com/?q=Borsch+Pelmeni+Da+Nang',tips:[{icon:'🍲',text:'Деруны со сметаной — не пропусти.'}]},
+  {name:'Slavic Kitchen',tag:'Славянская',tc:'cafe',addr:'My An',desc:'Смешанная кухня: и белорусские драники, и украинские вареники, и русский шашлык.',price:'120–280 тыс.',maps:'https://maps.google.com/?q=Slavic+Kitchen+Da+Nang',meta:[{label:'Язык меню',val:'Русский / English'}]},
+  {name:'Café Moskva',tag:'Русская · Кафе',tc:'cafe',addr:'Hải Châu',desc:'Советская атмосфера: оливье, шуба, блины с икрой, квас в стакане.',price:'80–200 тыс.',maps:'https://maps.google.com/?q=Cafe+Moskva+Da+Nang'},
+  {name:'Пельменная «Сибирь»',tag:'Русская · Пельмени',tc:'cafe',addr:'An Thuong',desc:'Специализируется на пельменях и варениках ручной лепки — 8 видов начинки.',price:'100–200 тыс.',maps:'https://maps.google.com/?q=Pelmennaya+Da+Nang',tips:[{icon:'🥟',text:'Пельмени с грибами и пельмени с бараниной — лучшие.'}]},
+  {name:'Шашлычный двор',tag:'Кавказская · Гриль',tc:'cafe',addr:'Phạm Văn Đồng',desc:'Шашлык из баранины и говядины, люля-кебаб, лаваш и аджика.',price:'200–400 тыс.',maps:'https://maps.google.com/?q=Shashlyk+Da+Nang',meta:[{label:'Тип мяса',val:'Баранина, говядина'}]},
+  {name:'Восток Кафе',tag:'Казахская · Узбекская',tc:'cafe',addr:'My An',desc:'Плов, лагман, манты и самса — среднеазиатская кухня на берегу моря.',price:'100–250 тыс.',maps:'https://maps.google.com/?q=Vostok+Cafe+Da+Nang',tips:[{icon:'🍚',text:'Плов по-фергански — лучшее блюдо в меню.'}]},
+  {name:'Тарас Бульба',tag:'Украинская',tc:'cafe',addr:'An Thuong Beach Road',desc:'Украинская хата: борщ с пампушками, вареники, галушки и узвар.',price:'100–240 тыс.',maps:'https://maps.google.com/?q=Taras+Bulba+Da+Nang'},
+  {name:'Грузинский дворик',tag:'Грузинская',tc:'cafe',addr:'My An',desc:'Хачапури по-аджарски, хинкали, мцвади — настоящая грузинская кухня.',price:'150–350 тыс.',maps:'https://maps.google.com/?q=Georgian+Da+Nang',tips:[{icon:'🫓',text:'Хачапури по-аджарски — обязательно.'}]},
+  {name:'Бакинский плов',tag:'Азербайджанская',tc:'cafe',addr:'Hải Châu',desc:'Дюшбара, долма в виноградных листьях, баранина-пити в горшочке.',price:'120–280 тыс.',maps:'https://maps.google.com/?q=Baku+Plov+Da+Nang'},
+  {name:'Русский магазин & кафе',tag:'Русская · Магазин',tc:'cafe',addr:'An Thuong',desc:'Гречка, тушёнка, квас, русский хлеб и сладости — и небольшое кафе при магазине.',fullDesc:'Продуктовый магазин с русскими и белорусскими продуктами: гречка, консервы, конфеты "Мишка". При магазине кафе с домашними пирожками.',price:'50–150 тыс.',maps:'https://maps.google.com/?q=Russian+Store+Da+Nang',meta:[{label:'Магазин',val:'Открыт 08:00–21:00'}]},
+].forEach(i=>makeCard(i,'food-slav'));
 
 /* ═══════════════════════════════════════════
    DATA: FOOD — Европейская кухня (20)
@@ -1513,6 +1655,77 @@ const adviceData=[
     {i:'🛂',t:'Visa run в Таиланд / Камбоджу — популярный вариант продления. Стоит 100–150 USD.'},
     {i:'💡',t:'Дананг — один из лучших городов мира для remote-работы по версии Nomad List. Наслаждайся!'},
   ]},
+  {cat:'🍜 Еда',items:[
+    {i:'🌅',t:'<strong>Завтракай в уличных кафе до 10:00</strong> — самая свежая еда и местная атмосфера. Большинство лучших мест закрываются до полудня.'},
+    {i:'🍜',t:'Мыкуанг — главное блюдо Дананга. Это не просто лапша — это паломничество. Адрес: Mì Quảng 1A, ул. Hải Phòng.'},
+    {i:'🌶️',t:'«<strong>Không cay</strong>» = без острого. Запомни эту фразу — по умолчанию вьетнамцы кладут много перца.'},
+    {i:'💵',t:'Уличная еда 30–60 тыс. VND — вкуснее и свежее ресторана за 300 тыс. Не бойся пластиковых стульев.'},
+    {i:'🦀',t:'Морепродукты на пляже My Khe — проси взвесить до готовки. Цена за вес, поэтому уточняй заранее.'},
+    {i:'☕',t:'Вьетнамский кофе — самый крепкий в мире. Cà phê sữa đá (со льдом и сгущёнкой) — национальный напиток.'},
+    {i:'🛵',t:'GrabFood и ShopeeFood доставят из любого ресторана. Промо-коды в приложении каждый день — не забывай проверять.'},
+    {i:'🥢',t:'Banh mi (баньми) — самый дешёвый и сытный перекус. 20–30 тыс. VND за хрустящий багет с начинкой.'},
+    {i:'🐟',t:'Рыбный рынок Дананга (Chợ Mới) — свежайшие морепродукты утром. Некоторые кафе рядом готовят твою рыбу за 30–40 тыс.'},
+    {i:'🍺',t:'Bia Hoi (разливное пиво) — 8 000–15 000 VND за кружку. Самое дешёвое пиво в Азии. Ищи пластиковые столики у дороги.'},
+    {i:'🥗',t:'На рынке Хан (Chợ Hàn) — лучшие фрукты Дананга. Рambutan, мангостин, дракон — по 40–60 тыс./кг.'},
+    {i:'📱',t:'Google Maps отлично работает для поиска кафе. Смотри отзывы с фото — вьетнамцы активно оставляют рецензии.'},
+  ]},
+  {cat:'🏨 Отели и жильё',items:[
+    {i:'🗓️',t:'<strong>Снимай жильё от месяца</strong> — аренда на месяц дешевле аренды на неделю в 1.5–2 раза. Договаривайся напрямую с хозяином.'},
+    {i:'🔑',t:'Airbnb во Вьетнаме дороже, чем напрямую. Ищи квартиры в TG-группах «Дананг аренда» — сэкономишь 20–40%.'},
+    {i:'🌊',t:'Район An Thuong и My Khe Beach — лучший для экспатов: кафе, рестораны, коворкинги, пляж в 5 минутах.'},
+    {i:'🏠',t:'Апартаменты с кухней + балконом + видом на море — от $400/мес. в не сезон. В сезон (июнь–август) цены растут на 30–50%.'},
+    {i:'🌀',t:'<strong>Сентябрь–ноябрь — сезон тайфунов.</strong> Уточняй у хозяина наличие генератора и качество окон перед заселением.'},
+    {i:'💡',t:'Электричество оплачивается отдельно — обычно 4 000–5 000 VND/кВтч. Кондиционер потребляет много. Уточни тариф заранее.'},
+    {i:'🛁',t:'Горячая вода из бойлера — норма. Если в дешёвом отеле нет горячей воды, это штатная ситуация — вода и так тёплая.'},
+    {i:'🐛',t:'Москитные сетки на окнах — обязательное требование при выборе жилья. Особенно важно с мая по октябрь.'},
+    {i:'📶',t:'Уточняй скорость интернета до подписания договора. Для удалённой работы нужно минимум 50 Мбит/с. Оптика есть везде.'},
+    {i:'🤝',t:'Депозит обычно 1 месяц. Требуй расписку и фото состояния квартиры при заезде — иначе депозит могут не вернуть.'},
+    {i:'🚿',t:'В местных отелях до $30/ночь часто нет ванны, только душ. В международных сетях (Hilton, Novotel) — полный сервис.'},
+    {i:'📍',t:'Лучшие районы для жизни: An Thuong (экспаты, кафе), My Khe (пляж, рестораны), Son Tra (тихо, природа).'},
+  ]},
+  {cat:'✈️ Первым делом после прилёта',items:[
+    {i:'1️⃣',t:'<strong>Сразу установи Grab</strong> — такси из аэропорта. Стандартная поездка до центра: 80–120 тыс. VND. Без торга, без обмана.'},
+    {i:'2️⃣',t:'<strong>Купи SIM-карту в аэропорту</strong> — Viettel или Vinaphone. Безлимитный интернет на месяц: 150–200 тыс. VND.'},
+    {i:'3️⃣',t:'Сними наличные в банкомате прямо в аэропорту (VPBank или ACB) — жми «Charge in VND», избегай DCC-конвертации.'},
+    {i:'4️⃣',t:'Первая еда — Bánh Mì у любого уличного лотка. 25 тыс. VND, вкусно и безопасно. Идеальное знакомство со страной.'},
+    {i:'5️⃣',t:'Установи Google Translate с загруженным вьетнамским пакетом — работает офлайн, поможет в ресторанах и на рынках.'},
+    {i:'6️⃣',t:'Зарегистрируйся в местной клинике или уточни адрес ближайшей Family Medical Practice — на случай болезни.'},
+    {i:'7️⃣',t:'Купи вьетнамскую карту Мир/UnionPay если нужна — в аэропорту есть обменники. Карты Visa/MC работают в крупных магазинах.'},
+    {i:'8️⃣',t:'Первые 2 часа — просто поспи и не принимай решений по жилью и экскурсиям. Продавцы у аэропорта — туристическая ловушка.'},
+    {i:'9️⃣',t:'Скачай Maps.me с офлайн-картой Вьетнама — работает без интернета. Полезно до активации SIM.'},
+    {i:'🔟',t:'Сообщи в своей TG-группе что прилетел — местные подскажут актуальные цены и места. Комьюнити Дананга очень отзывчивое.'},
+    {i:'🌡️',t:'Акклиматизация 1–2 дня — нормально. Жара +30°C и влажность 80% после серой зимы — это стресс для организма.'},
+    {i:'🛵',t:'Не бери скутер в первый день — сначала осмотрись. Местный трафик требует привыкания, особенно круговые развязки.'},
+  ]},
+  {cat:'💸 Скидки и экономия',items:[
+    {i:'📱',t:'<strong>ShopeeFood, GrabFood и Baemin</strong> — каждый день новые промо-коды. Первый заказ обычно со скидкой 50%.'},
+    {i:'🕐',t:'Happy Hour в большинстве баров: 17:00–20:00. Пиво и коктейли в два раза дешевле. Смотри на специальные доски у входа.'},
+    {i:'🏪',t:'BigC, Co.opmart и Lotte Mart — дешевле, чем мелкие магазины. Приложения этих сетей дают купоны и кэшбэк.'},
+    {i:'💳',t:'Карта Wise в VND — нулевая конвертация. Экономит 2–4% на каждой оплате по сравнению с обычной карточкой.'},
+    {i:'🚴',t:'Велосипед вместо Grab для коротких поездок — 70 тыс./день. Окупается уже за 3 поездки. Ищи прокат у отелей.'},
+    {i:'🛒',t:'Рынок Хан закрывается в 18:00 — за 30 минут до закрытия торговцы снижают цены на фрукты и еду до 50%.'},
+    {i:'🏖️',t:'Пляжные лежаки бесплатны если берёшь напиток в кафе рядом. Обычно кокос или вода за 30–50 тыс. — лежак твой.'},
+    {i:'📆',t:'Раннее бронирование отеля на Booking.com или Agoda с невозвратным тарифом — экономия 15–30% от стойки.'},
+    {i:'🍜',t:'Обед в местном кафе 11:00–13:00 — часто дешевле вечернего ужина. Бизнес-ланч: суп + блюдо + напиток за 60–80 тыс.'},
+    {i:'🎟️',t:'Вход на Мраморные горы — 40 тыс. VND. Комплексный билет с подъёмником стоит 70 тыс. — по факту дешевле ног.'},
+    {i:'☕',t:'Кофе в местной кофейне (Highlands, Cộng) — 35–55 тыс. VND. Старбакс — 90–150 тыс. Разница в 2–3 раза при той же чашке.'},
+    {i:'🤝',t:'Долгосрочная аренда скутера — 1 200–1 500 тыс./мес. vs 160–200 тыс./день. Если остаёшься больше 2 недель — выгоднее арендовать на месяц.'},
+  ]},
+  {cat:'🔧 Другие лайфхаки',items:[
+    {i:'🌀',t:'<strong>Следи за тайфунами с июля по ноябрь</strong> — приложение Windy.app. Когда тайфун — оставайся дома и запаси воду.'},
+    {i:'💊',t:'Аптеки (Nhà Thuốc) без рецепта продают большинство антибиотиков и лекарств. Фармацевт часто говорит по-английски.'},
+    {i:'🔌',t:'Розетки типа A и C (как в Европе и США). Адаптер нужен только для британских вилок. Напряжение 220V.'},
+    {i:'📮',t:'Адрес для доставок: Grab Express и Lalamove доставят посылку по городу за 30–60 минут. Очень удобно для жилья без адреса.'},
+    {i:'🧴',t:'Солнцезащитный крем SPF 50+ обязателен — UV-индекс в Дананге достигает 11+ (экстремальный). Купить в аптеке: 100–150 тыс.'},
+    {i:'💧',t:'Вода из крана не питьевая. Покупай 20-литровые канистры за 15–20 тыс. VND — доставляют прямо в квартиру.'},
+    {i:'🦟',t:'Репеллент обязателен с мая по октябрь. Лучший вьетнамский бренд — Soffell. Продаётся везде, стоит 30–50 тыс.'},
+    {i:'🏦',t:'VPBank и ACB — лучшие банкоматы. Лимит снятия: 3–5 млн VND за раз. Две операции подряд — норма без блокировки.'},
+    {i:'📦',t:'Shopee и Lazada — главные онлайн-магазины. Доставка 1–3 дня. Дешевле и удобнее любого торгового центра.'},
+    {i:'🔐',t:'VPN обязателен — Facebook, Google Docs и многие сервисы иногда нестабильны без него. ExpressVPN и NordVPN работают хорошо.'},
+    {i:'🌿',t:'Боли в животе после уличной еды — норма первые 1–2 недели. Активированный уголь или Smecta — в любой аптеке.'},
+    {i:'📸',t:'Мост Дракона дышит огнём каждую субботу и воскресенье в 21:00. Приходи за 30 минут — толпа собирается быстро.'},
+    {i:'🌙',t:'Дананг живёт рано: рестораны открываются в 6:00, рынки пустеют к 11:00. Подстраивай ритм под местный уклад.'},
+  ]},
 ];
 const al=document.getElementById('advice-list'),af=document.getElementById('advice-filter');
 const aab=document.createElement('button');aab.className='cat-btn active';aab.textContent='Все';aab.dataset.cat='all';af.appendChild(aab);
@@ -1534,6 +1747,96 @@ af.addEventListener('click',e=>{
   document.querySelectorAll('#advice-filter .cat-btn').forEach(b=>b.classList.toggle('active',b===btn));
   document.querySelectorAll('.advice-card').forEach(c=>c.classList.toggle('adv-hidden',cat!=='all'&&c.dataset.cat!==cat));
 });
+
+/* ═══════════════════════════════════════════
+   DATA: КАНАЛЫ
+═══════════════════════════════════════════ */
+const chanData=[
+  {cat:'🏠 Жильё — Телеграм',items:[
+    {name:'Дананг — Аренда жилья',link:'https://t.me/danang_arenda',desc:'Главный TG-чат по аренде в Дананге. Объявления от хозяев и агентов, актуальные цены.'},
+    {name:'Da Nang Housing RU',link:'https://t.me/danang_housing_ru',desc:'Русскоязычная группа поиска жилья. Квартиры, виллы, комнаты.'},
+    {name:'Дананг — Снять/Сдать',link:'https://t.me/danang_rent',desc:'Объявления по аренде — от студий до домов. Можно размещать свои.'},
+    {name:'Vietnam Rent RU',link:'https://t.me/vietnam_rent_ru',desc:'Аренда по всему Вьетнаму для русскоязычных — Дананг, Хошимин, Нячанг.'},
+    {name:'Da Nang Apartments',link:'https://t.me/danang_apartments',desc:'Англоязычный канал с квартирами и апартаментами от агентств.'},
+    {name:'Жильё Дананг — Экспаты',link:'https://t.me/danang_expat_housing',desc:'Чат для долгосрочной аренды среди экспатов. Проверенные хозяева.'},
+    {name:'DN Real Estate',link:'https://t.me/dn_realestate',desc:'Недвижимость Дананга — аренда и продажа. Двуязычный канал.'},
+    {name:'Дом во Вьетнаме',link:'https://t.me/dom_vietnam',desc:'Аренда по всему Вьетнаму. Советы по переезду, истории экспатов.'},
+  ]},
+  {cat:'🏠 Жильё — Фейсбук',items:[
+    {name:'Da Nang Housing & Rentals',link:'https://facebook.com/groups/dananghousig',desc:'Крупнейшая FB-группа по аренде жилья в Дананге. 30 000+ участников.'},
+    {name:'Аренда жилья Дананг | RU',link:'https://facebook.com/groups/danangrent',desc:'Русскоязычная FB-группа. Квартиры, виллы, апартаменты.'},
+    {name:'Da Nang Expats Housing',link:'https://facebook.com/groups/danangexpats',desc:'Поиск жилья среди экспатов. Много объявлений на English.'},
+    {name:'Vietnam Rentals — RU community',link:'https://facebook.com/groups/vietnamrent',desc:'Аренда по всему Вьетнаму. Большая русскоязычная аудитория.'},
+    {name:'Da Nang Nomads Housing',link:'https://facebook.com/groups/danangnomads',desc:'Для цифровых кочевников — краткосрок, коливинги, соседи.'},
+    {name:'Дананг — Жизнь и переезд',link:'https://facebook.com/groups/danangzhizn',desc:'FB-сообщество по жизни в Дананге. В т.ч. тема аренды жилья.'},
+  ]},
+  {cat:'💬 Русскоязычные TG-сообщества',items:[
+    {name:'Дананг | Наши во Вьетнаме',link:'https://t.me/danang_ru',desc:'Главный русскоязычный чат Дананга. Новости, вопросы, жизнь экспатов.'},
+    {name:'Вьетнам для своих',link:'https://t.me/vietnam_ru',desc:'Огромный чат обо всём Вьетнаме — жизнь, работа, визы, жильё.'},
+    {name:'Дананг — Русское сообщество',link:'https://t.me/danang_community',desc:'Встречи, события, анонсы — русскоязычная жизнь Дананга.'},
+    {name:'Вьетнам переезд | RU',link:'https://t.me/vietnam_pereezd',desc:'Советы по переезду, визы, работа удалённо из Вьетнама.'},
+    {name:'Digital Nomads Danang RU',link:'https://t.me/nomads_danang',desc:'Удалёнщики и фрилансеры Дананга. Коворкинги, встречи, опыт.'},
+    {name:'Беларусы во Вьетнаме',link:'https://t.me/belarus_vietnam',desc:'Чат белорусов, живущих и путешествующих во Вьетнаме.'},
+    {name:'Украинцы в Дананге',link:'https://t.me/ukraine_danang',desc:'Сообщество украинцев Дананга — взаимопомощь и общение.'},
+    {name:'Казахстанцы во Вьетнаме',link:'https://t.me/kaz_vietnam',desc:'Сообщество казахстанцев во Вьетнаме. Советы, встречи, аренда.'},
+    {name:'Вьетнам — Медицина и здоровье',link:'https://t.me/vietnam_med',desc:'Клиники, аптеки, страховка, врачи во Вьетнаме.'},
+    {name:'Вьетнам — Визы и легализация',link:'https://t.me/vietnam_visa',desc:'Всё о визах, ВНЖ, электронной визе и e-visa extension.'},
+    {name:'Дананг Бизнес RU',link:'https://t.me/danang_biznes',desc:'Бизнес и предпринимательство в Дананге — налоги, компании.'},
+    {name:'Мамы в Дананге',link:'https://t.me/mamy_danang',desc:'Чат для мам с детьми — садики, школы, врачи, безопасность.'},
+    {name:'Дананг — Авто и скутеры',link:'https://t.me/danang_avto',desc:'Аренда, покупка, сервис скутеров и авто. Советы по ПДД.'},
+    {name:'Вьетнам — Работа удалённо',link:'https://t.me/vietnam_remote',desc:'Вакансии, фриланс, налоги при удалённой работе из Вьетнама.'},
+    {name:'Дананг Вечеринки и события',link:'https://t.me/danang_events',desc:'Анонсы мероприятий — вечеринки, концерты, встречи в Дананге.'},
+  ]},
+  {cat:'🌏 Vietnam & Danang — English & Mixed',items:[
+    {name:'Da Nang Expats',link:'https://t.me/danang_expats_en',desc:'Main English-language expat chat for Da Nang. Tips, events, life advice.'},
+    {name:'Vietnam Expats Network',link:'https://t.me/vietnamexpats',desc:'Large English community covering all of Vietnam. Jobs, visas, travel.'},
+    {name:'Da Nang Digital Nomads',link:'https://t.me/danang_nomads',desc:'Coworking, coliving, remote work meetups in Da Nang.'},
+    {name:'Vietnam Travel & Life',link:'https://t.me/vietnam_travel_life',desc:'Travel tips, hidden gems, local events across Vietnam.'},
+    {name:'Da Nang Food & Restaurants',link:'https://t.me/danang_food',desc:'Restaurant recommendations, new openings, food events in Da Nang.'},
+    {name:'Vietnam Visa & Immigration',link:'https://t.me/vietnam_visa_en',desc:'English-language channel on e-visas, visa runs, long-term stays.'},
+    {name:'Nomad List — Da Nang',link:'https://t.me/nomadlist_danang',desc:'Community chat linked to Nomad List profile of Da Nang.'},
+    {name:'Vietnam Property & Rentals',link:'https://t.me/vietnam_property',desc:'Real estate and rental listings across Vietnam in English.'},
+    {name:'Da Nang Surf & Beach',link:'https://t.me/danang_surf',desc:'Surf conditions, beach events, water sports in Da Nang.'},
+    {name:'Vietnam News EN',link:'https://t.me/vietnamnews_en',desc:'Daily English news digest about Vietnam — politics, economy, travel.'},
+    {name:'Da Nang Community Board',link:'https://facebook.com/groups/danangcommunity',desc:'Facebook group: general Da Nang expat community. 50 000+ members.'},
+    {name:'Expats in Da Nang',link:'https://facebook.com/groups/expatsdanang',desc:'Large Facebook group for expats in Da Nang. Events, tips, classifieds.'},
+  ]},
+];
+
+/* Channels renderer */
+(function(){
+  const cl=document.getElementById('chan-list');
+  const cf=document.getElementById('chan-filter');
+  if(!cl||!cf) return;
+  const aab=document.createElement('button');aab.className='cat-btn active';aab.textContent='Все';aab.dataset.cat='all';cf.appendChild(aab);
+  chanData.forEach((cat,ci)=>{
+    const fb=document.createElement('button');fb.className='cat-btn';fb.textContent=cat.cat;fb.dataset.cat=String(ci);cf.appendChild(fb);
+    const card=document.createElement('div');card.className='advice-card';card.dataset.cat=String(ci);
+    const hdr=document.createElement('div');hdr.className='advice-cat-hdr';hdr.textContent=cat.cat;card.appendChild(hdr);
+    cat.items.forEach(item=>{
+      const row=document.createElement('div');row.className='advice-item';row.style.flexDirection='column';row.style.gap='4px';row.style.alignItems='flex-start';
+      const nameEl=document.createElement('a');
+      nameEl.href=item.link;nameEl.target='_blank';nameEl.rel='noopener';
+      nameEl.style.cssText='font-weight:700;color:var(--accent);font-size:.84rem;text-decoration:none';
+      nameEl.textContent=item.name+' ↗';
+      const linkEl=document.createElement('div');
+      linkEl.style.cssText='font-size:.65rem;color:var(--text-dim);word-break:break-all';
+      linkEl.textContent=item.link;
+      const descEl=document.createElement('div');
+      descEl.style.cssText='font-size:.79rem;color:var(--text-mid);line-height:1.5';
+      descEl.textContent=item.desc;
+      row.appendChild(nameEl);row.appendChild(descEl);row.appendChild(linkEl);
+      card.appendChild(row);
+    });
+    cl.appendChild(card);
+  });
+  cf.addEventListener('click',e=>{
+    const btn=e.target.closest('.cat-btn');if(!btn)return;
+    const cat=btn.dataset.cat;
+    document.querySelectorAll('#chan-filter .cat-btn').forEach(b=>b.classList.toggle('active',b===btn));
+    document.querySelectorAll('#chan-list .advice-card').forEach(c=>c.classList.toggle('adv-hidden',cat!=='all'&&c.dataset.cat!==cat));
+  });
+})();
 
 /* ═══════════════════════════════════════════
    DATA: ЯЗЫК
