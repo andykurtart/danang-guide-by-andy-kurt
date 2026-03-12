@@ -308,9 +308,11 @@ tbody td:first-child{text-align:left;font-weight:500}
 /* ATM TABLE */
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:14px;margin-bottom:18px}
 .atm-table{width:100%;border-collapse:separate;border-spacing:0;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--surface);min-width:340px}
-.atm-table thead th{background:var(--accent);color:rgba(255,255,255,.75);padding:8px 10px;font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;text-align:left;white-space:nowrap}
+.atm-table thead th{background:var(--accent);color:rgba(255,255,255,.75);padding:8px 10px;font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;text-align:right;white-space:nowrap}
+.atm-table thead th:first-child{text-align:left}
 [data-theme="dark"] .atm-table thead th{color:rgba(15,13,12,.75)}
-.atm-table tbody td{padding:8px 10px;font-size:.78rem;border-bottom:1px solid var(--border)}
+.atm-table tbody td{padding:8px 10px;font-size:.78rem;border-bottom:1px solid var(--border);text-align:right}
+.atm-table tbody td:first-child{text-align:left}
 .atm-table tbody tr:last-child td{border-bottom:none}
 .atm-table tbody tr:nth-child(odd){background:var(--surface)}
 .atm-table tbody tr:nth-child(even){background:var(--surface2)}
@@ -397,7 +399,7 @@ tbody td:first-child{text-align:left;font-weight:500}
 .tab-lbl{font-size:.54rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
 
 /* ── Weather card on home ─────────────────── */
-.home-weather-card{background:color-mix(in srgb,var(--accent) 8%,var(--surface));border:1px solid var(--border);border-radius:11px;padding:7px 12px;margin:5px 0 2px}
+.home-weather-card{background:color-mix(in srgb,var(--accent) 8%,var(--surface));border:1px solid var(--border);border-radius:11px;padding:7px 12px;margin:5px 0 7px}
 .hwc-row{display:flex;align-items:center;gap:8px}
 .hwc-main{justify-content:space-between}
 .hwc-left{display:flex;align-items:baseline;gap:7px;flex-shrink:0}
@@ -678,7 +680,7 @@ tbody td:first-child{text-align:left;font-weight:500}
     <div class="cards-grid" id="exchange-cards"></div></div>
     <div class="atm-section" data-sec="crypto"><div class="section-title">Криптообменники и P2P</div>
     <div class="cards-grid" id="crypto-cards"></div></div></div>
-    <div class="tips-box">
+    <div class="tips-box" style="margin-top:20px">
       <div class="tips-title">Советы по наличным</div>
       <div class="tip-item"><span>❌</span><span><strong>Всегда «Charge in VND»</strong> — не соглашайся на конвертацию банкомата.</span></div>
       <div class="tip-item"><span>💵</span>Снимай крупными суммами — 5 млн за раз выгоднее при фиксированной комиссии.</div>
