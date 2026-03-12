@@ -47,6 +47,7 @@ a{color:inherit;text-decoration:none}
 
 /* PAGES */
 .page,.detail-page{display:none}
+.page.active{padding-bottom:90px}
 .page.active,.detail-page.active{display:block}
 
 /* SECTION HERO */
@@ -87,7 +88,7 @@ a{color:inherit;text-decoration:none}
 .top-right{display:flex;align-items:center;gap:2px}
 
 /* CONTENT */
-.content{max-width:860px;margin:0 auto;padding:18px 16px 32px}
+.content{max-width:860px;margin:0 auto;padding:18px 16px 100px}
 
 /* SECTION TITLE */
 .section-title{font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;display:flex;align-items:center;gap:10px}
@@ -394,6 +395,38 @@ tbody td:first-child{text-align:left;font-weight:500}
 .tab-btn.active::after{content:'';position:absolute;bottom:7px;width:16px;height:2px;background:var(--accent);border-radius:2px}
 .tab-icon{font-size:1.15rem;line-height:1}
 .tab-lbl{font-size:.54rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+
+/* ── Weather card on home ─────────────────── */
+.home-weather-card{background:color-mix(in srgb,var(--accent) 8%,var(--surface));border:1px solid var(--border);border-radius:11px;padding:7px 12px;margin:5px 0 2px}
+.hwc-row{display:flex;align-items:center;gap:8px}
+.hwc-main{justify-content:space-between}
+.hwc-left{display:flex;align-items:baseline;gap:7px;flex-shrink:0}
+.hwc-time{font-size:.8rem;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}
+.hwc-date{font-size:.8rem;font-weight:500;color:var(--text-dim)}
+.hwc-right{display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.hwc-icon{font-size:1rem;line-height:1}
+.hwc-temp{font-size:.82rem;font-weight:800;color:var(--accent)}
+.hwc-lbl{font-size:.68rem;color:var(--text-dim)}
+.hwc-val{font-size:.68rem;font-weight:600;color:var(--text-mid)}
+.hwc-sep{font-size:.6rem;color:var(--text-dim);padding:0 1px}
+/* ── Events cards ─────────────────────────── */
+.ev-month-hdr{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);padding:18px 0 6px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.ev-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 16px;margin-bottom:10px;transition:box-shadow .15s}
+.ev-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.18)}
+.ev-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.ev-emoji{font-size:1.6rem;line-height:1;flex-shrink:0;margin-top:1px}
+.ev-meta{flex:1}
+.ev-date-str{font-size:.68rem;color:var(--text-dim);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.ev-cat-label{font-size:.67rem;color:var(--text-mid);margin-top:2px}
+.ev-badge{display:inline-block;font-size:.6rem;font-weight:800;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;flex-shrink:0;margin-top:2px}
+.ev-badge-today{background:var(--accent);color:#fff}
+.ev-badge-soon{background:color-mix(in srgb,var(--accent) 25%,var(--surface));color:var(--accent)}
+.ev-title{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:5px;line-height:1.3}
+.ev-place{font-size:.72rem;color:var(--text-dim);margin-bottom:6px}
+.ev-desc{font-size:.78rem;color:var(--text-mid);line-height:1.55;margin-bottom:10px}
+.ev-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.ev-price{font-size:.72rem;font-weight:700;color:var(--text-mid);background:var(--surface2);padding:3px 10px;border-radius:20px}
+.ev-link{font-size:.72rem;font-weight:700;color:var(--accent);text-decoration:none;padding:4px 12px;border:1px solid var(--accent);border-radius:20px}
 </style>
 </head>
 <body>
@@ -433,8 +466,26 @@ tbody td:first-child{text-align:left;font-weight:500}
 <!-- ═══════════════════════════ HOME ═══════════════════════════ -->
 <div class="page active" id="page-home">
   <div class="home-header">
-    <div class="home-title">Привет, добро пожаловать в Дананг 👋</div>
-    <div class="home-sub">Выбери нужный раздел</div>
+    <div class="home-title">Добро пожаловать в Дананг 🇻🇳</div>
+    <div class="home-sub" id="hwc-greeting" style="margin:-2px 0 4px;font-size:.72rem">Доброго дня! ☀️</div>
+    <div class="home-weather-card" id="home-weather-card">
+      <div class="hwc-row hwc-main">
+        <div class="hwc-left">
+          <span class="hwc-time" id="hwc-time">--:--</span>
+          <span class="hwc-date" id="hwc-date">...</span>
+        </div>
+        <div class="hwc-right">
+          <span class="hwc-icon" id="hwc-icon">⛅</span>
+          <span class="hwc-temp" id="hwc-temp">--°C</span>
+          <span class="hwc-sep">·</span>
+          <span class="hwc-val" id="hwc-wind">--</span>
+          <span class="hwc-sep">·</span>
+          <span class="hwc-lbl">💧</span><span class="hwc-val" id="hwc-hum">--%</span>
+          <span class="hwc-sep">·</span>
+          <span class="hwc-lbl">🌡️</span><span class="hwc-val" id="hwc-feel">--°C</span>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="home-grid" id="home-grid"></div>
 </div>
@@ -547,6 +598,21 @@ tbody td:first-child{text-align:left;font-weight:500}
 </div>
 
 <!-- ═══════════════════════════ КОВОРКИНГИ ═══════════════════════════ -->
+
+<!-- ═══════════════════════════ ИВЕНТЫ ═══════════════════════════ -->
+<div class="page" id="page-events">
+  <div class="section-hero">
+    <div class="hero-eyebrow">Дананг · Мероприятия</div>
+    <div class="hero-title">Ивенты</div>
+    <div class="hero-sub" id="events-hero-sub">Загрузка событий...</div>
+  </div>
+  <div class="cat-filter" id="events-filter"></div>
+  <div id="events-list"></div>
+  <div id="events-empty" style="display:none;text-align:center;padding:32px 16px;color:var(--text-dim);font-size:.85rem">
+    Нет предстоящих событий. Загляни позже — новые ивенты появятся скоро.
+  </div>
+</div>
+
 <div class="page" id="page-cowork">
   <div class="section-hero">
     <div class="hero-eyebrow">Дананг · Работа</div>
@@ -584,7 +650,13 @@ tbody td:first-child{text-align:left;font-weight:500}
     </div>
   </div>
   <div class="content">
-    <div class="section-title">Комиссии банков (иностранные карты)</div>
+    <div class="cat-filter" id="atm-cat-filter">
+      <button class="cat-btn active" data-cat="all">Все</button>
+      <button class="cat-btn" data-cat="atm">🏧 Банкоматы</button>
+      <button class="cat-btn" data-cat="exchange">💱 Обменники</button>
+      <button class="cat-btn" data-cat="crypto">₿ Крипта</button>
+    </div>
+    <div class="atm-section" data-sec="atm"><div class="section-title" id="atm-table-title">Комиссии банков (иностранные карты)</div>
     <div class="tbl-wrap">
       <table class="atm-table">
         <thead><tr><th>Банк</th><th>Комиссия</th><th>Лимит</th><th>Примечание</th></tr></thead>
@@ -599,11 +671,13 @@ tbody td:first-child{text-align:left;font-weight:500}
           <tr><td><strong>HSBC</strong></td><td><span class="fee-ok">~50 000</span></td><td>2 000 000</td><td>Лучший в аэропорту</td></tr>
         </tbody>
       </table>
-    </div>
-    <div class="section-title">Банкоматы — где найти</div>
-    <div class="cards-grid" id="atm-cards"></div>
-    <div class="section-title">Обменники</div>
-    <div class="cards-grid" id="exchange-cards"></div>
+    </div></div>
+    <div class="atm-section" data-sec="atm"><div class="section-title">Банкоматы — где найти</div>
+    <div class="cards-grid" id="atm-cards"></div></div>
+    <div class="atm-section" data-sec="exchange"><div class="section-title">Обменники</div>
+    <div class="cards-grid" id="exchange-cards"></div></div>
+    <div class="atm-section" data-sec="crypto"><div class="section-title">Криптообменники и P2P</div>
+    <div class="cards-grid" id="crypto-cards"></div></div></div>
     <div class="tips-box">
       <div class="tips-title">Советы по наличным</div>
       <div class="tip-item"><span>❌</span><span><strong>Всегда «Charge in VND»</strong> — не соглашайся на конвертацию банкомата.</span></div>
@@ -689,11 +763,23 @@ tbody td:first-child{text-align:left;font-weight:500}
     </div>
   </div>
   <div class="content">
-    <div class="section-title">Аптеки (Nhà thuốc)</div>
-    <div class="med-grid" id="pharma-cards"></div>
-    <div class="section-title">Клиники и больницы</div>
-    <div class="med-grid" id="clinic-cards"></div>
-    <div id="med-guides"></div>
+    <div class="cat-filter" id="med-cat-filter">
+      <button class="cat-btn active" data-cat="all">Все</button>
+      <button class="cat-btn" data-cat="pharma">💊 Аптеки</button>
+      <button class="cat-btn" data-cat="clinic">🏥 Мед центры</button>
+      <button class="cat-btn" data-cat="guides">📋 Гайды</button>
+    </div>
+    <div class="med-section" data-sec="pharma">
+      <div class="section-title">Аптеки (Nhà thuốc)</div>
+      <div class="med-grid" id="pharma-cards"></div>
+    </div>
+    <div class="med-section" data-sec="clinic">
+      <div class="section-title">Медицинские центры и клиники</div>
+      <div class="med-grid" id="clinic-cards"></div>
+    </div>
+    <div class="med-section" data-sec="guides">
+      <div id="med-guides"></div>
+    </div>
   </div>
 </div>
 
@@ -1180,14 +1266,34 @@ document.getElementById('food-filter').addEventListener('click',e=>{
 /* ═══════════════════════════════════════════
    DATA: EXCHANGE (обменники)
 ═══════════════════════════════════════════ */
+
 [
   {name:'Tiệm Vàng Bảo Tín',tag:'Обменник · Золото',tc:'exchange',addr:'Trần Phú, Hải Châu',desc:'Ювелирный магазин с лучшим курсом USD/EUR в центре города.',fullDesc:'Ювелирный магазин с обменом валюты. Курс USD и EUR как правило выше банковского на 1–2%.',price:'Лучший курс',maps:'https://maps.google.com/?q=Bao+Tin+jewelry+Da+Nang',meta:[{label:'Валюты',val:'USD, EUR, GBP'},{label:'Часы',val:'08:00–20:00'}],tips:[{icon:'💱',text:'Приноси крупные купюры — за мелкие курс хуже.'}]},
   {name:'Chợ Hàn Exchange',tag:'Обменник · Рынок',tc:'exchange',addr:'Рынок Хан, 1-й этаж',desc:'Обменники в рынке Хан — конкурентный курс, работают до вечера.',fullDesc:'На 1-м этаже рынка Хан несколько обменников. Можно сравнить курс между ними.',price:'Средний курс',maps:'https://maps.google.com/?q=Han+Market+Da+Nang',meta:[{label:'Часы',val:'07:00–18:00'},{label:'Торг',val:'Возможен'}]},
   {name:'Vietcombank Exchange',tag:'Обменник · Банк',tc:'exchange',addr:'Trần Phú',desc:'Официальный обмен в банке — надёжно, но курс немного хуже рынка.',fullDesc:'Официальный обмен в отделении Vietcombank. Нужен паспорт. Надёжно, без рисков.',price:'Банковский курс',maps:'https://maps.google.com/?q=Vietcombank+Da+Nang',meta:[{label:'Документы',val:'Паспорт обязателен'},{label:'Часы',val:'08:00–17:00 (Пн–Пт)'}]},
   {name:'Airport Exchange (HSBC)',tag:'Обменник · Аэропорт',tc:'exchange',addr:'Аэропорт Da Nang',desc:'HSBC в аэропорту — надёжно, но курс хуже города на 2–3%.',fullDesc:'Обменник в зоне прилёта аэропорта. Удобен при прилёте, но курс менее выгодный.',price:'Ниже рыночного',maps:'https://maps.google.com/?q=Da+Nang+airport',meta:[{label:'Совет',val:'Меняй минимум — доберись до города'}]},
   {name:'Tiệm Vàng Kim Long',tag:'Обменник · Золото',tc:'exchange',addr:'Hải Châu',desc:'Ещё один надёжный ювелирный обменник с хорошим курсом.',fullDesc:'Ювелирный магазин с выгодным обменом USD и EUR. Популярен среди экспатов.',price:'Хороший курс',maps:'https://maps.google.com/?q=Kim+Long+jewelry+Da+Nang',meta:[{label:'Часы',val:'08:30–20:00'}]},
-  {name:'BigC Exchange Counter',tag:'Обменник · Супермаркет',tc:'exchange',addr:'BigC, Ngô Quyền',desc:'Обменник внутри гипермаркета BigC — удобно совместить с шоппингом.',fullDesc:'Стойка обмена валют внутри BigC. Работает в часы работы магазина.',price:'Средний курс',maps:'https://maps.google.com/?q=BigC+Da+Nang',meta:[{label:'Часы',val:'08:00–22:00'}]},
+  {name:'BigC Exchange Counter',tag:'Обменник · Супермаркет',tc:'exchange',addr:'BigC, Ngô Quyền',desc:'Обменник внутри гипермаркета BigC — удобно совместить с шоппингом.',fullDesc:'Стойка обмена валют внутри BigC. Работает в часы работы магазина.',price:'Средний курс',maps:'https://maps.google.com/?q=BigC+Da+Nang',meta:[{label:'Часы',val:'08:00–22:00'}]}
 ].forEach(i=>makeCard(i,'exchange-cards'));
+
+[
+{name:'Binance P2P',tag:'Крипта · P2P',tc:'exchange',addr:'binance.com/en/p2p',
+   desc:'Крупнейшая P2P-платформа. USDT → VND через банковский перевод.',
+   fullDesc:'<span class=\"desc-label\">₿ Что это</span><p>Binance P2P — децентрализованный маркетплейс внутри Binance. Продавцы и покупатели торгуют напрямую, Binance держит крипту в эскроу до подтверждения оплаты.</p><span class=\"desc-label\">💱 Как работает</span><p>Ты продаёшь USDT → продавец переводит VND на твой вьетнамский счёт (VietinBank, MB, Vietcombank). Курс устанавливает продавец — как правило 0,5–1% лучше официального. Без комиссии платформы.</p><span class=\"desc-label\">🕐 Когда доступно</span><p>24/7. Сделки закрываются за 5–20 минут. Нужен верифицированный аккаунт Binance.</p><span class=\"desc-label\">👥 Для кого</span><p>Тем кто держит крипту и хочет получить VND без банковских конвертаций. Экспаты, фрилансеры, получающие зарплату в USDT.</p><span class=\"desc-label\">💡 Лайфхак</span><p>Фильтруй продавцов с 98%+ completion rate и 500+ trades — это гарантия надёжности. Выбирай тех кто принимает твой банк.</p>',
+   price:'0% комиссия',site:'https://p2p.binance.com',meta:[{label:'Валюты',val:'USDT, BTC, ETH, BNB'},{label:'Мин. сумма',val:'~50 USD'}],tips:[{icon:'🔒',text:'Не отпускай крипту до получения VND.'}]},
+  {name:'OKX P2P',tag:'Крипта · P2P',tc:'exchange',addr:'okx.com/p2p-markets',
+   desc:'P2P-платформа OKX — хорошая альтернатива Binance с конкурентными курсами.',
+   fullDesc:'<span class=\"desc-label\">₿ Что это</span><p>P2P-рынок биржи OKX. Принцип тот же что у Binance P2P: крипта в эскроу, перевод VND напрямую от продавца.</p><span class=\"desc-label\">💱 Как работает</span><p>Продаёшь USDT или BTC, получаешь VND на вьетнамский банковский счёт или карту. Часто есть ордера на крупные суммы которых нет на Binance.</p><span class=\"desc-label\">🕐 Когда доступно</span><p>24/7. Нужен аккаунт OKX с KYC.</p><span class=\"desc-label\">👥 Для кого</span><p>Хорошая альтернатива Binance P2P — сравни курсы на обеих платформах перед сделкой.</p><span class=\"desc-label\">💡 Лайфхак</span><p>Сравни курс продажи USDT на OKX и Binance одновременно — разница может быть 0,3–0,5%, что на крупных суммах ощутимо.</p>',
+   price:'0% комиссия',site:'https://www.okx.com/p2p-markets',meta:[{label:'Валюты',val:'USDT, BTC, ETH'},{label:'Работает в VN',val:'Да ✓'}]},
+  {name:'BitcoinVN',tag:'Крипта · Обменник',tc:'exchange',addr:'bitcoinvn.io',
+   desc:'Первая биржа Вьетнама (с 2014) — крипта → наличные VND через встречу.',
+   fullDesc:'<span class=\"desc-label\">₿ Что это</span><p>BitcoinVN — первая и старейшая криптобиржа Вьетнама, работает с 2014 года. Специализируется на обмене крипты на наличные VND с выдачей по встрече или через OTC-стол. Регулируется Государственной комиссией по ценным бумагам.</p><span class=\"desc-label\">💱 Как работает</span><p>1. Регистрируешься на bitcoinvn.io. 2. Отправляешь крипту (USDT, BTC, ETH, USDC). 3. Выбираешь «Cash Pick-up» и ближайшую локацию. 4. Команда связывается по телефону и назначает встречу. 5. Получаешь наличные VND.</p><span class=\"desc-label\">🕐 Когда доступно</span><p>Только по записи. Обычно встреча на следующий день. Для сумм меньше 50 млн VND — быстрее.</p><span class=\"desc-label\">👥 Для кого</span><p>Тем кто хочет наличные VND из крипты без банковского счёта во Вьетнаме. Крупные суммы (200 млн+ VND) — через OTC-стол без лимитов.</p><span class=\"desc-label\">💡 Лайфхак</span><p>Сначала сделай тестовую транзакцию на небольшую сумму. Сервис давно работающий — отзывы на Trustpilot хорошие.</p>',
+   price:'Зависит от суммы',site:'https://bitcoinvn.io',meta:[{label:'Поддержка',val:'EN + VI'},{label:'Мин. сумма',val:'Нет'}],tips:[{icon:'📅',text:'Только по записи — не walk-in.'}]},
+  {name:'Telegram: @vietnam_obmen',tag:'Крипта · P2P-чат',tc:'exchange',addr:'t.me/vietnam_obmen',
+   desc:'Русскоязычный чат обмена крипты и валют во Вьетнаме.',
+   fullDesc:'<span class=\"desc-label\">₿ Что это</span><p>Официальный чат обмена валют и крипты от проекта «ФОРУМ Вьетнам». Тысячи участников, сотни активных обменников и частных продавцов.</p><span class=\"desc-label\">💱 Как работает</span><p>Пишешь запрос в чат: «продаю 500 USDT за VND» — тебе пишут продавцы. Можно также найти обменников с постоянными ордерами. Работает USDT, BTC, наличные USD, EUR, RUB, BYN.</p><span class=\"desc-label\">🕐 Когда доступно</span><p>24/7. Днём активнее — больше предложений.</p><span class=\"desc-label\">👥 Для кого</span><p>Русскоязычные экспаты которым проще общаться на родном языке и доверяют проверенному сообществу.</p><span class=\"desc-label\">💡 Лайфхак</span><p>Проверяй историю аккаунта продавца в чате. Опытные участники имеют много отзывов прямо в описании профиля.</p>',
+   price:'Договорной',site:'https://t.me/vietnam_obmen',meta:[{label:'Язык',val:'Русский'},{label:'Криптовалюты',val:'USDT, BTC, ETH'}],tips:[{icon:'⚠️',text:'Торгуй только с проверенными участниками.'}]},
+].forEach(i=>makeCard(i,'crypto-cards'));
 
 /* ═══════════════════════════════════════════
    DATA: LEISURE
@@ -1749,6 +1855,18 @@ const adviceData=[
     {i:'📸',t:'Мост Дракона дышит огнём каждую субботу и воскресенье в 21:00. Приходи за 30 минут — толпа собирается быстро.'},
     {i:'🌙',t:'Дананг живёт рано: рестораны открываются в 6:00, рынки пустеют к 11:00. Подстраивай ритм под местный уклад.'},
   ]},
+  {cat:'₿ Крипта и обмен',items:[
+    {icon:'₿',text:'Крипта во Вьетнаме легальна для частного использования. С 2025 года работает пилотный проект лицензирования бирж согласно Постановлению №05/2025. Дананг — первый город в стране где тестируют стейблкоин-платежи (Basal Pay).'},
+    {icon:'💱',text:'Самый выгодный способ конвертации: продавай USDT через Binance P2P или OKX P2P. Продавец переводит VND прямо на вьетнамский банковский счёт. Курс обычно на 0,5–1% лучше обменников. Комиссия платформы — 0%.'},
+    {icon:'🔒',text:'На P2P платформах (Binance, OKX) крипта удерживается в эскроу до подтверждения платежа. Не отпускай крипту пока не увидел деньги на счёте. Торгуй только с продавцами 98%+ completion rate и 500+ сделок.'},
+    {icon:'💵',text:'Хочешь наличные VND из крипты без банковского счёта? BitcoinVN (bitcoinvn.io) — старейший OTC-сервис Вьетнама с 2014 года. Отправляешь USDT, встречаешься с курьером, получаешь наличные. Только по записи.'},
+    {icon:'💬',text:'Русскоязычный Telegram-чат @vietnam_obmen — тысячи участников, частные обменники, наличные и безнал. Удобен для обмена небольших сумм без регистрации на биржах.'},
+    {icon:'🏪',text:'Оплата криптой в магазинах Дананга пока редкость. Несколько заведений в An Thuong принимают USDT через QR-код — ищи стикер «USDT accepted» у кассы. Список постепенно растёт.'},
+    {icon:'📱',text:'Для повседневных трат конвертируй крипту в VND заранее. Держи нужную сумму на вьетнамском счёте или карте. Моментально обналичивать каждый раз — неудобно.'},
+    {icon:'⚠️',text:'При P2P-сделках на крупные суммы (10 000+ USD) вьетнамские банки могут заблокировать перевод как подозрительный. Разбивай на несколько дней или используй несколько банков.'},
+    {icon:'📊',text:'USDT — самая удобная крипта для жизни в Дананге: стейблкоин привязан к доллару, нет волатильности, широко принимается P2P-продавцами. BTC и ETH тоже работают, но конвертировать дольше.'},
+    {icon:'🏦',text:'Вьетнамские банки не принимают крипту напрямую. Легальная схема: крипта → P2P продажа → VND на счёт → наличные в банкомате. Весь цикл занимает 20–40 минут.'},
+  ]},
 ];
 const al=document.getElementById('advice-list'),af=document.getElementById('advice-filter');
 const aab=document.createElement('button');aab.className='cat-btn active';aab.textContent='Все';aab.dataset.cat='all';af.appendChild(aab);
@@ -2089,6 +2207,447 @@ if ('serviceWorker' in navigator) {
       .catch(e => console.log('SW reg failed:', e));
   });
 }
+
+
+/* ═══════════════════════════════════════════════════════════
+   WEATHER — Open-Meteo (no API key needed)
+   Da Nang: lat=16.054, lon=108.202
+═══════════════════════════════════════════════════════════ */
+(function initWeather(){
+  const DANANGLAT = 16.054, DANANGLON = 108.202;
+
+  function wmoIcon(code, isDay){
+    const d = isDay !== false;
+    if(code===0) return d?'☀️':'🌙';
+    if(code<=2) return d?'⛅':'🌙';
+    if(code===3) return '☁️';
+    if(code<=49) return '🌫️';
+    if(code<=57) return '🌧️';
+    if(code<=67) return '🌧️';
+    if(code<=77) return '🌨️';
+    if(code<=82) return '🌦️';
+    if(code<=86) return '❄️';
+    if(code<=99) return '⛈️';
+    return '🌤️';
+  }
+  function wmoDesc(code){
+    if(code===0) return 'Ясно';
+    if(code<=2) return 'Переменная облачность';
+    if(code===3) return 'Пасмурно';
+    if(code<=49) return 'Туман';
+    if(code<=57) return 'Морось';
+    if(code<=67) return 'Дождь';
+    if(code<=77) return 'Снег';
+    if(code<=82) return 'Ливень';
+    if(code<=86) return 'Снежный шквал';
+    if(code<=99) return 'Гроза';
+    return 'Облачно';
+  }
+  function bftDesc(ms){
+    if(ms<0.5) return 'Штиль';
+    if(ms<3.4) return 'Лёгкий ветер';
+    if(ms<5.5) return 'Слабый ветер';
+    if(ms<8.0) return 'Умеренный';
+    if(ms<10.8) return 'Свежий ветер';
+    if(ms<13.9) return 'Сильный ветер';
+    return 'Шторм';
+  }
+  function windDir(deg){
+    const dirs=['С','СВ','В','ЮВ','Ю','ЮЗ','З','СЗ'];
+    return dirs[Math.round(deg/45)%8];
+  }
+  function greeting(h){
+    if(h<5)  return 'Доброй ночи 🌙';
+    if(h<12) return 'Доброго утра! ☀️';
+    if(h<17) return 'Хорошего дня! 🌴';
+    if(h<21) return 'Хорошего вечера! 🌅';
+    return 'Доброй ночи 🌙';
+  }
+
+  function updateClock(){
+    const now = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Ho_Chi_Minh'}));
+    const hh = String(now.getHours()).padStart(2,'0');
+    const mm = String(now.getMinutes()).padStart(2,'0');
+    const timeEl = document.getElementById('hwc-time');
+    const dateEl = document.getElementById('hwc-date');
+    const greetEl = document.getElementById('hwc-greeting');
+    if(timeEl) timeEl.textContent = hh+':'+mm;
+    if(dateEl){
+      const days=['вс','пн','вт','ср','чт','пт','сб'];
+      const months=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+      dateEl.textContent = days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()];
+    }
+    if(greetEl) greetEl.textContent = greeting(now.getHours());
+  }
+
+  async function fetchWeather(){
+    try{
+      const url='https://api.open-meteo.com/v1/forecast'
+        +'?latitude='+DANANGLAT+'&longitude='+DANANGLON
+        +'&current=temperature_2m,apparent_temperature,relative_humidity_2m,'
+        +'weather_code,wind_speed_10m,wind_direction_10m,is_day'
+        +'&wind_speed_unit=ms&timezone=Asia%2FHo_Chi_Minh';
+      const r = await fetch(url);
+      const j = await r.json();
+      const c = j.current;
+      const temp  = Math.round(c.temperature_2m);
+      const feel  = Math.round(c.apparent_temperature);
+      const hum   = c.relative_humidity_2m;
+      const ws    = c.wind_speed_10m;
+      const wdir  = c.wind_direction_10m;
+      const code  = c.weather_code;
+      const isDay = c.is_day;
+
+      const tempEl  = document.getElementById('hwc-temp');
+      const iconEl  = document.getElementById('hwc-icon');
+      const windEl  = document.getElementById('hwc-wind');
+      const humEl   = document.getElementById('hwc-hum');
+      const feelEl  = document.getElementById('hwc-feel');
+      const subEl   = document.getElementById('events-hero-sub');
+
+      if(tempEl)  tempEl.textContent  = temp+'°C';
+      if(iconEl)  iconEl.textContent  = wmoIcon(code, isDay);
+      if(windEl)  windEl.textContent  = Math.round(ws)+' м/с · '+windDir(wdir)+' · '+bftDesc(ws);
+      if(humEl)   humEl.textContent   = hum+'%';
+      if(feelEl)  feelEl.textContent  = feel+'°C · '+wmoDesc(code);
+    } catch(e){
+      const f=document.getElementById('hwc-feel');
+      if(f) f.textContent='Нет данных';
+    }
+  }
+
+  updateClock();
+  setInterval(updateClock, 30000);
+  fetchWeather();
+  setInterval(fetchWeather, 600000);
+})();
+
+
+/* ═══════════════════════════════════════════════════════════
+   EVENTS — curated list, auto-hides past events
+   Dates: ISO format YYYY-MM-DD HH:MM
+   Update this array when deploying new version
+═══════════════════════════════════════════════════════════ */
+const eventsData = [
+  /* ── МАРТ 2026 ── */
+  {
+    date: '2026-03-14 19:00',
+    end:  '2026-03-14 23:00',
+    title: 'Квиз «Своя игра» — Дананг',
+    cat: 'quiz',
+    catLabel: '🧠 Квиз',
+    place: 'Waterfront Bar, 150 Bạch Đằng',
+    desc: 'Интеллектуальная игра для русскоязычных экспатов. Командный формат, 6 туров по разным темам. Победителям призы от спонсоров. Вход свободный, регистрация команды в чате @danang_tysa.',
+    link: 'https://t.me/danang_tysa',
+    price: 'Бесплатно',
+    emoji: '🧠'
+  },
+  {
+    date: '2026-03-15 10:00',
+    end:  '2026-03-15 16:00',
+    title: 'Рынок мастеров — An Thuong',
+    cat: 'market',
+    catLabel: '🛍️ Рынок',
+    place: 'An Thuong Walking Street',
+    desc: 'Еженедельный воскресный рынок на пешеходной улице An Thuong. Ремёсла, еда, живая музыка, детские активности. Русские и украинские экспаты часто выставляют свои изделия.',
+    link: 'https://t.me/danang_afisha',
+    price: 'Вход свободный',
+    emoji: '🛍️'
+  },
+  {
+    date: '2026-03-17 19:30',
+    end:  '2026-03-17 22:00',
+    title: 'Мафия — большой стол',
+    cat: 'game',
+    catLabel: '🎭 Игра',
+    place: 'Gozar Coffee, An Thuong',
+    desc: 'Большая игра в мафию на русском языке. Профессиональный ведущий, несколько партий за вечер. Все роли, живая атмосфера. Записывайся заранее — мест ограниченно.',
+    link: 'https://t.me/danang_tysa',
+    price: '50 000 VND',
+    emoji: '🎭'
+  },
+  {
+    date: '2026-03-20 18:00',
+    end:  '2026-03-20 21:00',
+    title: 'Нетворкинг для фрилансеров',
+    cat: 'networking',
+    catLabel: '🤝 Нетворкинг',
+    place: 'F-Studio Cowork, An Thuong',
+    desc: 'Встреча фрилансеров и удалёнщиков из русскоязычного комьюнити. Питчинг проектов по 2 минуты, знакомства, обмен контактами. Закуски и напитки включены.',
+    link: 'https://t.me/danang_forum',
+    price: '100 000 VND',
+    emoji: '🤝'
+  },
+  {
+    date: '2026-03-22 10:00',
+    end:  '2026-03-22 13:00',
+    title: 'Сапбординг — групповой заплыв',
+    cat: 'sport',
+    catLabel: '🏄 Спорт',
+    place: 'My Khe Beach, точка сбора у флага',
+    desc: 'Групповой выезд на SUP-борды вдоль пляжа My Khe. Инструктор включён, доски напрокат. Уровень любой — новичков научат. Организует спортивный клуб русскоязычных экспатов.',
+    link: 'https://t.me/danang_tysa',
+    price: '200 000 VND',
+    emoji: '🏄'
+  },
+  {
+    date: '2026-03-22 19:00',
+    end:  '2026-03-22 23:59',
+    title: 'Вечеринка «Весна в Дананге»',
+    cat: 'party',
+    catLabel: '🎉 Вечеринка',
+    place: 'Sky36 Bar, Novotel',
+    desc: 'Большая весенняя вечеринка русскоязычного комьюнити на крышном баре с видом на море. DJ, живая музыка, розыгрыши. Дресс-код: bright summer. Билеты в @danang_tysa.',
+    link: 'https://t.me/danang_tysa',
+    price: '200 000 VND (включая 1 напиток)',
+    emoji: '🎉'
+  },
+  {
+    date: '2026-03-24 19:30',
+    end:  '2026-03-24 22:00',
+    title: 'Настольные игры — вечер',
+    cat: 'game',
+    catLabel: '🎲 Игры',
+    place: 'Soul Kitchen Da Nang, An Thuong',
+    desc: 'Еженедельный вечер настольных игр. Каркассон, Уно, Колонизаторы, Кодовые имена. Приходи с друзьями или один — подберём компанию. Вход без регистрации.',
+    link: 'https://t.me/danang_tysa',
+    price: 'Бесплатно (купи кофе)',
+    emoji: '🎲'
+  },
+  {
+    date: '2026-03-28 09:00',
+    end:  '2026-03-28 12:00',
+    title: 'Йога на пляже — утренняя',
+    cat: 'sport',
+    catLabel: '🧘 Спорт',
+    place: 'My Khe Beach, зона у Fusion Hotel',
+    desc: 'Утренняя йога с русскоязычным инструктором прямо на пляже. Подходит для любого уровня. Коврики можно взять или принести свои. Постоянная группа по субботам.',
+    link: 'https://t.me/danang_tysa',
+    price: '50 000 VND',
+    emoji: '🧘'
+  },
+  {
+    date: '2026-03-29 18:00',
+    end:  '2026-03-29 21:00',
+    title: 'Квиз «Кино и сериалы»',
+    cat: 'quiz',
+    catLabel: '🧠 Квиз',
+    place: 'The Pub, An Thuong',
+    desc: 'Тематический квиз по кино и сериалам на русском. Командный формат, 5 туров. Вопросы о советском и российском кино, голливуде, сериалах Netflix. Регистрация команды в чате.',
+    link: 'https://t.me/danang_tysa',
+    price: 'Бесплатно',
+    emoji: '🎬'
+  },
+  /* ── АПРЕЛЬ 2026 ── */
+  {
+    date: '2026-04-01 19:00',
+    end:  '2026-04-01 22:00',
+    title: 'Встреча «Новички в Дананге»',
+    cat: 'networking',
+    catLabel: '🤝 Нетворкинг',
+    place: 'Чайхона Дананг',
+    desc: 'Ежемесячная встреча для недавно приехавших. Делятся опытом, помогают разобраться с жильём, визами, банками, интернетом. Приходи с вопросами — отвечаем на всё.',
+    link: 'https://t.me/danang_forum',
+    price: 'Бесплатно',
+    emoji: '🤝'
+  },
+  {
+    date: '2026-04-04 10:00',
+    end:  '2026-04-04 14:00',
+    title: 'Экскурсия на Мраморные горы',
+    cat: 'excursion',
+    catLabel: '🗺️ Экскурсия',
+    place: 'Ngũ Hành Sơn (отъезд от An Thuong)',
+    desc: 'Групповая экскурсия на Мраморные горы с русскоязычным гидом. История, пещерные пагоды, виды на море. Группа до 12 человек, транспорт включён.',
+    link: 'https://t.me/vietnam_360',
+    price: '300 000 VND',
+    emoji: '🗺️'
+  },
+  {
+    date: '2026-04-05 19:00',
+    end:  '2026-04-05 23:00',
+    title: 'Большая мафия — апрельский турнир',
+    cat: 'game',
+    catLabel: '🎭 Игра',
+    place: 'Waterfront Bar',
+    desc: 'Турнир по мафии с рейтинговой системой. Несколько столов одновременно, выбывание, финал. Победитель получает приз. Обязательная регистрация заранее — места ограничены.',
+    link: 'https://t.me/danang_tysa',
+    price: '100 000 VND',
+    emoji: '🏆'
+  },
+  {
+    date: '2026-04-11 10:00',
+    end:  '2026-04-11 17:00',
+    title: 'День на природе — Ba Na Hills',
+    cat: 'excursion',
+    catLabel: '🗺️ Экскурсия',
+    place: 'Ba Na Hills (отъезд от An Thuong)',
+    desc: 'Групповая поездка на Ba Na Hills — горный курорт с видами, канатной дорогой и Золотым мостом. Группа до 15 человек, организованный транспорт, гид по желанию.',
+    link: 'https://t.me/vietnam_360',
+    price: 'Транспорт + билет (~700 000 VND)',
+    emoji: '⛰️'
+  },
+  {
+    date: '2026-04-15 19:00',
+    end:  '2026-04-15 22:00',
+    title: 'Вечер настолок и общения',
+    cat: 'game',
+    catLabel: '🎲 Игры',
+    place: 'Soul Kitchen Da Nang',
+    desc: 'Регулярный вечер настольных игр с русскоязычным комьюнити. Игры на любой вкус: от Уно до сложных стратегий. Приводи друзей.',
+    link: 'https://t.me/danang_tysa',
+    price: 'Бесплатно',
+    emoji: '🎲'
+  },
+];
+
+(function renderEvents(){
+  const listEl   = document.getElementById('events-list');
+  const filterEl = document.getElementById('events-filter');
+  const emptyEl  = document.getElementById('events-empty');
+  const subEl    = document.getElementById('events-hero-sub');
+  if(!listEl || !filterEl) return;
+
+  // Current time in Da Nang (UTC+7)
+  const nowVN = new Date(new Date().toLocaleString('en-US', {timeZone:'Asia/Ho_Chi_Minh'}));
+
+  // Filter out past events (use end time if available, else start)
+  const upcoming = eventsData.filter(ev => {
+    const [datePart, timePart] = (ev.end || ev.date).split(' ');
+    const [y,mo,d] = datePart.split('-').map(Number);
+    const [h,mi]   = (timePart||'23:59').split(':').map(Number);
+    const evEnd = new Date(y, mo-1, d, h, mi);
+    return evEnd > nowVN;
+  });
+
+  // Sort by start date
+  upcoming.sort((a,b) => a.date.localeCompare(b.date));
+
+  if(subEl) subEl.textContent = upcoming.length
+    ? upcoming.length + ' предстоящих событий · обновляется автоматически'
+    : 'Ближайшие события';
+
+  if(!upcoming.length){
+    if(emptyEl) emptyEl.style.display = '';
+    return;
+  }
+
+  // Collect unique categories
+  const cats = ['all', ...new Set(upcoming.map(e=>e.cat))];
+  const catLabels = {'all':'Все'};
+  upcoming.forEach(e=>{ catLabels[e.cat] = e.catLabel; });
+
+  // Build filter buttons
+  filterEl.innerHTML = '';
+  cats.forEach((cat, i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn' + (i===0?' active':'');
+    btn.textContent = catLabels[cat];
+    btn.dataset.cat = cat;
+    filterEl.appendChild(btn);
+  });
+  filterEl.addEventListener('click', e=>{
+    const btn = e.target.closest('.cat-btn');
+    if(!btn) return;
+    filterEl.querySelectorAll('.cat-btn').forEach(b=>b.classList.toggle('active', b===btn));
+    const sel = btn.dataset.cat;
+    listEl.querySelectorAll('.ev-card').forEach(c=>{
+      c.style.display = (sel==='all' || c.dataset.cat===sel) ? '' : 'none';
+    });
+  });
+
+  // Month-grouped rendering
+  const months = ['Январь','Февраль','Март','Апрель','Май','Июнь',
+                  'Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+  const weekdays = ['вс','пн','вт','ср','чт','пт','сб'];
+
+  let curMonth = -1;
+  upcoming.forEach(ev=>{
+    const [datePart, timePart] = ev.date.split(' ');
+    const [y,mo,d] = datePart.split('-').map(Number);
+    const [h,mi]   = (timePart||'00:00').split(':').map(Number);
+    const evDate   = new Date(y, mo-1, d, h, mi);
+    const wd       = weekdays[evDate.getDay()];
+
+    // Month header
+    if(mo !== curMonth){
+      curMonth = mo;
+      const hdr = document.createElement('div');
+      hdr.className = 'ev-month-hdr';
+      hdr.textContent = months[mo-1] + ' ' + y;
+      listEl.appendChild(hdr);
+    }
+
+    // Card
+    const card = document.createElement('div');
+    card.className = 'ev-card';
+    card.dataset.cat = ev.cat;
+
+    // Days until
+    const msUntil = evDate - nowVN;
+    const daysUntil = Math.ceil(msUntil / 86400000);
+    let badge = '';
+    if(daysUntil === 0) badge = '<span class="ev-badge ev-badge-today">Сегодня</span>';
+    else if(daysUntil === 1) badge = '<span class="ev-badge ev-badge-soon">Завтра</span>';
+    else if(daysUntil <= 3) badge = '<span class="ev-badge ev-badge-soon">Через '+daysUntil+' дня</span>';
+
+    const timeStr = timePart ? h+':'+String(mi).padStart(2,'0') : '';
+    const endStr  = ev.end ? ev.end.split(' ')[1] : '';
+
+    card.innerHTML =
+      '<div class="ev-header">'
+      +  '<div class="ev-emoji">'+ev.emoji+'</div>'
+      +  '<div class="ev-meta">'
+      +    '<div class="ev-date-str">'+wd+', '+d+' '+months[mo-1].slice(0,3).toLowerCase()
+      +       (timeStr ? ' · '+timeStr+(endStr?' — '+endStr:'') : '')+'</div>'
+      +    '<div class="ev-cat-label">'+ev.catLabel+'</div>'
+      +  '</div>'
+      +  badge
+      +'</div>'
+      +'<div class="ev-title">'+ev.title+'</div>'
+      +'<div class="ev-place">📍 '+ev.place+'</div>'
+      +'<div class="ev-desc">'+ev.desc+'</div>'
+      +'<div class="ev-footer">'
+      +  '<span class="ev-price">'+ev.price+'</span>'
+      +  (ev.link ? '<a class="ev-link" href="'+ev.link+'" target="_blank" rel="noopener">Подробнее ↗</a>' : '')
+      +'</div>';
+
+    listEl.appendChild(card);
+  });
+})();
+
+
+/* ═══ ATM PAGE FILTER ═══ */
+(function(){
+  const filterEl = document.getElementById('atm-cat-filter');
+  if(!filterEl) return;
+  const sections = document.querySelectorAll('#page-atm .atm-section');
+  filterEl.addEventListener('click', e => {
+    const btn = e.target.closest('.cat-btn');
+    if(!btn) return;
+    filterEl.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b === btn));
+    const sel = btn.dataset.cat;
+    sections.forEach(sec => {
+      sec.style.display = (sel === 'all' || sec.dataset.sec === sel) ? '' : 'none';
+    });
+  });
+})();
+
+/* ═══ MEDICINE PAGE FILTER ═══ */
+(function(){
+  const filterEl = document.getElementById('med-cat-filter');
+  if(!filterEl) return;
+  const sections = document.querySelectorAll('#page-medicine .med-section');
+  filterEl.addEventListener('click', e => {
+    const btn = e.target.closest('.cat-btn');
+    if(!btn) return;
+    filterEl.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b === btn));
+    const sel = btn.dataset.cat;
+    sections.forEach(sec => {
+      sec.style.display = (sel === 'all' || sec.dataset.sec === sel) ? '' : 'none';
+    });
+  });
+})();
 </script>
 </body>
 </html>

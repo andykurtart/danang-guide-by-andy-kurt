@@ -1,4 +1,4 @@
-const CACHE = 'danang-v2';
+const CACHE = 'danang-v1';
 const ASSETS = [
   './index.html',
   './manifest.json',
