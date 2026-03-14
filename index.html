@@ -200,6 +200,12 @@ a{color:inherit;text-decoration:none}
 [data-theme="dark"] .btn-primary{color:var(--bg)}
 .btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border2)}
 .detail-tips-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.detail-map-block{margin-bottom:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.detail-map-frame{width:100%;height:200px;display:block;border:none;border-radius:14px 14px 0 0;filter:grayscale(20%)}
+.detail-map-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface)}
+.detail-map-addr{font-size:.75rem;color:var(--text-mid);display:flex;align-items:center;gap:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:65%}
+.detail-map-btn{font-size:.72rem;font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap;padding:5px 10px;border:1px solid var(--border);border-radius:20px;background:var(--bg);transition:background .15s}
+.detail-map-btn:active{background:var(--border)}
 .detail-tips-title{font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px}
 
 /* CONTACT PAGE */
@@ -399,18 +405,23 @@ tbody td:first-child{text-align:left;font-weight:500}
 .tab-lbl{font-size:.54rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
 
 /* ── Weather card on home ─────────────────── */
-.home-weather-card{background:color-mix(in srgb,var(--accent) 8%,var(--surface));border:1px solid var(--border);border-radius:11px;padding:7px 12px;margin:5px 0 7px}
-.hwc-row{display:flex;align-items:center;gap:8px}
-.hwc-main{justify-content:space-between}
-.hwc-left{display:flex;align-items:baseline;gap:7px;flex-shrink:0}
-.hwc-time{font-size:.8rem;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}
-.hwc-date{font-size:.8rem;font-weight:500;color:var(--text-dim)}
-.hwc-right{display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:flex-end}
-.hwc-icon{font-size:1rem;line-height:1}
-.hwc-temp{font-size:.82rem;font-weight:800;color:var(--accent)}
-.hwc-lbl{font-size:.68rem;color:var(--text-dim)}
-.hwc-val{font-size:.68rem;font-weight:600;color:var(--text-mid)}
-.hwc-sep{font-size:.6rem;color:var(--text-dim);padding:0 1px}
+/* ── Weather card — mobile-first redesign ─── */
+.home-weather-card{background:color-mix(in srgb,var(--accent) 6%,var(--surface));border:1px solid var(--border);border-radius:14px;padding:11px 14px;margin:6px 0 8px;display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;gap:8px 12px;align-items:center}
+.hwc-datetime{display:flex;align-items:baseline;gap:6px;grid-column:1}
+.hwc-time{font-size:1.25rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1}
+.hwc-date{font-size:.7rem;font-weight:500;color:var(--text-dim);white-space:nowrap}
+.hwc-weather-main{display:flex;align-items:center;gap:6px;grid-column:2;grid-row:1/3;justify-content:flex-end}
+.hwc-icon{font-size:1.9rem;line-height:1;flex-shrink:0}
+.hwc-tempblock{display:flex;flex-direction:column;align-items:flex-end;gap:1px}
+.hwc-temp{font-size:1.3rem;font-weight:800;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums}
+.hwc-feel{font-size:.62rem;color:var(--text-dim);white-space:nowrap}
+.hwc-stats{display:flex;align-items:center;gap:0;grid-column:1;grid-row:2}
+.hwc-stat{display:flex;align-items:center;gap:3px;padding:0 8px 0 0}
+.hwc-stat:not(:last-child){border-right:1px solid var(--border);margin-right:8px}
+.hwc-stat-icon{font-size:.75rem;line-height:1;opacity:.7}
+.hwc-stat-val{font-size:.68rem;font-weight:600;color:var(--text-mid);white-space:nowrap}
+.hwc-desc{font-size:.62rem;color:var(--text-dim);grid-column:1/3;border-top:1px solid var(--border);padding-top:6px;margin-top:1px;display:none}
+@media(min-width:400px){.hwc-desc{display:block}}
 /* ── Events cards ─────────────────────────── */
 .ev-month-hdr{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);padding:18px 0 6px;border-bottom:1px solid var(--border);margin-bottom:10px}
 .ev-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 16px;margin-bottom:10px;transition:box-shadow .15s}
@@ -471,22 +482,28 @@ tbody td:first-child{text-align:left;font-weight:500}
     <div class="home-title">Добро пожаловать в Дананг 🇻🇳</div>
     <div class="home-sub" id="hwc-greeting" style="margin:-2px 0 4px;font-size:.72rem">Доброго дня! ☀️</div>
     <div class="home-weather-card" id="home-weather-card">
-      <div class="hwc-row hwc-main">
-        <div class="hwc-left">
-          <span class="hwc-time" id="hwc-time">--:--</span>
-          <span class="hwc-date" id="hwc-date">...</span>
-        </div>
-        <div class="hwc-right">
-          <span class="hwc-icon" id="hwc-icon">⛅</span>
+      <div class="hwc-datetime">
+        <span class="hwc-time" id="hwc-time">--:--</span>
+        <span class="hwc-date" id="hwc-date">...</span>
+      </div>
+      <div class="hwc-weather-main">
+        <span class="hwc-icon" id="hwc-icon">⛅</span>
+        <div class="hwc-tempblock">
           <span class="hwc-temp" id="hwc-temp">--°C</span>
-          <span class="hwc-sep">·</span>
-          <span class="hwc-val" id="hwc-wind">--</span>
-          <span class="hwc-sep">·</span>
-          <span class="hwc-lbl">💧</span><span class="hwc-val" id="hwc-hum">--%</span>
-          <span class="hwc-sep">·</span>
-          <span class="hwc-lbl">🌡️</span><span class="hwc-val" id="hwc-feel">--°C</span>
+          <span class="hwc-feel">ощущ. <span id="hwc-feel">--°C</span></span>
         </div>
       </div>
+      <div class="hwc-stats">
+        <div class="hwc-stat">
+          <span class="hwc-stat-icon">💧</span>
+          <span class="hwc-stat-val" id="hwc-hum">--%</span>
+        </div>
+        <div class="hwc-stat">
+          <span class="hwc-stat-icon">💨</span>
+          <span class="hwc-stat-val" id="hwc-wind">-- м/с</span>
+        </div>
+      </div>
+      <div class="hwc-desc" id="hwc-desc">Загрузка погоды…</div>
     </div>
   </div>
   <div class="home-grid" id="home-grid"></div>
@@ -819,6 +836,32 @@ tbody td:first-child{text-align:left;font-weight:500}
   </div>
 </div>
 
+<!-- ═══════════════════════════ МАГАЗИНЫ ═══════════════════════════ -->
+<div class="page" id="page-shops">
+  <div class="section-hero">
+    <div class="hero-eyebrow">Дананг · Шоппинг</div>
+    <div class="hero-title">Магазины</div>
+    <div class="hero-sub">Рынки, торговые центры, сувениры и продукты — всё для покупок</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val">30+</div><div class="hero-stat-label">мест</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">4</div><div class="hero-stat-label">категории</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="sub-filter" id="shops-filter">
+      <button class="sub-btn active" data-sec="all">Все</button>
+      <button class="sub-btn" data-sec="markets">🛒 Рынки</button>
+      <button class="sub-btn" data-sec="malls">🏬 ТЦ</button>
+      <button class="sub-btn" data-sec="souvenirs">🎁 Сувениры</button>
+      <button class="sub-btn" data-sec="grocery">🥦 Продукты</button>
+    </div>
+    <div class="leisure-sec" id="sec-markets"><div class="section-title">Рынки</div><div class="cards-grid" id="shops-markets"></div></div>
+    <div class="leisure-sec" id="sec-malls"><div class="section-title">Торговые центры</div><div class="cards-grid" id="shops-malls"></div></div>
+    <div class="leisure-sec" id="sec-souvenirs"><div class="section-title">Сувенирные магазины</div><div class="cards-grid" id="shops-souvenirs"></div></div>
+    <div class="leisure-sec" id="sec-grocery"><div class="section-title">Продуктовые магазины</div><div class="cards-grid" id="shops-grocery"></div></div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════ ЯЗЫК ═══════════════════════════ -->
 <div class="page" id="page-lang">
   <div class="section-hero">
@@ -910,6 +953,13 @@ tbody td:first-child{text-align:left;font-weight:500}
       <div class="detail-tips-title">Советы</div>
       <div id="detail-tips"></div>
     </div>
+    <div class="detail-map-block" id="detail-map-block" style="display:none">
+      <iframe class="detail-map-frame" id="detail-map-frame" src="" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <div class="detail-map-footer">
+        <span class="detail-map-addr">📍 <span id="detail-map-addr-text"></span></span>
+        <a class="detail-map-btn" id="detail-map-link" href="#" target="_blank">Открыть в картах ↗</a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -936,6 +986,7 @@ tbody td:first-child{text-align:left;font-weight:500}
   <button class="tab-btn" data-page="page-history"    onclick="switchTab(this)"><span class="tab-icon">📜</span><span class="tab-lbl">История</span></button>
   <button class="tab-btn" data-page="page-facts"      onclick="switchTab(this)"><span class="tab-icon">💎</span><span class="tab-lbl">Факты</span></button>
   <button class="tab-btn" data-page="page-channels"   onclick="switchTab(this)"><span class="tab-icon">📢</span><span class="tab-lbl">Каналы</span></button>
+  <button class="tab-btn" data-page="page-shops"      onclick="switchTab(this)"><span class="tab-icon">🛍️</span><span class="tab-lbl">Магазины</span></button>
   <button class="tab-btn" data-page="page-lang"       onclick="switchTab(this)"><span class="tab-icon">🗣️</span><span class="tab-lbl">Язык</span></button>
   <button class="tab-btn" data-page="page-contact"    onclick="switchTab(this)"><span class="tab-icon">✌️</span><span class="tab-lbl">Связаться</span></button>
 <script>
@@ -959,6 +1010,7 @@ const sidebarNav=[
   {page:'page-history',  icon:'📜', name:'История',    sub:'2000 лет Дананга'},
   {page:'page-facts',    icon:'💎', name:'Факты',      sub:'100 фактов о Дананге'},
   {page:'page-channels', icon:'📢', name:'Каналы',     sub:'Группы, комьюнити, чаты'},
+  {page:'page-shops',    icon:'🛍️', name:'Магазины',   sub:'Рынки, ТЦ, сувениры, продукты'},
   {page:'page-lang',     icon:'🗣️', name:'Язык',       sub:'100 вьетнамских фраз'},
   {page:'page-contact',   icon:'✌️', name:'Связаться',  sub:'@andykurt_dsgn'},
 ];
@@ -1017,6 +1069,36 @@ function openDetail(item){
   const tw=document.getElementById('detail-tips-wrap'),td=document.getElementById('detail-tips');
   if(item.tips&&item.tips.length){td.innerHTML=item.tips.map(t=>`<div class="tip-item"><span>${t.icon}</span><span>${t.text}</span></div>`).join('');tw.style.display='block'}
   else tw.style.display='none';
+
+  // Map block
+  const mb=document.getElementById('detail-map-block');
+  const mf=document.getElementById('detail-map-frame');
+  const ml=document.getElementById('detail-map-link');
+  const ma=document.getElementById('detail-map-addr-text');
+  if(item.maps){
+    // Extract query from google maps URL
+    const qMatch=item.maps.match(/[?&]q=([^&]+)/);
+    const q=qMatch?qMatch[1]:(item.name+'+Da+Nang').replace(/\s+/g,'+');
+    // OpenStreetMap embed via search
+    mf.src=`https://www.openstreetmap.org/export/embed.html?bbox=108.10,16.00,108.30,16.10&layer=mapnik&marker=16.054,108.202&query=${encodeURIComponent(q.replace(/\+/g,' '))}`;
+    // Use nominatim to get real coords, fallback to Da Nang center
+    ml.href=item.maps;
+    if(ma) ma.textContent=item.addr||item.name;
+    mb.style.display='block';
+    // Async: get real coordinates from Nominatim
+    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q.replace(/\+/g,' ')+', Da Nang, Vietnam')}&format=json&limit=1`)
+      .then(r=>r.json())
+      .then(data=>{
+        if(data&&data[0]){
+          const lat=parseFloat(data[0].lat),lon=parseFloat(data[0].lon);
+          const d=0.005;
+          mf.src=`https://www.openstreetmap.org/export/embed.html?bbox=${lon-d},${lat-d},${lon+d},${lat+d}&layer=mapnik&marker=${lat},${lon}`;
+        }
+      }).catch(()=>{});
+  } else {
+    mb.style.display='none';
+  }
+
   window.scrollTo({top:0,behavior:'smooth'});
 }
 document.getElementById('detail-back').addEventListener('click',()=>{
@@ -1037,6 +1119,7 @@ const homeItems=[
   {page:'page-history',  icon:'📜',label:'История',   name:'История',     desc:'2000 лет Дананга',             cls:'tile-c8'},
   {page:'page-facts',    icon:'💎',label:'Интересное',name:'Факты',       desc:'100 фактов о Дананге',         cls:'tile-c7'},
   {page:'page-channels', icon:'📢',label:'Сообщество',name:'Каналы',       desc:'50+ групп и каналов',          cls:'tile-c4'},
+  {page:'page-shops',    icon:'🛍️',label:'Шоппинг',   name:'Магазины',    desc:'Рынки, ТЦ, сувениры, продукты',cls:'tile-c2'},
   {page:'page-lang',     icon:'🗣️',label:'Язык',      name:'Вьетнамский', desc:'100 слов и фраз',              cls:'tile-c3 span2'},
   {page:'page-contact',   icon:'✌️',label:'Контакты', name:'Связаться',   desc:'@andykurt_dsgn · донат · о себе', cls:'tile-c5 span2'},
 ];
@@ -1296,6 +1379,157 @@ document.getElementById('food-filter').addEventListener('click',e=>{
    fullDesc:'<span class=\"desc-label\">₿ Что это</span><p>Официальный чат обмена валют и крипты от проекта «ФОРУМ Вьетнам». Тысячи участников, сотни активных обменников и частных продавцов.</p><span class=\"desc-label\">💱 Как работает</span><p>Пишешь запрос в чат: «продаю 500 USDT за VND» — тебе пишут продавцы. Можно также найти обменников с постоянными ордерами. Работает USDT, BTC, наличные USD, EUR, RUB, BYN.</p><span class=\"desc-label\">🕐 Когда доступно</span><p>24/7. Днём активнее — больше предложений.</p><span class=\"desc-label\">👥 Для кого</span><p>Русскоязычные экспаты которым проще общаться на родном языке и доверяют проверенному сообществу.</p><span class=\"desc-label\">💡 Лайфхак</span><p>Проверяй историю аккаунта продавца в чате. Опытные участники имеют много отзывов прямо в описании профиля.</p>',
    price:'Договорной',site:'https://t.me/vietnam_obmen',meta:[{label:'Язык',val:'Русский'},{label:'Криптовалюты',val:'USDT, BTC, ETH'}],tips:[{icon:'⚠️',text:'Торгуй только с проверенными участниками.'}]},
 ].forEach(i=>makeCard(i,'crypto-cards'));
+
+
+/* ═══════════════════════════════════════════
+   DATA: МАГАЗИНЫ
+═══════════════════════════════════════════ */
+const shopsData = {
+  markets: [
+    {name:'Chợ Hàn (Рынок Хан)',tag:'Рынок · Центральный',tc:'market',addr:'119 Trần Phú, Hải Châu',
+     desc:'Главный крытый рынок Дананга — морепродукты, одежда, ткани, специи и сувениры.',
+     fullDesc:'<span class="desc-label">🏮 Атмосфера</span><p>Двухэтажный крытый рынок в самом центре города, открытый с 1940-х. Первый этаж — морепродукты, мясо, фрукты, специи. Второй — одежда, ткани, сувениры. Местные и туристы вперемешку.</p><span class="desc-label">🛒 Что купить</span><p>Свежие морепродукты по ценам вдвое ниже ресторанных. Ткань аозай на пошив. Сушёные морепродукты как подарки. Специи и вьетнамский кофе.</p><span class="desc-label">💬 Как торговаться</span><p>Цены для иностранцев завышены в 1,5–2 раза. Называй свою цену — 60% от озвученной. Спокойно, без споров. Если продавец не идёт навстречу — развернись, скорее всего окликнет.</p><span class="desc-label">💡 Лайфхак</span><p>Приходи до 9:00 — морепродукты самые свежие, торговаться проще. После 11 толпа и духота.</p>',
+     price:'Торг уместен',maps:'https://maps.google.com/?q=Han+Market+Da+Nang',
+     meta:[{label:'Часы',val:'06:00–18:00'},{label:'Этажей',val:'2'}],
+     tips:[{icon:'💬',text:'Начинай торг с 50–60% от названной цены.'},{icon:'💳',text:'Только наличные VND.'}]},
+    {name:'Chợ Cồn (Рынок Кон)',tag:'Рынок · Местный',tc:'market',addr:'290 Hùng Vương, Hải Châu',
+     desc:'Самый большой рынок Дананга для местных — без туристической наценки.',
+     fullDesc:'<span class="desc-label">🏮 Атмосфера</span><p>Огромный рынок площадью почти гектар — сюда ходят местные жители, не туристы. Цены реальные, торговаться не всегда нужно — часто честная цена с первого раза.</p><span class="desc-label">🛒 Что купить</span><p>Продукты питания по самым низким ценам в городе. Свежие овощи, фрукты, мясо, рыба. Уличная еда прямо внутри рынка — дешевле не бывает. Бытовая химия, посуда, одежда.</p><span class="desc-label">🕐 Когда идти</span><p>Ранний рынок с 05:00 — самый живой и свежий. После 13:00 часть торговцев закрывается.</p><span class="desc-label">💡 Лайфхак</span><p>Поешь прямо на рынке — тарелка супа bún bò от 25 тыс. VND. Лучший бюджетный завтрак в городе.</p>',
+     price:'Низкие цены',maps:'https://maps.google.com/?q=Con+Market+Da+Nang',
+     meta:[{label:'Часы',val:'05:00–18:00'},{label:'Тип',val:'Для местных'}],
+     tips:[{icon:'⏰',text:'До 8:00 — максимальный выбор свежих продуктов.'}]},
+    {name:'Chợ Đầu Mối (Оптовый рынок)',tag:'Рынок · Оптовый',tc:'market',addr:'Hòa Cường Bắc',
+     desc:'Оптовый продовольственный рынок — самые низкие цены на фрукты и овощи.',
+     fullDesc:'<span class="desc-label">🏮 Атмосфера</span><p>Крупнейший оптовый рынок Дананга. Работает с ночи — основные поставки между 2:00 и 6:00. Приходи рано утром чтобы застать полный ассортимент.</p><span class="desc-label">🛒 Что купить</span><p>Фрукты оптом — цены в 2–3 раза ниже супермаркетов. Дракон-фрукт, манго, папайя, лонган. Подходит если снимаешь квартиру и готовишь дома.</p><span class="desc-label">💡 Лайфхак</span><p>Можно покупать в розницу — просто бери меньше чем продавцы предлагают оптом. Торговцы соглашаются.</p>',
+     price:'Оптовые цены',maps:'https://maps.google.com/?q=Cho+Dau+Moi+Da+Nang',
+     meta:[{label:'Часы',val:'02:00–08:00'},{label:'Фокус',val:'Фрукты и овощи'}]},
+    {name:'Chợ An Hải Bắc',tag:'Рынок · Районный',tc:'market',addr:'An Hải Bắc, Sơn Trà',
+     desc:'Районный рынок полуострова Сон Чы — рыба прямо с лодок, местная атмосфера.',
+     fullDesc:'<span class="desc-label">🏮 Атмосфера</span><p>Небольшой рынок в жилом квартале Сон Чы. Рыба и морепродукты здесь часто свежее чем на Рынке Хан — рыбаки привозят прямо сюда.</p><span class="desc-label">🛒 Что купить</span><p>Живые крабы, креветки, рыба. Местные фрукты. Готовая еда на завтрак — bánh mì, cháo, xôi.</p><span class="desc-label">💡 Лайфхак</span><p>Если живёшь в районе Сон Чы или Мой Кхе — это твой ежедневный рынок. Уютнее и дешевле чем Рынок Хан.</p>',
+     price:'Местные цены',maps:'https://maps.google.com/?q=Cho+An+Hai+Bac+Da+Nang',
+     meta:[{label:'Часы',val:'05:00–11:00'},{label:'Акцент',val:'Морепродукты'}]},
+    {name:'Chợ Đống Đa',tag:'Рынок · Одежда',tc:'market',addr:'Đống Đa, Hải Châu',
+     desc:'Рынок тканей и одежды — лучшее место для пошива аозая и вьетнамской одежды.',
+     fullDesc:'<span class="desc-label">🏮 Атмосфера</span><p>Специализированный рынок с упором на ткани, одежду и пошив. Десятки портних прямо на рынке — принеси фото и через 1–2 дня получишь готовое изделие.</p><span class="desc-label">🛒 Что купить</span><p>Шёлк, хлопок, лён — материалы для пошива. Готовая одежда: платья, брюки, рубашки. Аозай на заказ от 300 тыс. VND.</p><span class="desc-label">💡 Лайфхак</span><p>Возьми понравившуюся вещь с собой как образец — портнихи скопируют точь-в-точь за треть цены магазина.</p>',
+     price:'300 тыс.+ за пошив',maps:'https://maps.google.com/?q=Cho+Dong+Da+Da+Nang',
+     meta:[{label:'Часы',val:'07:00–18:00'},{label:'Специализация',val:'Ткани и пошив'}],
+     tips:[{icon:'✂️',text:'Аозай на заказ — от 300 тыс. VND, готов за 1–2 дня.'}]},
+    {name:'Night Market An Thuong',tag:'Рынок · Ночной',tc:'market',addr:'An Thuong Walking Street',
+     desc:'Воскресный вечерний рынок в районе экспатов — еда, ремёсла, живая музыка.',
+     fullDesc:'<span class="desc-label">🏮 Атмосфера</span><p>Пешеходная улица An Thuong по воскресеньям превращается в живой вечерний рынок. Смешение туристов, экспатов и местных. Музыканты, уличная еда, хэндмейд.</p><span class="desc-label">🛒 Что купить</span><p>Изделия ручной работы от местных мастеров. Картины, украшения, керамика. Вьетнамские сувениры по адекватным ценам — меньше накрутки чем в туристических точках.</p><span class="desc-label">💡 Лайфхак</span><p>Лучший вечер — приходи к 18:00, когда всё раскладывается. Сочетай с ужином в одном из ресторанов An Thuong.</p>',
+     price:'Разные цены',maps:'https://maps.google.com/?q=An+Thuong+Walking+Street+Da+Nang',
+     meta:[{label:'Дни',val:'Воскресенье'},{label:'Время',val:'17:00–22:00'}]},
+  ],
+  malls: [
+    {name:'Vincom Plaza Đà Nẵng',tag:'ТЦ · Премиум',tc:'mall',addr:'910A Ngô Quyền, Sơn Trà',
+     desc:'Крупнейший торговый центр Дананга — международные бренды, кинотеатр, фудкорт.',
+     fullDesc:'<span class="desc-label">🏬 Описание</span><p>Флагманский ТЦ сети Vincom — крупнейшей розничной сети Вьетнама. 5 этажей, более 100 магазинов, якорный гипермаркет VinMart на первом этаже.</p><span class="desc-label">🛍️ Что здесь есть</span><p>Zara, H&M, Mango, Nike, Adidas, Samsung, Apple Premium Reseller. Кинотеатр CGV на верхнем этаже. Фудкорт с вьетнамской и международной едой. Ресторанная зона.</p><span class="desc-label">💡 Лайфхак</span><p>VinMart на B1 — отличный супермаркет с хорошим выбором импортных продуктов. Кинотеатр CGV — субтитры на английском, цена 80–120 тыс. VND.</p>',
+     price:'Средний+ сегмент',maps:'https://maps.google.com/?q=Vincom+Plaza+Da+Nang',
+     meta:[{label:'Часы',val:'09:30–22:00'},{label:'Этажей',val:'5 + B1'}],
+     tips:[{icon:'🎬',text:'Кино в CGV — 80–120 тыс. VND, английские субтитры.'}]},
+    {name:'Lotte Mart Đà Nẵng',tag:'ТЦ · Гипермаркет',tc:'mall',addr:'6 Nại Nam, Hải Châu',
+     desc:'Корейский гипермаркет — огромный выбор продуктов, техники и товаров для дома.',
+     fullDesc:'<span class="desc-label">🏬 Описание</span><p>Масштабный корейский гипермаркет в центре города. Один из лучших в Дананге по ассортименту — особенно импортные продукты и корейские товары.</p><span class="desc-label">🛍️ Что здесь есть</span><p>Огромный продуктовый отдел — импортные сыры, колбасы, европейские вина. Корейские снеки и рамен. Бытовая техника. Одежда среднего сегмента. Детские товары. Фудкорт.</p><span class="desc-label">💡 Лайфхак</span><p>Лучший выбор европейских продуктов в городе — импортные сыры, оливковое масло, паста. Цены выше локальных, но ниже чем в специализированных импортных магазинах.</p>',
+     price:'Средний сегмент',maps:'https://maps.google.com/?q=Lotte+Mart+Da+Nang',
+     meta:[{label:'Часы',val:'08:00–22:00'},{label:'Якорь',val:'Гипермаркет'}],
+     tips:[{icon:'🧀',text:'Лучший выбор импортных продуктов в городе.'}]},
+    {name:'AEON Mall Đà Nẵng',tag:'ТЦ · Японский',tc:'mall',addr:'Nguyễn Văn Linh, Hải Châu',
+     desc:'Японский торговый центр — стандарты качества выше среднего, супермаркет AEON.',
+     fullDesc:'<span class="desc-label">🏬 Описание</span><p>Японская сеть AEON работает по стандартам качества обслуживания выше среднего для Вьетнама. Якорный супермаркет AEON на нижних этажах.</p><span class="desc-label">🛍️ Что здесь есть</span><p>Супермаркет AEON с японскими продуктами. Торговая галерея с местными и международными брендами. Детская игровая зона. Кинотеатр. Рестораны.</p><span class="desc-label">💡 Лайфхак</span><p>AEON — лучший супермаркет города по качеству японских продуктов, соусов, снеков. Онигири и готовые блюда у выхода из супермаркета — отличный быстрый обед.</p>',
+     price:'Средний сегмент',maps:'https://maps.google.com/?q=AEON+Mall+Da+Nang',
+     meta:[{label:'Часы',val:'09:00–22:00'},{label:'Якорь',val:'AEON Supermarket'}]},
+    {name:'BigC (GO!) Đà Nẵng',tag:'ТЦ · Гипермаркет',tc:'mall',addr:'Ngô Quyền, Sơn Trà',
+     desc:'Французский гипермаркет Big C (сейчас GO!) — самые низкие цены среди крупных магазинов.',
+     fullDesc:'<span class="desc-label">🏬 Описание</span><p>Французская сеть BigC переименована в GO! — но формат и цены остались. Один из самых бюджетных гипермаркетов города с широким ассортиментом.</p><span class="desc-label">🛍️ Что здесь есть</span><p>Продукты по минимальным ценам. Большой отдел бытовой химии и косметики. Одежда, электроника. Обменник валют у входа. Парковка большая и бесплатная.</p><span class="desc-label">💡 Лайфхак</span><p>Лучшее место для закупки бытовых товаров, стирального порошка, средств гигиены — цены значительно ниже чем в мелких магазинах.</p>',
+     price:'Бюджетный сегмент',maps:'https://maps.google.com/?q=BigC+Go+Da+Nang',
+     meta:[{label:'Часы',val:'08:00–22:00'},{label:'Плюс',val:'Бесплатная парковка'}],
+     tips:[{icon:'💰',text:'Самые низкие цены на бытовую химию и гигиену.'}]},
+    {name:'Indochina Riverside Mall',tag:'ТЦ · Набережная',tc:'mall',addr:'74 Bạch Đằng, Hải Châu',
+     desc:'Небольшой ТЦ на берегу реки Хан — рестораны с видом и бутики.',
+     fullDesc:'<span class="desc-label">🏬 Описание</span><p>Компактный торговый центр на набережной реки Хан. Не для массового шоппинга — атмосферное место с ресторанами с видом на реку и мосты.</p><span class="desc-label">🛍️ Что здесь есть</span><p>Рестораны и кафе на верхних этажах с панорамным видом на Мост Дракона. Несколько бутиков с местными дизайнерами. Сувенирные лавки.</p><span class="desc-label">💡 Лайфхак</span><p>Приходи вечером в субботу или воскресенье — сидишь с ужином и наблюдаешь шоу Моста Дракона (огонь и вода в 21:00) прямо с террасы ресторана.</p>',
+     price:'Разные цены',maps:'https://maps.google.com/?q=Indochina+Riverside+Mall+Da+Nang',
+     meta:[{label:'Часы',val:'09:00–22:00'},{label:'Изюминка',val:'Вид на Мост Дракона'}],
+     tips:[{icon:'🐉',text:'В сб/вс вечером — шоу Моста Дракона прямо с террасы ресторана.'}]},
+  ],
+  souvenirs: [
+    {name:'Marble Mountains Gift Shops',tag:'Сувениры · Мрамор',tc:'souvenir',addr:'Ngũ Hành Sơn',
+     desc:'Мастерские у Мраморных гор — изделия из натурального мрамора и камня.',
+     fullDesc:'<span class="desc-label">🎁 Что купить</span><p>Статуэтки Будды, слонов и животных из натурального мрамора. Чаши, вазы, украшения. Всё производится здесь же — мастера работают прямо на глазах покупателей.</p><span class="desc-label">✅ Почему здесь</span><p>Это аутентичный местный промысел — мраморные мастерские существуют у подножия гор уже несколько поколений. Покупаешь напрямую у мастера, без посредников.</p><span class="desc-label">💡 Лайфхак</span><p>Торгуйся — цены для туристов завышены на 30–50%. При покупке нескольких изделий скидка почти гарантирована. Тяжёлые вещи можно отправить почтой прямо из Дананга.</p>',
+     price:'200 тыс. — 2 млн+',maps:'https://maps.google.com/?q=Marble+Mountains+souvenir+shops+Da+Nang',
+     meta:[{label:'Материал',val:'Мрамор, нефрит'},{label:'Часы',val:'07:00–18:00'}],
+     tips:[{icon:'💬',text:'Торгуйся — стартуй с 60% от цены.'},{icon:'📦',text:'Отправка почтой домой — спроси у продавца.'}]},
+    {name:'Hội An Handicraft Shops',tag:'Сувениры · Хойан',tc:'souvenir',addr:'Hội An Old Town (30 км)',
+     desc:'30 минут от Дананга — лучший шоппинг Вьетнама: шёлк, фонари, лакированные изделия.',
+     fullDesc:'<span class="desc-label">🎁 Что купить</span><p>Шёлковые платки, аозай, одежда на заказ за 24 часа. Бумажные и тканевые фонари — символ Хойана. Лакированные шкатулки, подносы, посуда. Картины маслом с видами Хойана.</p><span class="desc-label">✅ Почему здесь</span><p>Старый город Хойана — объект ЮНЕСКО — предлагает лучшее качество вьетнамского ремесленного производства. Пошив одежды за 24–48 часов любой сложности.</p><span class="desc-label">💡 Лайфхак</span><p>Торгуйся везде — 30–40% скидки норма. Одежда на заказ: принеси фото или вещь-образец, скажи размер. Через день забираешь. Фонари уплощаются для перевозки в чемодане.</p>',
+     price:'От 50 тыс. VND',maps:'https://maps.google.com/?q=Hoi+An+Old+Town+shopping',
+     meta:[{label:'До Хойана',val:'30 км / 40 мин'},{label:'Пошив',val:'За 24–48 ч'}],
+     tips:[{icon:'🚗',text:'Такси Дананг–Хойан: 200–300 тыс. VND или Grab.'},{icon:'✂️',text:'Пошив одежды — принеси образец или фото.'}]},
+    {name:'Souvenir Street (Bạch Đằng)',tag:'Сувениры · Набережная',tc:'souvenir',addr:'Bạch Đằng, набережная реки Хан',
+     desc:'Сувенирные магазины на набережной — кофе, специи, магниты, вьетнамские товары.',
+     fullDesc:'<span class="desc-label">🎁 Что купить</span><p>Вьетнамский кофе в пакетах и зёрнах — отличный подарок. Рисовая водка rượu gạo. Лаковые картины. Магниты, брелоки, тарелки с символикой Дананга. Традиционные шляпы nón lá.</p><span class="desc-label">💡 Лайфхак</span><p>Вьетнамский кофе Trung Nguyên и G7 — хорошие бренды для подарков. Покупай в упаковке, а не на развес — лучше хранится. Специи (звёздный анис, корица, куркума) весят мало и проходят через таможню.</p>',
+     price:'От 30 тыс. VND',maps:'https://maps.google.com/?q=Bach+Dang+souvenirs+Da+Nang',
+     meta:[{label:'Тип',val:'Туристические сувениры'},{label:'Часы',val:'08:00–22:00'}]},
+    {name:'Vietnam Souvenir (Trần Phú)',tag:'Сувениры · Магазин',tc:'souvenir',addr:'Trần Phú, Hải Châu',
+     desc:'Большой магазин вьетнамских сувениров — фиксированные цены, хороший выбор.',
+     fullDesc:'<span class="desc-label">🎁 Что купить</span><p>Лаковые изделия. Шёлковые изделия и платки. Традиционные куклы. Расписные зонтики. Чайные сервизы. Натуральная косметика — кокосовое масло, рисовые маски.</p><span class="desc-label">✅ Почему здесь</span><p>Фиксированные цены — не нужно торговаться, удобно для тех кто не любит рынки. Хороший выбор упакованных подарков для вывоза.</p><span class="desc-label">💡 Лайфхак</span><p>Натуральная вьетнамская косметика — хорошие сувениры: кокосовое масло, маски из риса, бальзамы с женьшенем. Всё в красивой упаковке и стоит недорого.</p>',
+     price:'Фикс. цены',maps:'https://maps.google.com/?q=Vietnam+souvenir+shop+Tran+Phu+Da+Nang',
+     meta:[{label:'Плюс',val:'Без торга, фикс цена'},{label:'Часы',val:'08:30–21:00'}]},
+    {name:'Làng nghề đá mỹ nghệ Non Nước',tag:'Сувениры · Деревня мастеров',tc:'souvenir',addr:'Ngũ Hành Sơn',
+     desc:'Деревня каменных мастеров у подножия Мраморных гор — изделия прямо от производителей.',
+     fullDesc:'<span class="desc-label">🎁 Что купить</span><p>Скульптуры из мрамора, гранита и нефрита. Украшения из полудрагоценных камней. Архитектурные элементы — можно заказать что угодно. Небольшие статуэтки — отличные подарки.</p><span class="desc-label">✅ Почему здесь</span><p>Это производственная деревня — мастерские работают прямо вдоль улицы. Видно весь процесс от камня до готового изделия. Цены — оптовые, без туристической наценки.</p><span class="desc-label">💡 Лайфхак</span><p>Договорись об отправке крупного изделия домой — мастера имеют опыт международной доставки. Небольшие вещи до 2 кг спокойно везёшь в ручной клади.</p>',
+     price:'От 100 тыс. VND',maps:'https://maps.google.com/?q=Non+Nuoc+stone+carving+village+Da+Nang',
+     meta:[{label:'Часы',val:'07:00–17:30'},{label:'Особенность',val:'Мастера при работе'}],
+     tips:[{icon:'📦',text:'Доставка крупных изделий домой — спрашивай у мастера.'}]},
+  ],
+  grocery: [
+    {name:'VinMart / WinMart',tag:'Продукты · Сеть',tc:'grocery',addr:'Несколько локаций',
+     desc:'Крупнейшая вьетнамская продуктовая сеть — свежие продукты, хорошее качество.',
+     fullDesc:'<span class="desc-label">🛒 Описание</span><p>VinMart (переименован в WinMart) — ведущая продуктовая сеть Вьетнама. Несколько форматов: крупные супермаркеты и мини-маркеты VinMart+ в каждом квартале.</p><span class="desc-label">🧺 Что покупать</span><p>Свежие фрукты и овощи хорошего качества. Охлаждённое мясо и морепродукты. Молочные продукты вьетнамских брендов. Готовая еда. Импортные товары по умеренным ценам.</p><span class="desc-label">💡 Лайфхак</span><p>Приложение Winmart+ позволяет заказывать доставку за 30–60 минут. Акции каждую неделю — смотри на ценники с красным уголком.</p>',
+     price:'Средние цены',maps:'https://maps.google.com/?q=WinMart+Da+Nang',
+     meta:[{label:'Локации',val:'10+ в городе'},{label:'Часы',val:'07:00–22:00'}],
+     tips:[{icon:'📱',text:'Приложение WinMart+ — доставка за 30–60 мин.'}]},
+    {name:'Co.opmart Đà Nẵng',tag:'Продукты · Супермаркет',tc:'grocery',addr:'Hải Châu',
+     desc:'Государственная кооперативная сеть — надёжное качество, доступные цены.',
+     fullDesc:'<span class="desc-label">🛒 Описание</span><p>Co.opmart — сеть кооперативных супермаркетов, существующая с 1990-х. Фокус на местных продуктах хорошего качества по доступным ценам.</p><span class="desc-label">🧺 Что покупать</span><p>Лучший выбор вьетнамских соусов, паст, приправ — рыбный соус nước mắm разных сортов, паста sate, соус hoisin. Местные снеки и сладости. Свежая выпечка bánh mì.</p><span class="desc-label">💡 Лайфхак</span><p>Карта лояльности Co.op — бесплатная, накапливает баллы. При покупке от 500 тыс. VND есть скидка. Хорошие цены на рыбный соус и соевые продукты — местная гордость.</p>',
+     price:'Доступные цены',maps:'https://maps.google.com/?q=Coopmart+Da+Nang',
+     meta:[{label:'Акцент',val:'Местные продукты'},{label:'Часы',val:'08:00–21:30'}]},
+    {name:'Tops Market (Central)',tag:'Продукты · Премиум',tc:'grocery',addr:'Hải Châu',
+     desc:'Тайская сеть — лучший выбор импортных и органических продуктов в городе.',
+     fullDesc:'<span class="desc-label">🛒 Описание</span><p>Тайская розничная сеть Tops Market — позиционирование выше среднего, упор на свежесть и импортные товары. Любимый магазин экспатов в Дананге.</p><span class="desc-label">🧺 Что покупать</span><p>Лучший выбор импортных сыров и колбасных изделий. Органические продукты. Японские и корейские товары. Свежая рыба в красивой нарезке. Вина и крафтовое пиво.</p><span class="desc-label">💡 Лайфхак</span><p>Скидки на мясо и рыбу после 19:00 — продавцы снижают цены на продукты со сроком. Органические овощи из центрального Вьетнама — хорошее соотношение цены и качества.</p>',
+     price:'Выше среднего',maps:'https://maps.google.com/?q=Tops+Market+Da+Nang',
+     meta:[{label:'Акцент',val:'Импорт и органика'},{label:'Часы',val:'08:00–22:00'}],
+     tips:[{icon:'🕖',text:'После 19:00 — скидки на мясо и рыбу дня.'}]},
+    {name:'Family Mart / Circle K',tag:'Продукты · Круглосуточный',tc:'grocery',addr:'По всему городу',
+     desc:'Японские удобные магазины 24/7 — готовая еда, онигири, кофе по-вьетнамски.',
+     fullDesc:'<span class="desc-label">🛒 Описание</span><p>Японские сети convenience stores — Family Mart и Circle K — есть практически на каждом углу Дананга. Работают 24/7, идеальны для перекуса в любое время.</p><span class="desc-label">🧺 Что покупать</span><p>Онигири и сэндвичи — свежие, меняются несколько раз в день. Готовые блюда в пакетах — разогревают в микроволновке. Кофе из машины — 20–30 тыс. VND. Мороженое в жару.</p><span class="desc-label">💡 Лайфхак</span><p>Family Mart кофе — один из лучших в городе за свою цену (кофе-лате с сиропом за 25 тыс.). Онигири с тунцом или свининой — сытный перекус за 20 тыс. VND.</p>',
+     price:'25–80 тыс. VND',maps:'https://maps.google.com/?q=Family+Mart+Da+Nang',
+     meta:[{label:'Часы',val:'24/7'},{label:'Локации',val:'30+ в городе'}],
+     tips:[{icon:'☕',text:'Кофе из машины Family Mart — 25 тыс., очень достойный.'}]},
+    {name:'Expat Grocery (импортные продукты)',tag:'Продукты · Импорт',tc:'grocery',addr:'An Thuong / My An',
+     desc:'Небольшие магазины для экспатов — европейские сыры, гречка, тушёнка, алкоголь.',
+     fullDesc:'<span class="desc-label">🛒 Описание</span><p>В районе An Thuong и My An есть несколько небольших магазинов ориентированных на русскоязычных и европейских экспатов. Ассортимент меняется, но базово есть гречка, консервы, европейский сыр, вино.</p><span class="desc-label">🧺 Что покупать</span><p>Гречка и другие крупы. Европейские сыры и колбасы. Тушёнка и консервированные товары. Квас и кефир (иногда). Европейский алкоголь по адекватным ценам.</p><span class="desc-label">💡 Лайфхак</span><p>Спроси в чате @danang_tysa — участники регулярно делятся где появились нужные продукты. Ассортимент нестабильный, поэтому лучше узнавать актуально.</p>',
+     price:'Выше рыночного',maps:'https://maps.google.com/?q=expat+grocery+An+Thuong+Da+Nang',
+     meta:[{label:'Район',val:'An Thuong / My An'},{label:'Акцент',val:'Европейские продукты'}],
+     tips:[{icon:'💬',text:'Актуальный ассортимент — спрашивай в чате @danang_tysa.'}]},
+    {name:'Bách Hoá Xanh',tag:'Продукты · Бюджетный',tc:'grocery',addr:'По всему городу',
+     desc:'Доступная вьетнамская продуктовая сеть — свежие продукты по минимальным ценам.',
+     fullDesc:'<span class="desc-label">🛒 Описание</span><p>Bách Hoá Xanh — быстрорастущая вьетнамская сеть магазинов у дома. Ориентирована на местных жителей с бюджетным подходом. Магазины небольшие, но есть в каждом квартале.</p><span class="desc-label">🧺 Что покупать</span><p>Свежие овощи и фрукты. Мясо и яйца. Молочные продукты вьетнамских брендов. Базовые бакалейные товары. Воды и напитки.</p><span class="desc-label">💡 Лайфхак</span><p>Самые низкие цены на яйца и куриное мясо в городе. Овощи берут нарасхват — приходи с утра. Приложение с доставкой за 2 часа работает хорошо.</p>',
+     price:'Самые низкие',maps:'https://maps.google.com/?q=Bach+Hoa+Xanh+Da+Nang',
+     meta:[{label:'Часы',val:'07:00–22:00'},{label:'Локации',val:'20+ в городе'}],
+     tips:[{icon:'🥚',text:'Лучшие цены на яйца и курицу в городе.'}]},
+  ],
+};
+
+const shopsSecTitles = {markets:'Рынки', malls:'Торговые центры', souvenirs:'Сувенирные магазины', grocery:'Продуктовые магазины'};
+Object.entries(shopsData).forEach(([sec,items])=>{
+  items.forEach(item=>makeCard(item,`shops-${sec}`));
+});
+document.getElementById('shops-filter').addEventListener('click',e=>{
+  const btn=e.target.closest('.sub-btn');if(!btn)return;
+  const sec=btn.dataset.sec;
+  document.querySelectorAll('#shops-filter .sub-btn').forEach(b=>b.classList.toggle('active',b===btn));
+  document.querySelectorAll('#page-shops .leisure-sec').forEach(el=>el.classList.toggle('hidden',sec!=='all'&&el.id!==`sec-${sec}`));
+});
 
 /* ═══════════════════════════════════════════
    DATA: LEISURE
@@ -2311,9 +2545,11 @@ if ('serviceWorker' in navigator) {
 
       if(tempEl)  tempEl.textContent  = temp+'°C';
       if(iconEl)  iconEl.textContent  = wmoIcon(code, isDay);
-      if(windEl)  windEl.textContent  = Math.round(ws)+' м/с · '+windDir(wdir)+' · '+bftDesc(ws);
+      if(windEl)  windEl.textContent  = Math.round(ws)+' м/с '+windDir(wdir);
       if(humEl)   humEl.textContent   = hum+'%';
-      if(feelEl)  feelEl.textContent  = feel+'°C · '+wmoDesc(code);
+      if(feelEl)  feelEl.textContent  = feel+'°C';
+      const descEl = document.getElementById('hwc-desc');
+      if(descEl)  descEl.textContent  = wmoDesc(code)+' · ветер '+bftDesc(ws);
     } catch(e){
       const f=document.getElementById('hwc-feel');
       if(f) f.textContent='Нет данных';
