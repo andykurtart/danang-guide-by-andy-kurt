@@ -1879,7 +1879,9 @@ adviceData.forEach((cat,ci)=>{
   const hdr=document.createElement('div');hdr.className='advice-cat-hdr';hdr.textContent=cat.cat;card.appendChild(hdr);
   cat.items.forEach(item=>{
     const row=document.createElement('div');row.className='advice-item';
-    row.innerHTML=`<span class="advice-num">${gn++}</span><span class="advice-icon">${item.i}</span><span class="advice-text">${item.t}</span>`;
+    const ico=typeof item==='string'?'💡':(item.i||item.icon||'💡');
+    const txt=typeof item==='string'?item:(item.t||item.text||'');
+    row.innerHTML=`<span class="advice-num">${gn++}</span><span class="advice-icon">${ico}</span><span class="advice-text">${txt}</span>`;
     card.appendChild(row);
   });
   al.appendChild(card);
