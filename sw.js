@@ -1,5 +1,4 @@
-// ─── VERSION: меняй эту строку при каждом деплое ────────────────────────────
-// Формат: 'danang-YYYY-MM-DD-N' — дата + номер сборки
+// ─── VERSION: меняй при каждом деплое ───────────────────────────────────────
 const CACHE = 'danang-2025-01-01-1';
 // ────────────────────────────────────────────────────────────────────────────
 
@@ -10,36 +9,44 @@ const LOCAL_ASSETS = [
   './icon-512.png',
 ];
 
-// Install: cache assets, skipWaiting чтобы новый SW сразу стал активным
+// Install: кэшируем файлы
+// НЕ вызываем skipWaiting() здесь — это вызывало бесконечный reload
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE).then(c => c.addAll(LOCAL_ASSETS))
   );
-  self.skipWaiting();
 });
 
-// Activate: удаляем ВСЕ старые кэши, берём контроль над всеми вкладками
+// Activate: удаляем старые кэши, берём контроль
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
+    caches.keys()
+      .then(keys => Promise.all(
         keys.filter(k => k !== CACHE).map(k => caches.delete(k))
-      )
-    ).then(() => self.clients.claim())
+      ))
+      .then(() => self.clients.claim())
   );
+});
+
+// Получаем команду на применение обновления от баннера
+self.addEventListener('message', e => {
+  if (e.data && e.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 // Fetch strategy
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
 
-  // API — always network
+  // API — всегда сеть, никогда кэш
   if (
     url.hostname.includes('frankfurter.app') ||
     url.hostname.includes('er-api.com') ||
     url.hostname.includes('open-meteo.com') ||
     url.hostname.includes('nominatim.openstreetmap.org') ||
-    url.hostname.includes('openstreetmap.org')
+    url.hostname.includes('openstreetmap.org') ||
+    url.hostname.includes('unsplash.com')
   ) {
     e.respondWith(
       fetch(e.request).catch(() =>
@@ -49,7 +56,7 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Fonts — network first
+  // Шрифты — сеть первая, кэш при оффлайн
   if (url.hostname.includes('fonts.')) {
     e.respondWith(
       fetch(e.request)
@@ -62,7 +69,7 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // index.html — network first (always get latest), offline fallback
+  // index.html — сеть первая (всегда свежий контент), оффлайн fallback
   if (url.pathname.endsWith('/') || url.pathname.endsWith('index.html')) {
     e.respondWith(
       fetch(e.request)
@@ -75,7 +82,7 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Everything else — cache first
+  // Всё остальное — кэш первый
   e.respondWith(
     caches.match(e.request).then(cached => {
       if (cached) return cached;
@@ -87,11 +94,4 @@ self.addEventListener('fetch', e => {
       });
     })
   );
-});
-
-// Получаем команду на применение обновления от баннера
-self.addEventListener('message', e => {
-  if (e.data && e.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
 });

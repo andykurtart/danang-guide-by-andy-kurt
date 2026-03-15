@@ -2906,34 +2906,24 @@ fetchRates();
 
 /* ═══ PWA SERVICE WORKER ═══ */
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    // ?v= заставляет браузер всегда проверять новую версию sw.js
-    navigator.serviceWorker.register('./sw.js?v=' + Date.now())
-      .then(reg => {
-        // Проверяем обновления каждые 60 секунд
-        setInterval(() => reg.update(), 60000);
+  // Регистрируем SW без ?v= — браузер сам проверяет изменения по HTTP-заголовкам
+  navigator.serviceWorker.register('./sw.js')
+    .then(reg => {
+      // Проверяем обновление при каждом открытии
+      reg.update();
 
-        reg.addEventListener('updatefound', () => {
-          const newSW = reg.installing;
-          newSW.addEventListener('statechange', () => {
-            if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
-              // Есть новая версия — показываем баннер
-              showUpdateBanner();
-            }
-          });
+      reg.addEventListener('updatefound', () => {
+        const newSW = reg.installing;
+        if (!newSW) return;
+        newSW.addEventListener('statechange', () => {
+          // Новый SW готов И уже есть активный (т.е. это не первый запуск)
+          if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+            showUpdateBanner();
+          }
         });
-      })
-      .catch(e => console.log('SW reg failed:', e));
-
-    // Если SW взял контроль (после обновления) — перезагружаем страницу
-    let refreshing = false;
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (!refreshing) {
-        refreshing = true;
-        window.location.reload();
-      }
-    });
-  });
+      });
+    })
+    .catch(e => console.warn('SW reg failed:', e));
 }
 
 function showUpdateBanner() {
@@ -2945,7 +2935,10 @@ function applyUpdate() {
   if (b) b.style.display = 'none';
   navigator.serviceWorker.getRegistration().then(reg => {
     if (reg && reg.waiting) {
+      // Говорим ожидающему SW взять контроль
       reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+      // Перезагружаем страницу чтобы применить
+      setTimeout(() => window.location.reload(), 300);
     }
   });
 }
@@ -3067,11 +3060,20 @@ function applyUpdate() {
   fetchWeather();
   setInterval(fetchWeather, 600000);
 
-/* ── Splash hide ── */
-window.addEventListener('load',()=>{
+/* ── Splash hide — работает и в PWA на iOS ── */
+function hideSplash(){
   const s=document.getElementById('splash');
-  if(s) setTimeout(()=>s.classList.add('hidden'),800);
-});
+  if(s) s.classList.add('hidden');
+}
+// DOMContentLoaded быстрее и надёжнее на iOS PWA
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', ()=>setTimeout(hideSplash, 600));
+} else {
+  // DOM уже готов (скрипт выполняется после парсинга)
+  setTimeout(hideSplash, 600);
+}
+// Страховочный таймер — скрываем в любом случае через 2 сек
+setTimeout(hideSplash, 2000);
 })();
 
 
