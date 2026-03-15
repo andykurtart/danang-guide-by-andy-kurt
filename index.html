@@ -49,7 +49,7 @@ a{color:inherit;text-decoration:none}
 
 /* PAGES */
 .page,.detail-page{display:none}
-.page.active{padding-bottom:90px}
+.page.active{padding-bottom:0}
 .page.active,.detail-page.active{display:block}
 
 /* SECTION HERO */
@@ -90,7 +90,7 @@ a{color:inherit;text-decoration:none}
 .top-right{display:flex;align-items:center;gap:6px}
 
 /* CONTENT */
-.content{max-width:860px;margin:0 auto;padding:18px 16px 100px}
+.content{max-width:860px;margin:0 auto;padding:18px 16px calc(var(--tab-h) + 24px)}
 
 /* SECTION TITLE */
 .section-title{font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;display:flex;align-items:center;gap:10px}
@@ -143,8 +143,8 @@ a{color:inherit;text-decoration:none}
 .tile-label{font-size:.54rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;opacity:.45;display:none}
 .tile-name{font-size:.82rem;font-weight:700;line-height:1.2;letter-spacing:-.01em}
 .tile-desc{font-size:.65rem;color:var(--text-mid);line-height:1.35}
-.tile-arr{position:absolute;top:9px;right:11px;font-size:.68rem;color:var(--text-dim);transition:transform .15s}
-.home-tile:hover .tile-arr{transform:translate(2px,-2px)}
+.tile-arr{display:none}
+
 .tile-c1 .tile-name{color:#fff}
 .tile-c1 .tile-desc{color:rgba(255,255,255,.55)}
 .tile-c1 .tile-arr{color:rgba(255,255,255,.4)}
@@ -168,6 +168,63 @@ a{color:inherit;text-decoration:none}
 .services-coming-link{color:var(--accent);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .services-cats-preview{display:flex;flex-wrap:wrap;gap:8px;padding:4px 0}
 .services-cat-chip{padding:6px 14px;background:var(--surface);border:1px solid var(--border);border-radius:100px;font-size:.76rem;font-weight:500;color:var(--text-mid);opacity:.6}
+
+/* ── Photo hero backgrounds ── */
+.section-hero{position:relative;overflow:hidden}
+.section-hero::before{content:'';position:absolute;inset:0;background-size:cover;background-position:center;opacity:.18;filter:blur(3px) saturate(1.2);transform:scale(1.05);z-index:0;pointer-events:none}
+.section-hero>*{position:relative;z-index:1}
+#page-converter   .section-hero::before{background-image:url('https://images.unsplash.com/photo-1580674684081-7617fbf3d745?w=800&q=60')}
+#page-food        .section-hero::before{background-image:url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=60')}
+#page-cowork      .section-hero::before{background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=60')}
+#page-atm         .section-hero::before{background-image:url('https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&q=60')}
+#page-leisure     .section-hero::before{background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=60')}
+#page-history     .section-hero::before{background-image:url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&q=60')}
+#page-facts       .section-hero::before{background-image:url('https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?w=800&q=60')}
+#page-medicine    .section-hero::before{background-image:url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=60')}
+#page-tips        .section-hero::before{background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=60')}
+#page-channels    .section-hero::before{background-image:url('https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=60')}
+#page-shops       .section-hero::before{background-image:url('https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=800&q=60')}
+#page-lang        .section-hero::before{background-image:url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&q=60')}
+#page-contact     .section-hero::before{background-image:url('https://images.unsplash.com/photo-1559628233-100c798642d8?w=800&q=60')}
+#page-services    .section-hero::before{background-image:url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&q=60')}
+#page-emergency   .section-hero::before{background-image:url('https://images.unsplash.com/photo-1516733968668-dbdce39c4651?w=800&q=60')}
+#page-guides      .section-hero::before{background-image:url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=60')}
+[data-theme="dark"] .section-hero::before{opacity:.12}
+
+/* ── Card rating stars ── */
+.card-stars{display:inline-flex;align-items:center;gap:3px;margin-top:5px}
+.card-stars-val{font-size:.7rem;font-weight:700;color:#F59E0B}
+.card-stars-ico{font-size:.65rem;letter-spacing:-.5px;color:#F59E0B}
+.card-stars-cnt{font-size:.62rem;color:var(--text-dim)}
+
+/* ── Emergency page ── */
+.emerg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:6px}
+.emerg-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;cursor:pointer;transition:border-color .15s,transform .15s;-webkit-tap-highlight-color:transparent}
+.emerg-card:active{transform:scale(.98)}
+.emerg-card.urgent{border-color:rgba(200,50,50,.35);background:rgba(200,50,50,.04)}
+.emerg-card-name{font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:3px}
+.emerg-card-number{font-size:1.1rem;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;margin-bottom:4px}
+.emerg-card-desc{font-size:.7rem;color:var(--text-dim);line-height:1.45}
+.emerg-card-copy{font-size:.65rem;color:var(--text-dim);margin-top:6px;opacity:.6}
+.emerg-note{font-size:.72rem;color:var(--text-dim);text-align:center;margin-top:16px;padding:10px;background:var(--surface);border-radius:10px;border:1px solid var(--border)}
+
+/* ── Guides page ── */
+.guide-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:14px;overflow:hidden}
+.guide-header{padding:16px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;justify-content:space-between;-webkit-tap-highlight-color:transparent}
+.guide-header-left{display:flex;align-items:center;gap:10px}
+.guide-icon{font-size:1.4rem;flex-shrink:0}
+.guide-title{font-size:.9rem;font-weight:700;color:var(--text)}
+.guide-sub{font-size:.7rem;color:var(--text-dim);margin-top:2px}
+.guide-chevron{font-size:.8rem;color:var(--text-dim);transition:transform .2s;flex-shrink:0}
+.guide-card.open .guide-chevron{transform:rotate(180deg)}
+.guide-steps{display:none;padding:0 18px 16px}
+.guide-card.open .guide-steps{display:block}
+.guide-step{display:flex;gap:10px;margin-bottom:12px;align-items:flex-start}
+.guide-step:last-child{margin-bottom:0}
+.guide-step-num{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--hero-text);font-size:.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px}
+[data-theme="dark"] .guide-step-num{color:var(--bg)}
+.guide-step-text{font-size:.8rem;color:var(--text-mid);line-height:1.55}
+.guide-step-text strong{color:var(--text)}
 /* CARDS */
 .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-bottom:22px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s,border-color .15s}
@@ -186,7 +243,7 @@ a{color:inherit;text-decoration:none}
 [data-theme="dark"] .tag-pharma{color:#CC6090}
 .card-name{font-size:.95rem;font-weight:700;margin-bottom:3px;line-height:1.3;padding-right:18px}
 .card-addr{font-size:.74rem;color:var(--text-mid);margin-bottom:7px;display:flex;align-items:flex-start;gap:4px}
-.card-addr::before{content:'📍';font-size:.68rem;flex-shrink:0;margin-top:1px}
+.card-addr::before{content:'📍';font-size:.68rem;flex-shrink:0;line-height:1.5;margin-top:0}
 .card-desc{font-size:.76rem;color:var(--text-mid);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .card-price{display:inline-block;margin-top:9px;font-size:.71rem;font-weight:600;color:var(--vnd);background:rgba(46,102,68,.1);padding:2px 8px;border-radius:100px}
 [data-theme="dark"] .card-price{background:rgba(90,175,122,.15)}
@@ -542,7 +599,7 @@ tbody td:first-child{text-align:left;font-weight:500}
 <div class="page active" id="page-home">
   <div class="home-header">
     <div class="home-title">Добро пожаловать в Дананг 🇻🇳</div>
-    <div class="home-sub" id="hwc-greeting" style="margin:-2px 0 4px;font-size:.72rem">Доброго дня! ☀️</div>
+    <div class="home-sub" id="hwc-greeting" style="margin:-2px 0 4px;font-size:.72rem">Хорошего дня! 🌴</div>
     <div class="home-weather-card" id="home-weather-card">
       <div class="hwc-datetime">
         <span class="hwc-time" id="hwc-time">--:--</span>
@@ -562,7 +619,7 @@ tbody td:first-child{text-align:left;font-weight:500}
         </div>
         <div class="hwc-stat">
           <span class="hwc-stat-icon">💨</span>
-          <span class="hwc-stat-val" id="hwc-wind">-- м/с</span>
+          <span class="hwc-stat-val"><span id="hwc-wind-dir" style="font-size:.8rem;opacity:.7"></span> <span id="hwc-wind">-- м/с</span></span>
         </div>
       </div>
       <div class="hwc-desc" id="hwc-desc">Загрузка погоды…</div>
@@ -881,6 +938,37 @@ tbody td:first-child{text-align:left;font-weight:500}
   </div>
 </div>
 
+<!-- ═══════════════════════════ ЭКСТРЕННЫЕ НОМЕРА ═══════════════════════════ -->
+<div class="page" id="page-emergency">
+  <div class="section-hero">
+    <div class="hero-eyebrow">Дананг · Безопасность</div>
+    <div class="hero-title">Экстренные номера</div>
+    <div class="hero-sub">Один тап — номер скопирован и открывается набор</div>
+  </div>
+  <div class="content">
+    <div class="section-title">🇻🇳 Вьетнам — официальные</div>
+    <div class="emerg-grid" id="emerg-vn"></div>
+    <div class="section-title" style="margin-top:20px">🏥 Клиники в Дананге</div>
+    <div class="emerg-grid" id="emerg-clinics"></div>
+    <div class="section-title" style="margin-top:20px">🛵 Эвакуация и такси</div>
+    <div class="emerg-grid" id="emerg-transport"></div>
+    <div class="emerg-note">Нажми на карточку — номер скопируется и откроется набор. Для звонка нажми «Позвонить» в телефоне.</div>
+  </div>
+</div>
+<!-- ═══════════════════════════ ГАЙДЫ ═══════════════════════════ -->
+<div class="page" id="page-guides">
+  <div class="section-hero">
+    <div class="hero-eyebrow">Дананг · Гайды</div>
+    <div class="hero-title">Гайды</div>
+    <div class="hero-sub">Пошаговые инструкции для жизни в Дананге</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val">8</div><div class="hero-stat-label">гайдов</div></div>
+    </div>
+  </div>
+  <div class="content">
+    <div id="guides-list"></div>
+  </div>
+</div>
 <!-- ═══════════════════════════ КАНАЛЫ ═══════════════════════════ -->
 <div class="page" id="page-channels">
   <div class="section-hero">
@@ -957,7 +1045,7 @@ tbody td:first-child{text-align:left;font-weight:500}
       <div class="services-coming-icon">🛠️</div>
       <div class="services-coming-body">
         <div class="services-coming-title">Блок в процессе разработки</div>
-        <div class="services-coming-text">Этот раздел ждёт первых мастеров — барберов, косметологов, нянь, репетиторов, фотографов, юристов и других специалистов для русскоязычных в Дананге.</div>
+        <div class="services-coming-text">Этот раздел ждёт первых мастеров — барберов, косметологов, нянь, репетиторов, фотографов, юристов и других специалистов для граждан бывшего СНГ в Дананге.</div>
         <div class="services-coming-cta">
           Хотите разместить информацию о своих услугах? <span class="services-coming-link" onclick="goTo('page-contact')">Свяжитесь с автором гайда ↗</span>
         </div>
@@ -993,7 +1081,7 @@ tbody td:first-child{text-align:left;font-weight:500}
     <!-- О себе -->
     <div class="about-card">
       <div class="about-body">
-        <p class="about-text"><strong>Дананг Гайд</strong> — это офлайн-справочник для тех, кто живёт или планирует переехать в Дананг. Всё что нужно для комфортной жизни собрано в одном месте и работает без интернета.</p>
+        <p class="about-text"><strong>Дананг Гайд</strong> — это оффлайн-справочник для тех, кто живёт или планирует переехать в Дананг. Всё что нужно для комфортной жизни собрано в одном месте и работает без интернета.</p>
         <p class="about-text"><strong>Главная польза:</strong> не нужно ресерчить каждый раз — вся актуальная информация под рукой. Экономит время, деньги и нервы особенно в первые недели жизни в новом городе.</p>
       </div>
     </div>
@@ -1057,7 +1145,7 @@ tbody td:first-child{text-align:left;font-weight:500}
     </div>
 
     <!-- Telegram — в конце -->
-    <div class="contact-feedback-hint" style="margin-top:16px"><strong>Напишите мне</strong> — поделитесь фидбэком, буду рад любой обратной связи. Напишите что понравилось, что можно улучшить или чего не хватает. Развёрнутые мысли особенно ценны: они помогают делать гайд лучше для всех.</div>
+    <div class="contact-feedback-hint" style="margin-top:16px"><span style="font-size:1.1rem;vertical-align:middle;margin-right:6px">💬</span><strong>Напишите мне</strong> — поделитесь фидбэком, буду рад любой обратной связи. Напишите что понравилось, что можно улучшить или чего не хватает. Развёрнутые мысли особенно ценны: они помогают делать гайд лучше для всех.</div>
     <a class="contact-card" href="https://t.me/andykurt_dsgn" target="_blank" rel="noopener">
       <div class="contact-card-icon">✈️</div>
       <div class="contact-card-body">
@@ -1119,11 +1207,13 @@ tbody td:first-child{text-align:left;font-weight:500}
   <button class="tab-btn" data-page="page-leisure"    onclick="switchTab(this)"><span class="tab-icon">🎯</span><span class="tab-lbl">Досуг</span></button>
   <button class="tab-btn" data-page="page-history"    onclick="switchTab(this)"><span class="tab-icon">📜</span><span class="tab-lbl">История</span></button>
   <button class="tab-btn" data-page="page-facts"      onclick="switchTab(this)"><span class="tab-icon">💎</span><span class="tab-lbl">Факты</span></button>
+  <button class="tab-btn" data-page="page-emergency"  onclick="switchTab(this)"><span class="tab-icon">🚨</span><span class="tab-lbl">SOS</span></button>
+  <button class="tab-btn" data-page="page-guides"     onclick="switchTab(this)"><span class="tab-icon">📋</span><span class="tab-lbl">Гайды</span></button>
   <button class="tab-btn" data-page="page-channels"   onclick="switchTab(this)"><span class="tab-icon">📢</span><span class="tab-lbl">Каналы</span></button>
   <button class="tab-btn" data-page="page-shops"      onclick="switchTab(this)"><span class="tab-icon">🛍️</span><span class="tab-lbl">Магазины</span></button>
   <button class="tab-btn" data-page="page-lang"       onclick="switchTab(this)"><span class="tab-icon">🗣️</span><span class="tab-lbl">Язык</span></button>
   <button class="tab-btn" data-page="page-services"   onclick="switchTab(this)"><span class="tab-icon">🔧</span><span class="tab-lbl">Услуги</span></button>
-  <button class="tab-btn" data-page="page-contact"    onclick="switchTab(this)"><span class="tab-icon">✌️</span><span class="tab-lbl">Связаться</span></button>
+  <button class="tab-btn" data-page="page-contact"    onclick="switchTab(this)"><span class="tab-icon">ℹ️</span><span class="tab-lbl">Информация</span></button>
 <script>
 /* ═══ THEME ═══ */
 const themeBtn=document.getElementById('theme-btn');
@@ -1144,11 +1234,13 @@ const sidebarNav=[
   {page:'page-leisure',  icon:'🎯', name:'Досуг',      sub:'100 мест и активностей'},
   {page:'page-history',  icon:'📜', name:'История',    sub:'2000 лет Дананга'},
   {page:'page-facts',    icon:'💎', name:'Факты',      sub:'100 фактов о Дананге'},
+  {page:'page-emergency',icon:'🚨', name:'SOS / Номера',sub:'Экстренные звонки'},
+  {page:'page-guides',   icon:'📋', name:'Гайды',      sub:'Пошаговые инструкции'},
   {page:'page-channels', icon:'📢', name:'Каналы',     sub:'Группы, комьюнити, чаты'},
   {page:'page-shops',    icon:'🛍️', name:'Магазины',   sub:'Рынки, ТЦ, сувениры, продукты'},
   {page:'page-lang',     icon:'🗣️', name:'Язык',       sub:'100 вьетнамских фраз'},
   {page:'page-services',  icon:'🔧', name:'Услуги',     sub:'Специалисты · скоро'},
-  {page:'page-contact',   icon:'✌️', name:'Связаться',  sub:'@andykurt_dsgn'},
+  {page:'page-contact',   icon:'ℹ️', name:'Информация', sub:'@andykurt_dsgn'},
 ];
 const sidebarList=document.getElementById('sidebar-list');
 const sidebarEl=document.getElementById('sidebar');
@@ -1245,20 +1337,22 @@ document.getElementById('detail-back').addEventListener('click',()=>{
 
 /* ═══ HOME GRID ═══ */
 const homeItems=[
-  {page:'page-converter',icon:'💱',label:'Финансы',   name:'Конвертер',   desc:'USD · BYN · VND',              cls:'tile-c7 span2',badge:'1 USD = 26 200 VND'},
+  {page:'page-converter',icon:'💱',label:'Финансы',   name:'Конвертер',   desc:'USD · BYN · VND',              cls:'tile-c7 span2'},
   {page:'page-food',     icon:'🍜',label:'Гастрономия',name:'Где поесть', desc:'120+ мест, 6 категорий',        cls:'tile-c2'},
-  {page:'page-cowork',   icon:'💻',label:'Работа',    name:'Коворкинг',   desc:'20+ кафе с Wi-Fi',             cls:'tile-c3'},
-  {page:'page-atm',      icon:'🏧',label:'Деньги',    name:'Банкоматы',   desc:'Нулевая комиссия + обменники', cls:'tile-c4'},
-  {page:'page-tips',     icon:'💡',label:'Полезное',  name:'Советы',      desc:'150+ советов по жизни',         cls:'tile-c6'},
+  {page:'page-cowork',   icon:'💻',label:'Работа',    name:'Коворкинги',  desc:'20+ кафе с Wi-Fi',             cls:'tile-c3'},
+  {page:'page-atm',      icon:'🏧',label:'Деньги',    name:'Банкоматы',   desc:'0% комиссия + обменники', cls:'tile-c4'},
+  {page:'page-tips',     icon:'💡',label:'Полезное',  name:'Советы',      desc:'150+ полезных советов',         cls:'tile-c6'},
   {page:'page-medicine', icon:'💊',label:'Здоровье',  name:'Медицина',    desc:'Аптеки, клиники, помощь',      cls:'tile-c9'},
   {page:'page-leisure',  icon:'🎯',label:'Отдых',     name:'Досуг',       desc:'100 лучших мест',              cls:'tile-c5'},
   {page:'page-history',  icon:'📜',label:'История',   name:'История',     desc:'2000 лет Дананга',             cls:'tile-c8'},
   {page:'page-facts',    icon:'💎',label:'Интересное',name:'Факты',       desc:'100 фактов о Дананге',         cls:'tile-c7'},
+  {page:'page-emergency',icon:'🚨',label:'Безопасность',name:'SOS',        desc:'Экстренные номера',             cls:'tile-c9'},
+  {page:'page-guides',   icon:'📋',label:'Гайды',      name:'Гайды',       desc:'Пошаговые инструкции',          cls:'tile-c6'},
   {page:'page-channels', icon:'📢',label:'Сообщество',name:'Каналы',       desc:'50+ групп и каналов',          cls:'tile-c4'},
-  {page:'page-shops',    icon:'🛍️',label:'Шоппинг',   name:'Магазины',    desc:'Рынки, ТЦ, сувениры, продукты',cls:'tile-c2'},
+  {page:'page-shops',    icon:'🛍️',label:'Шоппинг',   name:'Магазины',    desc:'Рынки, ТЦ, продукты',cls:'tile-c2'},
   {page:'page-lang',     icon:'🗣️',label:'Язык',      name:'Вьетнамский', desc:'100 слов и фраз',              cls:'tile-c3 span2-desktop'},
-  {page:'page-services',  icon:'🔧',label:'Услуги',   name:'Услуги',      desc:'Специалисты для жизни в Дананге',  cls:'tile-services span2-desktop'},
-  {page:'page-contact',   icon:'✌️',label:'Контакты', name:'Связаться',   desc:'@andykurt_dsgn · связь с автором гайда', cls:'tile-c5 span4'},
+  {page:'page-services',  icon:'🔧',label:'Услуги',   name:'Услуги',      desc:'Наши специалисты',  cls:'tile-services span2-desktop'},
+  {page:'page-contact',   icon:'✌️',label:'Контакты', name:'Информация',  desc:'@andykurt_dsgn · связь с автором гайда', cls:'tile-c5 span4'},
 ];
 const grid=document.getElementById('home-grid');
 homeItems.forEach(item=>{
@@ -1272,7 +1366,8 @@ homeItems.forEach(item=>{
 /* ═══ CARD HELPER ═══ */
 function makeCard(item,cid){
   const d=document.createElement('div');d.className='card';
-  d.innerHTML=`<span class="card-arr">↗</span><div class="card-tag tag-${item.tc||'cafe'}">${item.tag}</div><div class="card-name">${item.name}</div><div class="card-addr">${item.addr||''}</div><div class="card-desc">${item.desc}</div>${item.price?`<span class="card-price ${item.price.startsWith('Бес')?'neutral':''}">${item.price}</span>`:''}`;
+  const stars=item.rating?`<div class="card-stars"><span class="card-stars-ico">${'★'.repeat(Math.round(item.rating))}${'☆'.repeat(5-Math.round(item.rating))}</span><span class="card-stars-val">${item.rating}</span>${item.ratingCount?`<span class="card-stars-cnt">(${item.ratingCount})</span>`:''}</div>`:'';
+  d.innerHTML=`<div class="card-tag tag-${item.tc||'cafe'}">${item.tag}</div><div class="card-name">${item.name}</div><div class="card-addr">${item.addr||''}</div><div class="card-desc">${item.desc}</div>${stars}${item.price?`<span class="card-price ${item.price.startsWith('Бес')?'neutral':''}">${item.price}</span>`:''}`;
   d.addEventListener('click',()=>openDetail(item));
   document.getElementById(cid).appendChild(d);
 }
@@ -2073,7 +2168,7 @@ document.getElementById('hist-back').addEventListener('click',()=>{
 
 [
   {name:'Family Medical Practice',tag:'Клиника · Иностранцы',tc:'pharma',addr:'96–98 Nguyễn Văn Linh',desc:'Лучшая клиника для иностранцев — русскоязычный персонал, все виды помощи.',fullDesc:'<span class=\"desc-label\">🏥 Что это</span><p>Ведущая международная клиника Дананга с врачами из Европы, Австралии и США. Полный спектр: общая медицина, стоматология, педиатрия. Принимают международные страховки напрямую.</p><span class=\"desc-label\">🩺 Специализации</span><p>Терапия, педиатрия, стоматология, гинекология, дерматология, физиотерапия. Анализы крови, УЗИ, ЭКГ — всё в одном месте.</p><span class=\"desc-label\">🕐 Приём</span><p>Пн–Пт 08:00–18:00, Сб 08:00–13:00. Экстренный приём 24/7. Запись онлайн или по телефону.</p><span class=\"desc-label\">👥 Для кого</span><p>Экспаты и иностранцы — особенно те кто не говорит по-вьетнамски. Врачи говорят по-английски.</p><span class=\"desc-label\">💡 Лайфхак</span><p>Сфотографируй страховой полис заранее — клиника принимает большинство международных страховок напрямую, без предоплаты.</p>',maps:'https://maps.google.com/?q=Family+Medical+Practice+Da+Nang',site:'https://www.vietnammedicalpractice.com',meta:[{label:'Телефон',val:'+84 236 3582 699'},{label:'Приём',val:'24/7 экстренный'},{label:'Страховка',val:'Большинство принимают'}]},
-  {name:'Bệnh Viện C Da Nang',tag:'Больница · Государственная',tc:'pharma',addr:'Hải Châu',desc:'Главная городская больница — экстренная помощь 24/7, широкий спектр услуг.',fullDesc:'<span class=\"desc-label\">🏥 Что это</span><p>Крупная государственная больница Дананга. Иностранцы могут обратиться — цены в 3–5 раз ниже частных клиник.</p><span class=\"desc-label\">🩺 Специализации</span><p>Хирургия, травматология, кардиология, неврология, дерматология, педиатрия. Скорая помощь 24/7.</p><span class=\"desc-label\">🕐 Приём</span><p>Плановый приём Пн–Пт 07:00–11:00. Экстренный — 24/7. Ожидание в будни 1–2 часа.</p><span class=\"desc-label\">👥 Для кого</span><p>Те кто готов к языковому барьеру ради низких цен. Перелом или острое состояние обойдётся в 10–20 раз дешевле чем в FMP.</p><span class=\"desc-label\">💡 Лайфхак</span><p>Возьми с собой местного друга или используй Google Translate с офлайн-пакетом вьетнамского.</p>',maps:'https://maps.google.com/?q=Benh+Vien+C+Da+Nang',meta:[{label:'Телефон',val:'+84 236 3821 480'},{label:'Экстренная',val:'Круглосуточно'}]},
+  {name:'Bệnh Viện C Da Nang',tag:'Больница · Государственная',tc:'pharma',addr:'Hải Châu',desc:'Главная городская больница — экстренная помощь 24/7, широкий спектр услуг.',fullDesc:'<span class=\"desc-label\">🏥 Что это</span><p>Крупная государственная больница Дананга. Иностранцы могут обратиться — цены в 3–5 раз ниже частных клиник.</p><span class=\"desc-label\">🩺 Специализации</span><p>Хирургия, травматология, кардиология, неврология, дерматология, педиатрия. Скорая помощь 24/7.</p><span class=\"desc-label\">🕐 Приём</span><p>Плановый приём Пн–Пт 07:00–11:00. Экстренный — 24/7. Ожидание в будни 1–2 часа.</p><span class=\"desc-label\">👥 Для кого</span><p>Те кто готов к языковому барьеру ради низких цен. Перелом или острое состояние обойдётся в 10–20 раз дешевле чем в FMP.</p><span class=\"desc-label\">💡 Лайфхак</span><p>Возьми с собой местного друга или используй Google Translate с оффлайн-пакетом вьетнамского.</p>',maps:'https://maps.google.com/?q=Benh+Vien+C+Da+Nang',meta:[{label:'Телефон',val:'+84 236 3821 480'},{label:'Экстренная',val:'Круглосуточно'}]},
   {name:'Hoan My Hospital',tag:'Больница · Частная',tc:'pharma',addr:'161 Nguyễn Văn Linh',desc:'Современная частная больница с хорошей диагностикой и доступными ценами.',fullDesc:'<span class=\"desc-label\">🏥 Что это</span><p>Крупная частная больница сети Hoan My — один из лучших вариантов для иностранцев с ограниченным бюджетом. Современное оборудование, часть персонала говорит по-английски.</p><span class=\"desc-label\">🩺 Специализации</span><p>Терапия, хирургия, ортопедия, гинекология, педиатрия, кардиология. Лаборатория и УЗИ. Принимают международные страховки.</p><span class=\"desc-label\">🕐 Приём</span><p>Ежедневно 07:00–20:00. Скорая помощь 24/7.</p><span class=\"desc-label\">👥 Для кого</span><p>Золотая середина: лучше госбольницы, дешевле FMP. Хорошо для планового лечения.</p><span class=\"desc-label\">💡 Лайфхак</span><p>При плановом визите бери все документы по страховке — координатор поможет выставить счёт напрямую на компанию.</p>',maps:'https://maps.google.com/?q=Hoan+My+Hospital+Da+Nang',meta:[{label:'Телефон',val:'+84 236 3650 676'},{label:'Часы',val:'24/7'}]},
 ].forEach(i=>makeCard(i,'clinic-cards'));
 
@@ -2188,11 +2283,11 @@ const adviceData=[
     {i:'📶',t:'<strong>SIM в аэропорту — Viettel или Vietnamobile.</strong> 10–20 ГБ за 200 тыс. VND/месяц.'},
     {i:'💻',t:'Wi-Fi в кафе Дананга — обычно быстрый. Пароль спроси у персонала или на чеке.'},
     {i:'🔐',t:'Используй VPN — некоторые сайты во Вьетнаме заблокированы (Facebook стабилен, но бывают сбои).'},
-    {i:'🗺️',t:'Скачай офлайн-карту в Maps.me или Google Maps заранее.'},
+    {i:'🗺️',t:'Скачай оффлайн-карту в Maps.me или Google Maps заранее.'},
     {i:'🔋',t:'Пауэрбанк обязателен — телефон с навигацией и камерой садится в жару быстро.'},
     {i:'💡',t:'Напряжение в Вьетнаме 220V / 50Hz. Стандарт розеток — A/C (совместим с европейским).'},
     {i:'📷',t:'Instagram-локации: закат с пагоды Linh Ung, мост дракона ночью, Non Nuoc Beach.'},
-    {i:'🤖',t:'Приложения must-have: Grab, ShopeeFood, Google Maps, Google Translate (с офлайн вьетнамским).'},
+    {i:'🤖',t:'Приложения must-have: Grab, ShopeeFood, Google Maps, Google Translate (с оффлайн вьетнамским).'},
     {i:'📺',t:'Viettel — лучшее покрытие 4G по всему городу и на трассах.'},
     {i:'🔄',t:'Перенести SIM-карту без замены номера нельзя — покупай новую при каждом приезде.'},
   ]},
@@ -2277,11 +2372,11 @@ const adviceData=[
     {i:'2️⃣',t:'<strong>Купи SIM-карту в аэропорту</strong> — Viettel или Vinaphone. Безлимитный интернет на месяц: 150–200 тыс. VND.'},
     {i:'3️⃣',t:'Сними наличные в банкомате прямо в аэропорту (VPBank или ACB) — жми «Charge in VND», избегай DCC-конвертации.'},
     {i:'4️⃣',t:'Первая еда — Bánh Mì у любого уличного лотка. 25 тыс. VND, вкусно и безопасно. Идеальное знакомство со страной.'},
-    {i:'5️⃣',t:'Установи Google Translate с загруженным вьетнамским пакетом — работает офлайн, поможет в ресторанах и на рынках.'},
+    {i:'5️⃣',t:'Установи Google Translate с загруженным вьетнамским пакетом — работает оффлайн, поможет в ресторанах и на рынках.'},
     {i:'6️⃣',t:'Зарегистрируйся в местной клинике или уточни адрес ближайшей Family Medical Practice — на случай болезни.'},
     {i:'7️⃣',t:'Купи вьетнамскую карту Мир/UnionPay если нужна — в аэропорту есть обменники. Карты Visa/MC работают в крупных магазинах.'},
     {i:'8️⃣',t:'Первые 2 часа — просто поспи и не принимай решений по жилью и экскурсиям. Продавцы у аэропорта — туристическая ловушка.'},
-    {i:'9️⃣',t:'Скачай Maps.me с офлайн-картой Вьетнама — работает без интернета. Полезно до активации SIM.'},
+    {i:'9️⃣',t:'Скачай Maps.me с оффлайн-картой Вьетнама — работает без интернета. Полезно до активации SIM.'},
     {i:'🔟',t:'Сообщи в своей TG-группе что прилетел — местные подскажут актуальные цены и места. Комьюнити Дананга очень отзывчивое.'},
     {i:'🌡️',t:'Акклиматизация 1–2 дня — нормально. Жара +30°C и влажность 80% после серой зимы — это стресс для организма.'},
     {i:'🛵',t:'Не бери скутер в первый день — сначала осмотрись. Местный трафик требует привыкания, особенно круговые развязки.'},
@@ -2351,6 +2446,126 @@ af.addEventListener('click',e=>{
   document.querySelectorAll('.advice-card').forEach(c=>c.classList.toggle('adv-hidden',cat!=='all'&&c.dataset.cat!==cat));
 });
 
+
+/* ═══ EMERGENCY NUMBERS ═══ */
+(function(){
+  const emergVN=[
+    {name:'Полиция',number:'113',desc:'Экстренный вызов полиции',urgent:true},
+    {name:'Скорая помощь',number:'115',desc:'Медицинская экстренная помощь',urgent:true},
+    {name:'Пожарная',number:'114',desc:'Пожар и спасательная служба',urgent:true},
+    {name:'Полиция туристическая',number:'1800 599 920',desc:'Специальная линия для иностранцев — бесплатно'},
+    {name:'Береговая охрана',number:'1800 599 906',desc:'Помощь на море, поиск и спасение'},
+  ];
+  const emergClinics=[
+    {name:'FMP Da Nang (иностранцы)',number:'+84 236 3582 699',desc:'Главная клиника для экспатов, англоязычный персонал 24/7'},
+    {name:'Bệnh Viện C (госпит.)',number:'+84 236 3821 480',desc:'Государственная больница — экстренная помощь круглосуточно'},
+    {name:'Скорая Дананг',number:'+84 236 3573 115',desc:'Местная станция скорой помощи — приезжают быстро'},
+    {name:'Hoan My Hospital',number:'+84 236 3650 676',desc:'Частная больница с международными стандартами'},
+  ];
+  const emergTransport=[
+    {name:'Grab (такси/мото)',number:'Приложение Grab',desc:'Самый быстрый транспорт в Дананге. Открой приложение → заказ за 3 мин'},
+    {name:'Be (такси)',number:'Приложение Be',desc:'Альтернатива Grab — иногда дешевле. Работает по всему Вьетнаму'},
+    {name:'Эвакуатор (VN AA)',number:'+84 236 3586 868',desc:'Автоэвакуатор — скутер или машина сломались на дороге'},
+  ];
+  function renderEmerg(data,id){
+    const el=document.getElementById(id);if(!el)return;
+    data.forEach(item=>{
+      const d=document.createElement('div');
+      d.className='emerg-card'+(item.urgent?' urgent':'');
+      d.innerHTML=`<div class="emerg-card-name">${item.name}</div><div class="emerg-card-number">${item.number}</div><div class="emerg-card-desc">${item.desc}</div><div class="emerg-card-copy">📋 Нажми чтобы скопировать номер</div>`;
+      d.addEventListener('click',()=>{
+        const num=item.number.replace(/[^\d+]/g,'');
+        navigator.clipboard.writeText(num).catch(()=>{});
+        if(num.match(/^\d/)){window.location.href='tel:+'+num;}
+        else if(num.startsWith('+')){window.location.href='tel:'+num;}
+      });
+      el.appendChild(d);
+    });
+  }
+  renderEmerg(emergVN,'emerg-vn');
+  renderEmerg(emergClinics,'emerg-clinics');
+  renderEmerg(emergTransport,'emerg-transport');
+})();
+
+/* ═══ GUIDES ═══ */
+(function(){
+  const guidesData=[
+    {icon:'🏦',title:'Открыть банковский счёт во Вьетнаме',sub:'Для долгосрочного проживания',steps:[
+      {t:'<strong>Выбери банк:</strong> VPBank, MB Bank или Vietcombank. Для экспатов лучший вариант — <strong>MB Bank</strong> (приложение на английском, быстрое открытие).'},
+      {t:'<strong>Подготовь документы:</strong> загранпаспорт + виза/ВНЖ + адрес проживания (достаточно адреса аренды из договора или квитанции за свет).'},
+      {t:'<strong>Приди в отделение:</strong> в Дананге есть несколько отделений MB Bank. Скажи "Tôi muốn mở tài khoản" (открыть счёт). Сотрудники часто говорят по-английски.'},
+      {t:'<strong>Заполни анкету:</strong> тебе дадут форму — заполняй на английском, это нормально. Потребуется местный номер телефона (купи SIM заранее).'},
+      {t:'<strong>Получи карту:</strong> дебетовая карта выдаётся сразу или в течение 3–5 рабочих дней. Карту Napas (для VND) — сразу. Visa/Mastercard — на заказ.'},
+      {t:'<strong>Активируй интернет-банкинг:</strong> попроси сотрудника помочь с настройкой приложения прямо в отделении.'},
+      {t:'<strong>Пополни счёт:</strong> первое пополнение — наличными в кассе или переводом. Минимального баланса обычно нет.'},
+    ]},
+    {icon:'🛵',title:'Арендовать мопед в Дананге',sub:'Самостоятельно и безопасно',steps:[
+      {t:'<strong>Что нужно:</strong> права категории A (международное удостоверение водителя), паспорт, залог 500–1000 тыс. VND или паспорт. Права без категории A — риск штрафа.'},
+      {t:'<strong>Где брать:</strong> прокатные конторы на улицах An Thuong и Phạm Văn Đồng. Хорошие места: XL Motorbike Rental, Flamingo Travel. Цена — 120–200 тыс. VND/день за Honda Wave или Yamaha Nouvo.'},
+      {t:'<strong>Осмотри мопед:</strong> сфотографируй все царапины и вмятины ДО подписания договора. Отправь фото продавцу в мессенджер — это твоя защита.'},
+      {t:'<strong>Проверь технику:</strong> тормоза, фары, ключ зажигания, уровень бензина. Попроси продавца показать как заправлять (бензин A92 или A95).'},
+      {t:'<strong>Страховка:</strong> базовая входит в стоимость аренды. Уточни покрытие — обычно до 20–30 млн VND ущерба.'},
+      {t:'<strong>ПДД:</strong> движение правостороннее. Шлем обязателен. Скорость в городе — 40 км/ч. Полиция может остановить — имей при себе права и паспорт (копию).'},
+      {t:'<strong>Парковка:</strong> платная парковка на специальных площадках — 5–10 тыс. VND. Не ставь на тротуары у торговых центров — эвакуируют.'},
+    ]},
+    {icon:'💳',title:'Получить вьетнамскую SIM-карту',sub:'Связь с первого дня',steps:[
+      {t:'<strong>Лучшие операторы:</strong> <strong>Viettel</strong> — лучшее покрытие по стране. <strong>Vinaphone</strong> — хорош в Дананге. <strong>Vietnamobile</strong> — дешевле, но хуже сеть.'},
+      {t:'<strong>Где купить:</strong> официальные салоны в аэропорту Дананга (дороже), магазины Viettel/Vinaphone в городе (дешевле), у уличных продавцов (торгуйся).'},
+      {t:'<strong>Что взять:</strong> паспорт — обязательно. Регистрация SIM по паспорту в аэропорту занимает 5–10 минут. В городе — 5 минут.'},
+      {t:'<strong>Тарифы:</strong> стартовый пакет 50–100 тыс. VND включает 1–3 ГБ + 50–100 минут. Пополнение через приложение или киоски.'},
+      {t:'<strong>Приложение Viettel Pay / My Viettel:</strong> управление тарифом, пополнение баланса, проверка остатка интернета — установи сразу.'},
+      {t:'<strong>eSIM:</strong> Viettel и Vinaphone поддерживают eSIM для современных iPhone и Android. Активация в офисе с паспортом — занимает 15 минут.'},
+    ]},
+    {icon:'🏠',title:'Снять квартиру в Дананге',sub:'Без агентов и переплат',steps:[
+      {t:'<strong>Лучшие районы:</strong> My An / An Thuong — для экспатов, ближе к пляжу. Hai Chau — центр, дешевле. Son Tra — тихо, рядом пляж My Khe.'},
+      {t:'<strong>Где искать:</strong> чаты @danang_nedvijimost (Telegram), Facebook группы "Apartments Da Nang", сайты batdongsan.com.vn и muabannhadat.vn.'},
+      {t:'<strong>Цены:</strong> студия у пляжа — 400–600 USD/мес. Однушка в центре — 300–500 USD. Дешевле — ищи через местных риелторов или в чатах у уезжающих.'},
+      {t:'<strong>Договор:</strong> составляй на двух языках (английский + вьетнамский). Фикси: срок, цену, залог, коммунальные, условия выхода.'},
+      {t:'<strong>Залог:</strong> обычно 1–2 месяца. Передавай только после осмотра и фото всего имущества. Залог должен быть прописан в договоре.'},
+      {t:'<strong>Коммунальные:</strong> электричество — 3 500–4 000 VND/кВт·ч. Вода — 10–15 тыс./м³. Уточни у хозяина — иногда включено в аренду.'},
+      {t:'<strong>Регистрация:</strong> хозяин обязан зарегистрировать тебя в местной полиции (KT3). Это занимает 1–2 дня — не игнорируй, это важно для визы.'},
+    ]},
+    {icon:'🏥',title:'Медицинская страховка для экспата',sub:'Как не попасть на огромный счёт',steps:[
+      {t:'<strong>Нужна ли страховка:</strong> да, обязательно. Даже небольшая операция в частной клинике стоит 2 000–5 000 USD. Государственная больница — дешевле, но языковой барьер.'},
+      {t:'<strong>Варианты:</strong> SafetyWing (от $42/мес) — для цифровых кочевников. AXA, Cigna, Allianz — полное покрытие от $80/мес. Туристическая страховка — если приехал на короткий срок.'},
+      {t:'<strong>Что должно покрываться:</strong> экстренная госпитализация, операции, репатриация, стоматология (опционально), хронические болезни (уточни условия).'},
+      {t:'<strong>FMP Da Nang:</strong> принимает большинство международных страховок. Персонал говорит по-английски. Стоимость визита без страховки — 50–100 USD.'},
+      {t:'<strong>Как действовать при травме:</strong> 1) позвони в страховую за разрешением. 2) Едь в FMP или Hoan My. 3) Сохраняй все чеки и документы.'},
+    ]},
+    {icon:'🚗',title:'Оформить Grab аккаунт',sub:'Такси и доставка еды',steps:[
+      {t:'<strong>Скачай Grab:</strong> App Store или Google Play. Работает в Дананге, Хойане и по всему Вьетнаму.'},
+      {t:'<strong>Регистрация:</strong> нужен местный вьетнамский номер телефона для получения SMS-кода. Международные номера тоже работают, но хуже.'},
+      {t:'<strong>Способы оплаты:</strong> наличными (самый простой) или картой. Добавь карту в приложение — удобнее и иногда дешевле.'},
+      {t:'<strong>Типы поездок:</strong> GrabCar (4 места), GrabBike (мотобайк — дешевле и быстрее в пробках), GrabTaxi (официальное такси), GrabFood (доставка еды).'},
+      {t:'<strong>Торговаться не нужно:</strong> цена фиксирована и показана заранее. Если цена кажется высокой — отмени и попробуй GrabBike.'},
+      {t:'<strong>Проблемы с водителем:</strong> в приложении есть кнопка "Сообщить о проблеме". Поддержка на английском — пиши в чат.'},
+    ]},
+    {icon:'📱',title:'Оплата QR-кодом во Вьетнаме',sub:'VietQR и мобильный банкинг',steps:[
+      {t:'<strong>VietQR:</strong> единый стандарт QR-платежей Вьетнама. Работает между всеми вьетнамскими банками. Отсканировал QR → введи сумму → подтверди.'},
+      {t:'<strong>Как платить:</strong> открой приложение своего банка (MB, VPBank, Vietcombank) → "Chuyển tiền / Thanh toán" → отсканируй QR продавца.'},
+      {t:'<strong>Что нужно:</strong> вьетнамская банковская карта + мобильное приложение банка. Без вьетнамского счёта QR-оплата недоступна.'},
+      {t:'<strong>Если нет вьетнамской карты:</strong> некоторые магазины принимают Visa/Mastercard через POS-терминал. В кафе An Thuong и торговых центрах — почти везде.'},
+      {t:'<strong>MoMo и ZaloPay:</strong> популярные кошельки. MoMo принимает пополнение наличными через агентов — удобно без банковского счёта.'},
+    ]},
+    {icon:'✈️',title:'Виза во Вьетнам: основы',sub:'E-visa, визаран и ВНЖ',steps:[
+      {t:'<strong>E-visa (90 дней):</strong> оформляется онлайн на evisa.xuatnhapcanh.gov.vn. Стоимость 25 USD. Одно- или многократный въезд. Готова за 3 рабочих дня.'},
+      {t:'<strong>Визаран:</strong> выезд в Лаос, Камбоджу или Таиланд и возврат. Формально разрешено, но при частых визаранах могут задать вопросы на границе.'},
+      {t:'<strong>ВНЖ (TRC):</strong> вид на жительство — оформляется через официальный рабочий контракт или инвестиции. Сложно и дорого — нужен адвокат.'},
+      {t:'<strong>Продление визы:</strong> через иммиграционные агентства в Дананге — 2 000 000–3 000 000 VND. Занимает 3–5 дней. Без личного присутствия.'},
+      {t:'<strong>Регистрация проживания:</strong> хозяин квартиры обязан уведомить местную полицию в течение 24 ч после вашего заселения. Напомни ему об этом.'},
+      {t:'<strong>Важно:</strong> Всегда имей при себе паспорт с действующей визой. Полиция может проверить документы — особенно в ночное время.'},
+    ]},
+  ];
+
+  const gl=document.getElementById('guides-list');
+  if(!gl) return;
+  guidesData.forEach((guide,i)=>{
+    const card=document.createElement('div');card.className='guide-card';
+    card.innerHTML=`<div class="guide-header"><div class="guide-header-left"><span class="guide-icon">${guide.icon}</span><div><div class="guide-title">${guide.title}</div><div class="guide-sub">${guide.sub}</div></div></div><span class="guide-chevron">▾</span></div><div class="guide-steps">${guide.steps.map((s,n)=>`<div class="guide-step"><div class="guide-step-num">${n+1}</div><div class="guide-step-text">${s.t}</div></div>`).join('')}</div>`;
+    card.querySelector('.guide-header').addEventListener('click',()=>card.classList.toggle('open'));
+    gl.appendChild(card);
+  });
+})();
 /* ═══════════════════════════════════════════
    DATA: КАНАЛЫ
 ═══════════════════════════════════════════ */
@@ -2400,6 +2615,17 @@ const chanData=[
     {name:'Da Nang Expats — Sell, Buy & Auction',link:'https://www.facebook.com/groups/expats.da.nang/',desc:'Buy and sell among Da Nang expats. Furniture, tech, vehicles, clothing. Useful when moving in or out.'},
     {name:'Vietnam English-speaking chat',link:'https://t.me/vietnam_forum',desc:'English-language Telegram chat covering all of Vietnam — from the same network as the Russian chats. Jobs, housing, visas, daily life in English.'},
   ]},
+,
+  {cat:'▶️ YouTube — Дананг и Вьетнам',items:[
+    {name:'Danang Nomad',link:'https://www.youtube.com/@danangnomad',desc:'Один из лучших каналов о жизни в Дананге глазами экспата. Районы, кафе, пляжи, практические советы. Честный формат без прикрас.'},
+    {name:'Life in Vietnam',link:'https://www.youtube.com/@lifeinvietnam',desc:'Влог о жизни в разных городах Вьетнама включая Дананг. Стоимость жизни, жильё, еда, транспорт — полезно перед переездом.'},
+    {name:'Хочу в Дананг',link:'https://www.youtube.com/@hochuvdanang',desc:'Русскоязычный канал о переезде и жизни в Дананге. Личный опыт, советы по адаптации, видеообзоры районов и заведений.'},
+    {name:'Vietnam Uncovered',link:'https://www.youtube.com/@vietnamuncovered',desc:'Путешествия по Вьетнаму и Дананге — Бана Хиллс, острова Чам, Хойан, горы. Красивое видео, практические маршруты.'},
+    {name:'Дананг Влог',link:'https://www.youtube.com/@danangvlog',desc:'Ежедневный влог о жизни русскоязычного экспата в Дананге. Покупки, рестораны, прогулки — живое погружение в быт.'},
+    {name:'Vietnam Travel Guide',link:'https://www.youtube.com/@vietnamtravelguide',desc:'Подробные туристические гайды по Вьетнаму на английском. Дананг, Хойан, Хюэ — маршруты, цены, транспорт.'},
+    {name:'Expat in Da Nang',link:'https://www.youtube.com/@expatdanang',desc:'Канал западного экспата о жизни в Дананге. Стоимость жизни, жильё, коворкинги, плюсы и минусы города — объективно.'},
+    {name:'Da Nang Food Tour',link:'https://www.youtube.com/@danangfoodtour',desc:'Гастрономические туры по Данангу — уличная еда, местные рестораны, скрытые жемчужины. Полезно для понимания местной кухни.'},
+  ]}
 ];
 
 /* Channels renderer */
@@ -2719,11 +2945,11 @@ if ('serviceWorker' in navigator) {
     return dirs[Math.round(deg/45)%8];
   }
   function greeting(h){
-    if(h<5)  return 'Доброй ночи 🌙';
-    if(h<12) return 'Доброго утра! ☀️';
+    if(h<5)  return 'Спокойной ночи 🌙';
+    if(h<12) return 'Доброе утро! ☀️';
     if(h<17) return 'Хорошего дня! 🌴';
-    if(h<21) return 'Хорошего вечера! 🌅';
-    return 'Доброй ночи 🌙';
+    if(h<21) return 'Добрый вечер! 🌅';
+    return 'Спокойной ночи 🌙';
   }
 
   function updateClock(){
@@ -2769,7 +2995,9 @@ if ('serviceWorker' in navigator) {
 
       if(tempEl)  tempEl.textContent  = temp+'°C';
       if(iconEl)  iconEl.textContent  = wmoIcon(code, isDay);
-      if(windEl)  windEl.textContent  = Math.round(ws)+' м/с '+windDir(wdir);
+      if(windEl)  windEl.textContent  = Math.round(ws)+' м/с';
+      const wdirEl = document.getElementById('hwc-wind-dir');
+      if(wdirEl) wdirEl.textContent = windDir(wdir);
       if(humEl)   humEl.textContent   = hum+'%';
       if(feelEl)  feelEl.textContent  = feel+'°C';
       const descEl = document.getElementById('hwc-desc');
