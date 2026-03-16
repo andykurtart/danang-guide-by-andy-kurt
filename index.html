@@ -528,8 +528,9 @@ tbody td:first-child{text-align:left;font-weight:500}
 .first-aid-text strong{color:var(--text);font-weight:600}
 
 /* TAB BAR */
-.tab-bar{position:fixed;bottom:0;left:0;right:0;height:var(--tab-h);background:var(--surface);border-top:1px solid var(--border2);display:flex;justify-content:center;overflow-x:scroll;overflow-y:hidden;z-index:100;box-shadow:0 -2px 10px rgba(0,0,0,.06);-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-x;overscroll-behavior-x:contain}
+.tab-bar{position:fixed;bottom:0;left:0;right:0;height:var(--tab-h);background:var(--surface);border-top:1px solid var(--border2);display:flex;justify-content:flex-start;overflow-x:scroll;overflow-y:hidden;z-index:100;box-shadow:0 -2px 10px rgba(0,0,0,.06);-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-x;overscroll-behavior-x:contain}
 .tab-bar::-webkit-scrollbar{display:none}
+@media(min-width:601px){.tab-bar{justify-content:center}}
 .tab-btn{flex:0 0 auto;min-width:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;color:var(--text-dim);transition:color .15s;padding:0 8px;position:relative;-webkit-tap-highlight-color:transparent}
 .tab-btn.active{color:var(--accent)}
 .tab-btn.active .tab-lbl{font-weight:700}
@@ -1224,18 +1225,18 @@ tbody td:first-child{text-align:left;font-weight:500}
   <button class="tab-btn" data-page="page-converter"  onclick="switchTab(this)"><span class="tab-icon">💱</span><span class="tab-lbl">Конвертер</span></button>
   <button class="tab-btn" data-page="page-food"       onclick="switchTab(this)"><span class="tab-icon">🍜</span><span class="tab-lbl">Поесть</span></button>
   <button class="tab-btn" data-page="page-cowork"     onclick="switchTab(this)"><span class="tab-icon">💻</span><span class="tab-lbl">Коворкинг</span></button>
+  <button class="tab-btn" data-page="page-guides"     onclick="switchTab(this)"><span class="tab-icon">📋</span><span class="tab-lbl">Гайды</span></button>
+  <button class="tab-btn" data-page="page-services"   onclick="switchTab(this)"><span class="tab-icon">🔧</span><span class="tab-lbl">Услуги</span></button>
   <button class="tab-btn" data-page="page-atm"        onclick="switchTab(this)"><span class="tab-icon">🏧</span><span class="tab-lbl">Деньги</span></button>
   <button class="tab-btn" data-page="page-tips"       onclick="switchTab(this)"><span class="tab-icon">💡</span><span class="tab-lbl">Советы</span></button>
-  <button class="tab-btn" data-page="page-medicine"   onclick="switchTab(this)"><span class="tab-icon">💊</span><span class="tab-lbl">Медицина</span></button>
   <button class="tab-btn" data-page="page-leisure"    onclick="switchTab(this)"><span class="tab-icon">🎯</span><span class="tab-lbl">Досуг</span></button>
-  <button class="tab-btn" data-page="page-history"    onclick="switchTab(this)"><span class="tab-icon">📜</span><span class="tab-lbl">История</span></button>
-  <button class="tab-btn" data-page="page-facts"      onclick="switchTab(this)"><span class="tab-icon">💎</span><span class="tab-lbl">Факты</span></button>
+  <button class="tab-btn" data-page="page-medicine"   onclick="switchTab(this)"><span class="tab-icon">💊</span><span class="tab-lbl">Медицина</span></button>
   <button class="tab-btn" data-page="page-emergency"  onclick="switchTab(this)"><span class="tab-icon">🚨</span><span class="tab-lbl">SOS</span></button>
-  <button class="tab-btn" data-page="page-guides"     onclick="switchTab(this)"><span class="tab-icon">📋</span><span class="tab-lbl">Гайды</span></button>
   <button class="tab-btn" data-page="page-channels"   onclick="switchTab(this)"><span class="tab-icon">📢</span><span class="tab-lbl">Каналы</span></button>
   <button class="tab-btn" data-page="page-shops"      onclick="switchTab(this)"><span class="tab-icon">🛍️</span><span class="tab-lbl">Магазины</span></button>
+  <button class="tab-btn" data-page="page-history"    onclick="switchTab(this)"><span class="tab-icon">📜</span><span class="tab-lbl">История</span></button>
+  <button class="tab-btn" data-page="page-facts"      onclick="switchTab(this)"><span class="tab-icon">💎</span><span class="tab-lbl">Факты</span></button>
   <button class="tab-btn" data-page="page-lang"       onclick="switchTab(this)"><span class="tab-icon">🗣️</span><span class="tab-lbl">Язык</span></button>
-  <button class="tab-btn" data-page="page-services"   onclick="switchTab(this)"><span class="tab-icon">🔧</span><span class="tab-lbl">Услуги</span></button>
   <button class="tab-btn" data-page="page-contact"    onclick="switchTab(this)"><span class="tab-icon">ℹ️</span><span class="tab-lbl">Информация</span></button>
 <script>
 /* ═══ THEME ═══ */
@@ -1251,18 +1252,18 @@ const sidebarNav=[
   {page:'page-converter',icon:'💱', name:'Конвертер',  sub:'USD · BYN · VND'},
   {page:'page-food',     icon:'🍜', name:'Где поесть', sub:'120+ мест, 6 категорий'},
   {page:'page-cowork',   icon:'💻', name:'Коворкинг',  sub:'20+ кафе с Wi-Fi'},
+  {page:'page-guides',   icon:'📋', name:'Гайды',      sub:'Пошаговые инструкции'},
+  {page:'page-services',  icon:'🔧', name:'Услуги',     sub:'Специалисты · скоро'},
   {page:'page-atm',      icon:'🏧', name:'Деньги',     sub:'Банкоматы и обменники'},
   {page:'page-tips',     icon:'💡', name:'Советы',     sub:'150+ советов'},
-  {page:'page-medicine', icon:'💊', name:'Медицина',   sub:'Аптеки, клиники, помощь'},
   {page:'page-leisure',  icon:'🎯', name:'Досуг',      sub:'100 мест и активностей'},
-  {page:'page-history',  icon:'📜', name:'История',    sub:'2000 лет Дананга'},
-  {page:'page-facts',    icon:'💎', name:'Факты',      sub:'100 фактов о Дананге'},
+  {page:'page-medicine', icon:'💊', name:'Медицина',   sub:'Аптеки, клиники, помощь'},
   {page:'page-emergency',icon:'🚨', name:'SOS / Номера',sub:'Экстренные звонки'},
-  {page:'page-guides',   icon:'📋', name:'Гайды',      sub:'Пошаговые инструкции'},
   {page:'page-channels', icon:'📢', name:'Каналы',     sub:'Группы, комьюнити, чаты'},
   {page:'page-shops',    icon:'🛍️', name:'Магазины',   sub:'Рынки, ТЦ, сувениры, продукты'},
+  {page:'page-history',  icon:'📜', name:'История',    sub:'2000 лет Дананга'},
+  {page:'page-facts',    icon:'💎', name:'Факты',      sub:'100 фактов о Дананге'},
   {page:'page-lang',     icon:'🗣️', name:'Язык',       sub:'100 вьетнамских фраз'},
-  {page:'page-services',  icon:'🔧', name:'Услуги',     sub:'Специалисты · скоро'},
   {page:'page-contact',   icon:'ℹ️', name:'Информация', sub:'@andykurt_dsgn'},
 ];
 const sidebarList=document.getElementById('sidebar-list');
@@ -1363,19 +1364,19 @@ const homeItems=[
   {page:'page-converter',icon:'💱',label:'Финансы',   name:'Конвертер',   desc:'USD · BYN · VND',              cls:'tile-c7 span2'},
   {page:'page-food',     icon:'🍜',label:'Гастрономия',name:'Где поесть', desc:'120+ мест, 6 категорий',        cls:'tile-c2'},
   {page:'page-cowork',   icon:'💻',label:'Работа',    name:'Коворкинги',  desc:'20+ кафе с Wi-Fi',             cls:'tile-c3'},
+  {page:'page-guides',   icon:'📋',label:'Гайды',      name:'Гайды',       desc:'Пошаговые инструкции',          cls:'tile-c6'},
+  {page:'page-services',  icon:'🔧',label:'Услуги',   name:'Услуги',      desc:'Наши специалисты',  cls:'tile-c5'},
   {page:'page-atm',      icon:'🏧',label:'Деньги',    name:'Банкоматы',   desc:'0% комиссия + обменники', cls:'tile-c4'},
   {page:'page-tips',     icon:'💡',label:'Полезное',  name:'Советы',      desc:'150+ полезных советов',         cls:'tile-c6'},
-  {page:'page-medicine', icon:'💊',label:'Здоровье',  name:'Медицина',    desc:'Аптеки, клиники, помощь',      cls:'tile-c9'},
   {page:'page-leisure',  icon:'🎯',label:'Отдых',     name:'Досуг',       desc:'100 лучших мест',              cls:'tile-c5'},
-  {page:'page-history',  icon:'📜',label:'История',   name:'История',     desc:'2000 лет Дананга',             cls:'tile-c8'},
-  {page:'page-facts',    icon:'💎',label:'Интересное',name:'Факты',       desc:'100 фактов о Дананге',         cls:'tile-c7'},
+  {page:'page-medicine', icon:'💊',label:'Здоровье',  name:'Медицина',    desc:'Аптеки, клиники, помощь',      cls:'tile-c9'},
   {page:'page-emergency',icon:'🚨',label:'Безопасность',name:'SOS',        desc:'Экстренные номера',             cls:'tile-c9'},
-  {page:'page-guides',   icon:'📋',label:'Гайды',      name:'Гайды',       desc:'Пошаговые инструкции',          cls:'tile-c6'},
   {page:'page-channels', icon:'📢',label:'Сообщество',name:'Каналы',       desc:'50+ групп и каналов',          cls:'tile-c4'},
   {page:'page-shops',    icon:'🛍️',label:'Шоппинг',   name:'Магазины',    desc:'Рынки, ТЦ, продукты',cls:'tile-c2'},
+  {page:'page-history',  icon:'📜',label:'История',   name:'История',     desc:'2000 лет Дананга',             cls:'tile-c8'},
+  {page:'page-facts',    icon:'💎',label:'Интересное',name:'Факты',       desc:'100 фактов о Дананге',         cls:'tile-c7'},
   {page:'page-lang',     icon:'🗣️',label:'Язык',      name:'Вьетнамский', desc:'100 слов и фраз',              cls:'tile-c3'},
-  {page:'page-services',  icon:'🔧',label:'Услуги',   name:'Услуги',      desc:'Наши специалисты',  cls:'tile-c5'},
-  {page:'page-contact',   icon:'✌️',label:'Контакты', name:'Информация',  desc:'@andykurt_dsgn · связь с автором гайда', cls:'tile-c5 span4'},
+  {page:'page-contact',   icon:'ℹ️',label:'Контакты', name:'Информация',  desc:'@andykurt_dsgn · связь с автором гайда', cls:'tile-c5 span4'},
 ];
 const grid=document.getElementById('home-grid');
 homeItems.forEach(item=>{
