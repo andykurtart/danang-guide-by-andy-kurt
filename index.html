@@ -34,7 +34,7 @@ a{color:inherit;text-decoration:none}
 /* TOP BAR */
 .top-bar{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:52px}
 .top-left{display:flex;align-items:center;gap:9px;min-width:0}
-.top-logo{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;transition:background .25s}
+.top-logo{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
 .top-title-wrap{display:flex;flex-direction:column;gap:1px;min-width:0;overflow:hidden}
 .top-title-main{font-size:.82rem;font-weight:700;letter-spacing:-.01em;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
 .top-title-sub{font-size:.58rem;font-weight:400;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.02em}
@@ -609,12 +609,12 @@ tbody td:first-child{text-align:left;font-weight:500}
 
 <div id="update-banner">🔄 Доступна новая версия <button onclick="applyUpdate()">Обновить</button></div>
 <div id="splash">
-  <div class="splash-icon">🗺️</div>
+  <div class="splash-icon" style="background:none;padding:0;overflow:hidden;border-radius:20px"><svg width="80" height="80" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="192" height="192" rx="34.5" fill="url(#lg80)"/><circle cx="96" cy="96" r="70.5" fill="#FFFF00"/><path d="M96 42.225L108.416 78.9L147.116 79.3875L116.103 102.525L127.616 139.5L96 117.112L64.39 139.5L75.9 102.525L44.89 79.3875L83.59 78.9L96 42.225Z" fill="#DA251D"/><defs><linearGradient id="lg80" x1="96" y1="0" x2="96" y2="192" gradientUnits="userSpaceOnUse"><stop stop-color="#DA251D"/><stop offset="1" stop-color="#C52821"/></linearGradient></defs></svg></div>
   <div class="splash-text">Гайд-Хелпер от Andy Kurt</div>
 </div>
 <div class="top-bar">
   <div class="top-left" id="top-logo-area" style="cursor:pointer" onclick="goTo('page-home');closeSidebar()">
-    <div class="top-logo">🇻🇳</div>
+    <div class="top-logo" style="background:none;padding:0;overflow:hidden"><svg width="32" height="32" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="192" height="192" rx="34.5" fill="url(#lg32)"/><circle cx="96" cy="96" r="70.5" fill="#FFFF00"/><path d="M96 42.225L108.416 78.9L147.116 79.3875L116.103 102.525L127.616 139.5L96 117.112L64.39 139.5L75.9 102.525L44.89 79.3875L83.59 78.9L96 42.225Z" fill="#DA251D"/><defs><linearGradient id="lg32" x1="96" y1="0" x2="96" y2="192" gradientUnits="userSpaceOnUse"><stop stop-color="#DA251D"/><stop offset="1" stop-color="#C52821"/></linearGradient></defs></svg></div>
     <div class="top-title-wrap">
       <span class="top-title-main">Дананг</span>
       <span class="top-title-sub">Гайд-Хелпер от Andy Kurt</span>
