@@ -556,6 +556,24 @@ tbody td:first-child{text-align:left;font-weight:500}
 .hwc-stat-val{font-size:.68rem;font-weight:600;color:var(--text-mid);white-space:nowrap}
 .hwc-desc{font-size:.62rem;color:var(--text-dim);grid-column:1/3;border-top:1px solid var(--border);padding-top:6px;margin-top:1px;display:none}
 @media(min-width:400px){.hwc-desc{display:block}}
+/* ── Weather extra row: UV / AQI / sun ── */
+.hwc-extra{display:flex;align-items:center;gap:0;grid-column:1/3;flex-wrap:wrap;padding-top:5px;margin-top:3px}
+.hwc-extra-item{display:flex;align-items:center;gap:3px;padding:0 10px 0 0;margin-right:0}
+.hwc-extra-item:not(:last-child){border-right:1px solid var(--border);margin-right:10px}
+.hwc-extra-icon{font-size:.72rem;line-height:1;opacity:.7}
+.hwc-extra-val{font-size:.68rem;font-weight:600;color:var(--text-mid);white-space:nowrap}
+.hwc-aqi-badge{display:inline-block;padding:1px 6px;border-radius:100px;font-size:.62rem;font-weight:700}
+.aqi-good{background:rgba(34,197,94,.18);color:#16a34a}
+.aqi-moderate{background:rgba(234,179,8,.18);color:#ca8a04}
+.aqi-usg{background:rgba(249,115,22,.18);color:#ea580c}
+.aqi-unhealthy{background:rgba(239,68,68,.18);color:#dc2626}
+.aqi-very{background:rgba(168,85,247,.18);color:#9333ea}
+.hwc-extra{display:flex;align-items:center;flex-wrap:wrap;gap:0;grid-column:1/3;padding-top:5px;margin-top:3px}
+.hwc-extra-stat{display:flex;align-items:center;gap:3px;padding:0 8px 0 0;white-space:nowrap}
+.hwc-extra-stat:not(:last-child){border-right:1px solid var(--border);margin-right:8px}
+.hwc-extra-icon{font-size:.72rem;line-height:1;opacity:.7}
+.hwc-extra-val{font-size:.67rem;font-weight:600;color:var(--text-mid)}
+.hwc-aqi-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:3px;flex-shrink:0}
 /* ── Events cards ─────────────────────────── */
 .ev-month-hdr{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);padding:18px 0 6px;border-bottom:1px solid var(--border);margin-bottom:10px}
 .ev-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 16px;margin-bottom:10px;transition:box-shadow .15s}
@@ -646,9 +664,23 @@ tbody td:first-child{text-align:left;font-weight:500}
           <span class="hwc-stat-icon">🌡️</span>
           <span class="hwc-stat-val"><span id="hwc-pressure">-- мб</span></span>
         </div>
-        <div class="hwc-stat">
-          <span class="hwc-stat-icon">☀️</span>
-          <span class="hwc-stat-val">УФ <span id="hwc-uv">--</span></span>
+      </div>
+      <div class="hwc-extra">
+        <div class="hwc-extra-stat">
+          <span class="hwc-extra-icon">☀️</span>
+          <span class="hwc-extra-val">УФ <span id="hwc-uv">--</span></span>
+        </div>
+        <div class="hwc-extra-stat">
+          <span class="hwc-extra-icon">🌬️</span>
+          <span class="hwc-extra-val">AQI <span id="hwc-aqi">--</span></span>
+        </div>
+        <div class="hwc-extra-stat">
+          <span class="hwc-extra-icon">🌅</span>
+          <span class="hwc-extra-val"><span id="hwc-sunrise">--</span> восход</span>
+        </div>
+        <div class="hwc-extra-stat">
+          <span class="hwc-extra-icon">🌇</span>
+          <span class="hwc-extra-val"><span id="hwc-sunset">--</span> закат</span>
         </div>
       </div>
       <div class="hwc-desc" id="hwc-desc">Загрузка погоды…</div>
@@ -3320,6 +3352,7 @@ function applyUpdate() {
         +'&current=temperature_2m,apparent_temperature,relative_humidity_2m,'
         +'weather_code,wind_speed_10m,wind_direction_10m,is_day,'
         +'uv_index,surface_pressure'
+        +'&daily=sunrise,sunset'
         +'&wind_speed_unit=ms&timezone=Asia%2FHo_Chi_Minh';
       const r = await fetch(url);
       const j = await r.json();
@@ -3333,6 +3366,10 @@ function applyUpdate() {
       const isDay = c.is_day;
       const uv     = c.uv_index !== undefined ? Math.round(c.uv_index*10)/10 : null;
       const press  = c.surface_pressure ? Math.round(c.surface_pressure) : null;
+      // Sunrise / sunset из daily
+      const srRaw  = j.daily && j.daily.sunrise && j.daily.sunrise[0];
+      const ssRaw  = j.daily && j.daily.sunset  && j.daily.sunset[0];
+      const fmtTime = s => s ? s.slice(11,16) : '--:--';
 
       const tempEl  = document.getElementById('hwc-temp');
       const iconEl  = document.getElementById('hwc-icon');
@@ -3350,8 +3387,12 @@ function applyUpdate() {
       if(feelEl)  feelEl.textContent  = feel+'°C';
       const uvEl   = document.getElementById('hwc-uv');
       const prEl   = document.getElementById('hwc-pressure');
+      const srEl   = document.getElementById('hwc-sunrise');
+      const ssEl   = document.getElementById('hwc-sunset');
       if(uvEl && uv!==null) uvEl.textContent = uv;
       if(prEl && press!==null) prEl.textContent = press+' мб';
+      if(srEl) srEl.textContent = fmtTime(srRaw);
+      if(ssEl) ssEl.textContent = fmtTime(ssRaw);
       const descEl = document.getElementById('hwc-desc');
       if(descEl)  descEl.textContent  = wmoDesc(code)+' · ветер '+bftDesc(ws);
     } catch(e){
@@ -3364,6 +3405,29 @@ function applyUpdate() {
   setInterval(updateClock, 30000);
   fetchWeather();
   setInterval(fetchWeather, 600000);
+  fetchAQI();
+  setInterval(fetchAQI, 1800000);
+
+  // AQI — Open-Meteo Air Quality API
+  async function fetchAQI(){
+    try{
+      const aqUrl='https://air-quality-api.open-meteo.com/v1/air-quality'
+        +'?latitude='+DANANGLAT+'&longitude='+DANANGLON
+        +'&current=european_aqi&timezone=Asia%2FHo_Chi_Minh';
+      const r = await fetch(aqUrl);
+      const j = await r.json();
+      const aqi = j.current && j.current.european_aqi;
+      const el = document.getElementById('hwc-aqi');
+      if(!el || aqi===undefined) return;
+      // Цветовая маркировка по EU AQI
+      const colors=['#50c878','#a8c340','#f5c518','#ff8c00','#c0392b','#7b241c'];
+      const labels=['Отлично','Хорошо','Умерен.','Плохой','Оч. плох.','Опасный'];
+      const idx = aqi<=20?0:aqi<=40?1:aqi<=60?2:aqi<=80?3:aqi<=100?4:5;
+      el.innerHTML = `<span style='color:${colors[idx]};font-weight:700'>${aqi} ${labels[idx]}</span>`;
+    } catch(e){}
+  }
+  fetchAQI();
+  setInterval(fetchAQI, 1800000);
 
 /* ── Splash hide — работает и в PWA на iOS ── */
 function hideSplash(){
