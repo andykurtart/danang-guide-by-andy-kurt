@@ -62,6 +62,12 @@ a{color:inherit;text-decoration:none}
 /* ── Home PWA install hint ── */
 .home-pwa-hint{text-align:center;font-size:.72rem;color:var(--accent);padding:14px 16px calc(var(--tab-h) + 20px);max-width:860px;margin:0 auto;line-height:1.5;text-decoration:underline;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,var(--accent) 40%,transparent)}
 .home-pwa-hint:hover{opacity:.8}
+
+/* ── Open counter ── */
+.open-counter{display:flex;align-items:center;gap:8px;margin-top:16px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:14px}
+.open-counter-icon{font-size:1rem;flex-shrink:0;opacity:.6}
+.open-counter-text{font-size:.76rem;color:var(--text-dim);line-height:1.4}
+.open-counter-text strong{color:var(--accent);font-size:.88rem}
 /* PAGES */
 .page,.detail-page{display:none}
 .page.active,.detail-page.active{display:block;padding-top:52px}
@@ -1216,6 +1222,12 @@ tbody td:first-child{text-align:left;font-weight:500}
       </div>
       <div class="contact-card-arr">↗</div>
     </a>
+
+    <!-- Счётчик открытий -->
+    <div class="open-counter" id="open-counter" style="display:none">
+      <span class="open-counter-icon">📊</span>
+      <span class="open-counter-text">Гайд-Хелпер открыли <strong id="open-counter-val">...</strong> раз — спасибо что с нами 🙌</span>
+    </div>
 
   </div>
 </div>
@@ -3442,6 +3454,37 @@ if(document.readyState==='loading'){
 }
 // Страховочный таймер — скрываем в любом случае через 2 сек
 setTimeout(hideSplash, 2000);
+
+/* ── Global open counter (CountAPI) ── */
+(function(){
+  const NAMESPACE = 'danang-guide-helper';
+  const KEY       = 'app-opens';
+
+  function fmt(n){
+    // Красивый формат: 25 430
+    return parseInt(n).toLocaleString('ru');
+  }
+
+  function showCount(n){
+    const el  = document.getElementById('open-counter');
+    const val = document.getElementById('open-counter-val');
+    if(el && val){
+      val.textContent = fmt(n);
+      el.style.display = 'flex';
+    }
+  }
+
+  // Инкрементируем счётчик и получаем новое значение
+  fetch('https://api.countapi.xyz/hit/' + NAMESPACE + '/' + KEY)
+    .then(r => r.json())
+    .then(d => { if(d && d.value) showCount(d.value); })
+    .catch(() => {
+      // Если API недоступен — показываем локальный fallback
+      const local = (parseInt(localStorage.getItem('danang_opens')) || 0) + 1;
+      localStorage.setItem('danang_opens', local);
+      showCount(local);
+    });
+})();
 })();
 
 
