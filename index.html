@@ -554,10 +554,9 @@ tbody td:first-child{text-align:left;font-weight:500}
 .hwc-stat:not(:last-child){border-right:1px solid var(--border);margin-right:8px}
 .hwc-stat-icon{font-size:.75rem;line-height:1;opacity:.7}
 .hwc-stat-val{font-size:.68rem;font-weight:600;color:var(--text-mid);white-space:nowrap}
-.hwc-desc{font-size:.62rem;color:var(--text-dim);grid-column:1/3;border-top:1px solid var(--border);padding-top:6px;margin-top:1px;display:none}
-@media(min-width:400px){.hwc-desc{display:block}}
+
 /* ── Weather extra row: UV / AQI / sun ── */
-.hwc-extra{display:flex;align-items:center;gap:0;grid-column:1/3;flex-wrap:wrap;padding-top:5px;margin-top:3px}
+.hwc-extra{display:flex;align-items:center;gap:0;grid-column:1/3;flex-wrap:wrap;padding-top:2px;margin-top:1px}
 .hwc-extra-item{display:flex;align-items:center;gap:3px;padding:0 10px 0 0;margin-right:0}
 .hwc-extra-item:not(:last-child){border-right:1px solid var(--border);margin-right:10px}
 .hwc-extra-icon{font-size:.72rem;line-height:1;opacity:.7}
@@ -568,7 +567,7 @@ tbody td:first-child{text-align:left;font-weight:500}
 .aqi-usg{background:rgba(249,115,22,.18);color:#ea580c}
 .aqi-unhealthy{background:rgba(239,68,68,.18);color:#dc2626}
 .aqi-very{background:rgba(168,85,247,.18);color:#9333ea}
-.hwc-extra{display:flex;align-items:center;flex-wrap:wrap;gap:0;grid-column:1/3;padding-top:5px;margin-top:3px}
+.hwc-extra{display:flex;align-items:center;flex-wrap:wrap;gap:0;grid-column:1/3;padding-top:2px;margin-top:1px}
 .hwc-extra-stat{display:flex;align-items:center;gap:3px;padding:0 8px 0 0;white-space:nowrap}
 .hwc-extra-stat:not(:last-child){border-right:1px solid var(--border);margin-right:8px}
 .hwc-extra-icon{font-size:.72rem;line-height:1;opacity:.7}
@@ -671,19 +670,18 @@ tbody td:first-child{text-align:left;font-weight:500}
           <span class="hwc-extra-val">УФ <span id="hwc-uv">--</span></span>
         </div>
         <div class="hwc-extra-stat">
-          <span class="hwc-extra-icon">🌬️</span>
-          <span class="hwc-extra-val">AQI <span id="hwc-aqi">--</span></span>
+          <span class="hwc-extra-icon">🌿</span>
+          <span class="hwc-extra-val">AQI <span id="hwc-aqi" class="hwc-aqi-badge">--</span></span>
         </div>
         <div class="hwc-extra-stat">
-          <span class="hwc-extra-icon">🌅</span>
-          <span class="hwc-extra-val"><span id="hwc-sunrise">--</span> восход</span>
+          <span class="hwc-extra-icon">🌄</span>
+          <span class="hwc-extra-val" id="hwc-sunrise">--:--</span>
         </div>
         <div class="hwc-extra-stat">
-          <span class="hwc-extra-icon">🌇</span>
-          <span class="hwc-extra-val"><span id="hwc-sunset">--</span> закат</span>
+          <span class="hwc-extra-icon">🌆</span>
+          <span class="hwc-extra-val" id="hwc-sunset">--:--</span>
         </div>
       </div>
-      <div class="hwc-desc" id="hwc-desc">Загрузка погоды…</div>
     </div>
   </div>
   <div class="home-grid" id="home-grid"></div>
@@ -1401,7 +1399,7 @@ document.getElementById('detail-back').addEventListener('click',()=>{
 
 /* ═══ HOME GRID ═══ */
 const homeItems=[
-  {page:'page-converter',icon:'💱',label:'Финансы',   name:'Конвертер',   desc:'USD · BYN · VND',              cls:'tile-c7 span2'},
+  {page:'page-converter',icon:'💱',label:'Финансы',   name:'Конвертер',   desc:'<span id="home-conv-rate">USD · BYN · VND</span>', cls:'tile-c7 span2'},
   {page:'page-food',     icon:'🍜',label:'Гастрономия',name:'Где поесть', desc:'120+ мест, 6 категорий',        cls:'tile-c2'},
   {page:'page-cowork',   icon:'💻',label:'Работа',    name:'Коворкинги',  desc:'20+ кафе с Wi-Fi',             cls:'tile-c3'},
   {page:'page-guides',   icon:'📋',label:'Гайды',      name:'Гайды',       desc:'Пошаговые инструкции',          cls:'tile-c6'},
@@ -3124,6 +3122,8 @@ function applyRates(){
   const locFmt=Math.round(c).toLocaleString('ru');
   const sub=document.getElementById('conv-rate-sub');
   if(sub) sub.textContent=`Курс на ${ds} · 1 USD = ${usdFmt} VND · 1 ${activeCur} ≈ ${locFmt} VND`;
+  const homeRate=document.getElementById('home-conv-rate');
+  if(homeRate) homeRate.textContent=`1 USD = ${usdFmt} ₫`;
   const fn=document.getElementById('conv-footnote');
   if(fn) fn.textContent=`Курс на ${ds} · 1 USD ≈ ${usdFmt} VND · 1 ${activeCur} ≈ ${fL(1/localRates[activeCur]*USD_VND).trim()}`;
   sfV(parseFloat(iV.value)||0);
@@ -3393,8 +3393,7 @@ function applyUpdate() {
       if(prEl && press!==null) prEl.textContent = press+' мб';
       if(srEl) srEl.textContent = fmtTime(srRaw);
       if(ssEl) ssEl.textContent = fmtTime(ssRaw);
-      const descEl = document.getElementById('hwc-desc');
-      if(descEl)  descEl.textContent  = wmoDesc(code)+' · ветер '+bftDesc(ws);
+
     } catch(e){
       const f=document.getElementById('hwc-feel');
       if(f) f.textContent='Нет данных';
