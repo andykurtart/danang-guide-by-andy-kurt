@@ -620,7 +620,7 @@ tbody td:first-child{text-align:left;font-weight:500}
 <div class="page active" id="page-home">
   <div class="home-header">
     <div class="home-title">Добро пожаловать в Дананг 🇻🇳</div>
-    <div class="home-sub" id="hwc-greeting" style="margin:-2px 0 4px;font-size:.72rem">Хорошего дня! 🌴</div>
+    <div class="home-sub" id="hwc-greeting" style="margin:-2px 0 4px;font-size:.72rem">Хорошего дня! 🌴 Дананг ждёт — ты готов?</div>
     <div class="home-weather-card" id="home-weather-card">
       <div class="hwc-datetime">
         <span class="hwc-time" id="hwc-time">--:--</span>
@@ -641,6 +641,14 @@ tbody td:first-child{text-align:left;font-weight:500}
         <div class="hwc-stat">
           <span class="hwc-stat-icon">💨</span>
           <span class="hwc-stat-val"><span id="hwc-wind-dir" style="font-size:.8rem;opacity:.7"></span> <span id="hwc-wind">-- м/с</span></span>
+        </div>
+        <div class="hwc-stat">
+          <span class="hwc-stat-icon">🌡️</span>
+          <span class="hwc-stat-val"><span id="hwc-pressure">-- мб</span></span>
+        </div>
+        <div class="hwc-stat">
+          <span class="hwc-stat-icon">☀️</span>
+          <span class="hwc-stat-val">УФ <span id="hwc-uv">--</span></span>
         </div>
       </div>
       <div class="hwc-desc" id="hwc-desc">Загрузка погоды…</div>
@@ -3230,11 +3238,63 @@ function applyUpdate() {
     return dirs[Math.round(deg/45)%8];
   }
   function greeting(h){
-    if(h<5)  return 'Спокойной ночи 🌙';
-    if(h<12) return 'Доброе утро! ☀️';
-    if(h<17) return 'Хорошего дня! 🌴';
-    if(h<21) return 'Добрый вечер! 🌅';
-    return 'Спокойной ночи 🌙';
+    // Wishes per time of day — 12 unique per block, rotate by day-of-year
+    const wishes = {
+      night:[
+        'Спокойной ночи 🌙 Дананг не спит — а ты поспи.',
+        'Спокойной ночи 🌙 Завтра море никуда не денется.',
+        'Спокойной ночи 🌙 Хорошие сны о пальмах.',
+        'Спокойной ночи 🌙 Отдыхай — завтра новый день.',
+        'Спокойной ночи 🌙 Бриз за окном — лучшая колыбельная.',
+        'Спокойной ночи 🌙 Всё хорошее — завтра.',
+        'Спокойной ночи 🌙 Дананг всё ещё здесь утром.',
+        'Спокойной ночи 🌙 Хороший отдых — хорошее утро.',
+      ],
+      morning:[
+        'Доброе утро! ☀️ Самое вкусное фо — прямо сейчас.',
+        'Доброе утро! ☀️ Сегодня хороший день чтобы выйти к морю.',
+        'Доброе утро! ☀️ Дананг ждёт — ты готов?',
+        'Доброе утро! ☀️ Бань ми на завтрак — и день задался.',
+        'Доброе утро! ☀️ Море уже тёплое. Ты ещё нет.',
+        'Доброе утро! ☀️ Кофе, солнце, план на день.',
+        'Доброе утро! ☀️ Хороший день начинается здесь.',
+        'Доброе утро! ☀️ Пока тихо — самое продуктивное время.',
+        'Доброе утро! ☀️ Впереди отличный день.',
+        'Доброе утро! ☀️ Один вдох морского воздуха — и поехали.',
+      ],
+      day:[
+        'Хорошего дня! 🌴 Не забудь выпить воды.',
+        'Хорошего дня! 🌴 Сегодня хороший повод попробовать что-то новое.',
+        'Хорошего дня! 🌴 Дананг полон открытий — выйди на улицу.',
+        'Хорошего дня! 🌴 В 11–15 ч лучше в тени.',
+        'Хорошего дня! 🌴 Всё идёт по плану.',
+        'Хорошего дня! 🌴 Улыбнись первым — вьетнамцы ответят.',
+        'Хорошего дня! 🌴 Лучший момент — прямо сейчас.',
+        'Хорошего дня! 🌴 Море, солнце, ты — хороший набор.',
+        'Хорошего дня! 🌴 Сегодня всё получится.',
+        'Хорошего дня! 🌴 Сделай хоть одно дело которое откладывал.',
+      ],
+      evening:[
+        'Добрый вечер! 🌅 Закат с Сон Чы — лучшее завершение дня.',
+        'Добрый вечер! 🌅 Самое время для прогулки по набережной.',
+        'Добрый вечер! 🌅 Время замедлиться и выдохнуть.',
+        'Добрый вечер! 🌅 Хороший ужин — заслужил.',
+        'Добрый вечер! 🌅 Фонари уже зажигаются.',
+        'Добрый вечер! 🌅 Море вечером — совсем другое.',
+        'Добрый вечер! 🌅 Тихий вечер тоже хороший вечер.',
+        'Добрый вечер! 🌅 Подведи итоги — день был хорошим.',
+        'Добрый вечер! 🌅 Вечерний бриз — лучшая награда за день.',
+        'Добрый вечер! 🌅 Bia hoi и закат — классика Дананга.',
+      ],
+    };
+    // Pick by day-of-year so меняется каждый день, не каждую секунду
+    const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
+    function pick(arr){ return arr[dayOfYear % arr.length]; }
+    if(h<5)  return pick(wishes.night);
+    if(h<12) return pick(wishes.morning);
+    if(h<17) return pick(wishes.day);
+    if(h<21) return pick(wishes.evening);
+    return pick(wishes.night);
   }
 
   function updateClock(){
@@ -3258,7 +3318,8 @@ function applyUpdate() {
       const url='https://api.open-meteo.com/v1/forecast'
         +'?latitude='+DANANGLAT+'&longitude='+DANANGLON
         +'&current=temperature_2m,apparent_temperature,relative_humidity_2m,'
-        +'weather_code,wind_speed_10m,wind_direction_10m,is_day'
+        +'weather_code,wind_speed_10m,wind_direction_10m,is_day,'
+        +'uv_index,surface_pressure'
         +'&wind_speed_unit=ms&timezone=Asia%2FHo_Chi_Minh';
       const r = await fetch(url);
       const j = await r.json();
@@ -3270,6 +3331,8 @@ function applyUpdate() {
       const wdir  = c.wind_direction_10m;
       const code  = c.weather_code;
       const isDay = c.is_day;
+      const uv     = c.uv_index !== undefined ? Math.round(c.uv_index*10)/10 : null;
+      const press  = c.surface_pressure ? Math.round(c.surface_pressure) : null;
 
       const tempEl  = document.getElementById('hwc-temp');
       const iconEl  = document.getElementById('hwc-icon');
@@ -3285,6 +3348,10 @@ function applyUpdate() {
       if(wdirEl) wdirEl.textContent = windDir(wdir);
       if(humEl)   humEl.textContent   = hum+'%';
       if(feelEl)  feelEl.textContent  = feel+'°C';
+      const uvEl   = document.getElementById('hwc-uv');
+      const prEl   = document.getElementById('hwc-pressure');
+      if(uvEl && uv!==null) uvEl.textContent = uv;
+      if(prEl && press!==null) prEl.textContent = press+' мб';
       const descEl = document.getElementById('hwc-desc');
       if(descEl)  descEl.textContent  = wmoDesc(code)+' · ветер '+bftDesc(ws);
     } catch(e){
