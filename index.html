@@ -1226,7 +1226,7 @@ tbody td:first-child{text-align:left;font-weight:500}
     <!-- Счётчик открытий -->
     <div class="open-counter" id="open-counter" style="display:none">
       <span class="open-counter-icon">📊</span>
-      <span class="open-counter-text">Гайд-Хелпер открыли <strong id="open-counter-val">...</strong> раз — спасибо что с нами 🙌</span>
+      <span class="open-counter-text">Сегодня Гайд-Хелпер был открыт <strong id="open-counter-val">...</strong> раз. Спасибо что с нами!</span>
     </div>
 
   </div>
@@ -3455,13 +3455,20 @@ if(document.readyState==='loading'){
 // Страховочный таймер — скрываем в любом случае через 2 сек
 setTimeout(hideSplash, 2000);
 
-/* ── Global open counter (CountAPI) ── */
+/* ── Daily open counter (CountAPI, ключ = дата) ── */
 (function(){
   const NAMESPACE = 'danang-guide-helper';
-  const KEY       = 'app-opens';
+
+  // Дата по времени Дананга (UTC+7)
+  function todayKey(){
+    const d = new Date(new Date().toLocaleString('en-US', {timeZone:'Asia/Ho_Chi_Minh'}));
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    return 'opens-' + y + '-' + m + '-' + day;  // напр. opens-2025-06-15
+  }
 
   function fmt(n){
-    // Красивый формат: 25 430
     return parseInt(n).toLocaleString('ru');
   }
 
@@ -3474,14 +3481,20 @@ setTimeout(hideSplash, 2000);
     }
   }
 
-  // Инкрементируем счётчик и получаем новое значение
-  fetch('https://api.countapi.xyz/hit/' + NAMESPACE + '/' + KEY)
+  const key = todayKey();
+
+  // Инкрементируем счётчик за сегодня
+  fetch('https://api.countapi.xyz/hit/' + NAMESPACE + '/' + key)
     .then(r => r.json())
-    .then(d => { if(d && d.value) showCount(d.value); })
+    .then(d => { if(d && d.value !== undefined) showCount(d.value); })
     .catch(() => {
-      // Если API недоступен — показываем локальный fallback
-      const local = (parseInt(localStorage.getItem('danang_opens')) || 0) + 1;
-      localStorage.setItem('danang_opens', local);
+      // Оффлайн-фоллбэк: локальный суточный счётчик
+      const storedKey = localStorage.getItem('danang_day_key');
+      let local = parseInt(localStorage.getItem('danang_day_count')) || 0;
+      if(storedKey !== key){ local = 0; } // новый день — сброс
+      local += 1;
+      localStorage.setItem('danang_day_key', key);
+      localStorage.setItem('danang_day_count', local);
       showCount(local);
     });
 })();
