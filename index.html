@@ -125,45 +125,46 @@ a{color:inherit;text-decoration:none}
 /* Responsive home grid — fills space, no orphan tiles */
 .home-grid{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:7px;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
   max-width:860px;
   margin:0 auto;
   padding:0 16px 14px;
 }
-@media(max-width:600px){
-  .home-grid{grid-template-columns:repeat(2,1fr)}
-  .home-tile.span2{grid-column:span 2}
+@media(min-width:601px){
+  .home-grid{grid-template-columns:repeat(3,1fr)}
+  .home-tile.span2{grid-column:span 1}
   .home-tile.span2-desktop{grid-column:span 1}
 }
-@media(min-width:601px){
-  .home-tile.span2{grid-column:span 2}
-  .home-tile.span2-desktop{grid-column:span 2}
+@media(max-width:600px){
+  .home-tile.span2{grid-column:span 1}
+  .home-tile.span2-desktop{grid-column:span 1}
 }
 
 .home-tile{
-  background:var(--surface);border:1px solid var(--border);border-radius:13px;
-  padding:23px 13px 22px;cursor:pointer;position:relative;
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:16px 10px 14px;cursor:pointer;position:relative;
   transition:transform .15s,box-shadow .15s,border-color .15s;
-  display:flex;flex-direction:column;justify-content:space-between;
+  display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;
+  min-height:100px;
 }
 .home-tile:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.09);border-color:var(--border2)}
 [data-theme="dark"] .home-tile:hover{box-shadow:0 6px 20px rgba(0,0,0,.4)}
 .tile-c1{background:var(--accent);color:var(--hero-text);border-color:transparent}
 [data-theme="dark"] .tile-c1{color:var(--bg)}
-.tile-c2{background:rgba(46,102,68,.08);border-color:rgba(46,102,68,.22)}
-.tile-c3{background:rgba(28,58,107,.07);border-color:rgba(28,58,107,.2)}
-.tile-c4{background:rgba(122,35,24,.07);border-color:rgba(122,35,24,.2)}
-.tile-c5{background:rgba(90,48,128,.07);border-color:rgba(90,48,128,.2)}
-.tile-c6{background:rgba(180,130,20,.07);border-color:rgba(180,130,20,.2)}
-.tile-c7{background:rgba(28,90,107,.07);border-color:rgba(28,90,107,.2)}
-.tile-c8{background:rgba(60,100,60,.07);border-color:rgba(60,100,60,.2)}
-.tile-c9{background:rgba(180,60,100,.07);border-color:rgba(180,60,100,.2)}
-.tile-header{display:flex;align-items:center;gap:6px;margin-bottom:4px}
-.tile-icon{font-size:1.15rem;line-height:1;flex-shrink:0}
+.tile-c2{background:var(--surface);border-color:var(--border)}
+.tile-c3{background:var(--surface);border-color:var(--border)}
+.tile-c4{background:var(--surface);border-color:var(--border)}
+.tile-c5{background:var(--surface);border-color:var(--border)}
+.tile-c6{background:var(--surface);border-color:var(--border)}
+.tile-c7{background:var(--surface);border-color:var(--border)}
+.tile-c8{background:var(--surface);border-color:var(--border)}
+.tile-c9{background:var(--surface);border-color:var(--border)}
+.tile-header{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%}
+.tile-icon{font-size:1.6rem;line-height:1;flex-shrink:0;display:block;margin-bottom:2px}
 .tile-label{font-size:.54rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;opacity:.45;display:none}
-.tile-name{font-size:.82rem;font-weight:700;line-height:1.2;letter-spacing:-.01em}
-.tile-desc{font-size:.65rem;color:var(--text-mid);line-height:1.35}
+.tile-name{font-size:.76rem;font-weight:700;line-height:1.2;letter-spacing:-.01em;color:var(--text);text-align:center}
+.tile-desc{font-size:.62rem;color:var(--text-mid);line-height:1.4;text-align:center;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:1.75em}
 .tile-arr{display:none}
 
 .tile-c1 .tile-name{color:#fff}
@@ -246,6 +247,40 @@ a{color:inherit;text-decoration:none}
 [data-theme="dark"] .guide-step-num{color:var(--bg)}
 .guide-step-text{font-size:.8rem;color:var(--text-mid);line-height:1.55}
 .guide-step-text strong{color:var(--text)}
+
+/* ── New neutral tile ── */
+.tile-n{background:var(--surface);border:1px solid var(--border)}
+.tile-conv{grid-column:1/-1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 14px 12px;cursor:default;align-items:stretch;text-align:left}
+.tile-span3{grid-column:1/-1}
+[data-theme="dark"] .tile-n,[data-theme="dark"] .tile-conv{background:var(--surface)}
+
+/* ── Home converter widget ── */
+.hconv-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;cursor:pointer}
+.hconv-title{font-size:.88rem;font-weight:800;color:var(--text)}
+.hconv-rate{font-size:.7rem;color:var(--text-dim)}
+.hconv-inputs{display:flex;align-items:center;gap:8px}
+.hconv-field{flex:1;display:flex;flex-direction:column;gap:3px}
+.hconv-label{font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);text-align:left}
+.hconv-input{width:100%;border:1.5px solid var(--border);border-radius:9px;padding:8px 10px;font-size:.9rem;font-weight:700;color:var(--text);background:var(--bg);outline:none;text-align:right;font-family:'Inter',sans-serif;transition:border-color .15s;-moz-appearance:textfield}
+.hconv-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 15%,transparent)}
+.hconv-sep{font-size:.9rem;color:var(--text-dim);flex-shrink:0;margin-top:14px}
+
+/* ── Tile colours (per item) ── */
+.tc-food{background:rgba(34,197,94,.06);border-color:rgba(34,197,94,.14)}
+.tc-cowork{background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.14)}
+.tc-guides{background:rgba(180,140,80,.06);border-color:rgba(180,140,80,.14)}
+.tc-services{background:rgba(120,120,130,.06);border-color:rgba(120,120,130,.14)}
+.tc-atm{background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.14)}
+.tc-tips{background:rgba(234,179,8,.06);border-color:rgba(234,179,8,.14)}
+.tc-leisure{background:rgba(139,92,246,.06);border-color:rgba(139,92,246,.14)}
+.tc-medicine{background:rgba(236,72,153,.06);border-color:rgba(236,72,153,.14)}
+.tc-sos{background:rgba(220,38,38,.07);border-color:rgba(220,38,38,.16)}
+.tc-channels{background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.14)}
+.tc-shops{background:rgba(34,197,94,.06);border-color:rgba(34,197,94,.14)}
+.tc-history{background:rgba(180,140,80,.06);border-color:rgba(180,140,80,.14)}
+.tc-facts{background:rgba(28,90,155,.06);border-color:rgba(28,90,155,.14)}
+.tc-lang{background:rgba(20,150,120,.06);border-color:rgba(20,150,120,.14)}
+.tc-info{background:rgba(90,48,128,.04);border-color:rgba(90,48,128,.1)}
 /* CARDS */
 .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-bottom:22px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s,border-color .15s}
@@ -1411,31 +1446,80 @@ document.getElementById('detail-back').addEventListener('click',()=>{
 
 /* ═══ HOME GRID ═══ */
 const homeItems=[
-  {page:'page-converter',icon:'💱',label:'Финансы',   name:'Конвертер',   desc:'<span id="home-conv-rate">USD · BYN · VND</span>', cls:'tile-c7 span2'},
-  {page:'page-food',     icon:'🍜',label:'Гастрономия',name:'Где поесть', desc:'120+ мест, 6 категорий',        cls:'tile-c2'},
-  {page:'page-cowork',   icon:'💻',label:'Работа',    name:'Коворкинги',  desc:'20+ кафе с Wi-Fi',             cls:'tile-c3'},
-  {page:'page-guides',   icon:'📋',label:'Гайды',      name:'Гайды',       desc:'Пошаговые инструкции',          cls:'tile-c6'},
-  {page:'page-services',  icon:'🔧',label:'Услуги',   name:'Услуги',      desc:'Наши специалисты',  cls:'tile-c5'},
-  {page:'page-atm',      icon:'🏧',label:'Деньги',    name:'Банкоматы',   desc:'0% комиссия + обменники', cls:'tile-c4'},
-  {page:'page-tips',     icon:'💡',label:'Полезное',  name:'Советы',      desc:'150+ полезных советов',         cls:'tile-c6'},
-  {page:'page-leisure',  icon:'🎯',label:'Отдых',     name:'Досуг',       desc:'100 лучших мест',              cls:'tile-c5'},
-  {page:'page-medicine', icon:'💊',label:'Здоровье',  name:'Медицина',    desc:'Аптеки, клиники, помощь',      cls:'tile-c9'},
-  {page:'page-emergency',icon:'🚨',label:'Безопасность',name:'SOS',        desc:'Экстренные номера',             cls:'tile-c9'},
-  {page:'page-channels', icon:'📢',label:'Сообщество',name:'Каналы',       desc:'50+ групп и каналов',          cls:'tile-c4'},
-  {page:'page-shops',    icon:'🛍️',label:'Шоппинг',   name:'Магазины',    desc:'Рынки, ТЦ, продукты',cls:'tile-c2'},
-  {page:'page-history',  icon:'📜',label:'История',   name:'История',     desc:'2000 лет Дананга',             cls:'tile-c8'},
-  {page:'page-facts',    icon:'💎',label:'Интересное',name:'Факты',       desc:'100 фактов о Дананге',         cls:'tile-c7'},
-  {page:'page-lang',     icon:'🗣️',label:'Язык',      name:'Вьетнамский', desc:'100 слов и фраз',              cls:'tile-c3'},
-  {page:'page-contact',   icon:'ℹ️',label:'Контакты', name:'Информация',  desc:'@andykurt_dsgn · связь с автором гайда', cls:'tile-c5 span4'},
+  {page:'page-converter',icon:'💱',label:'Финансы',   name:'Конвертер',   desc:'<span id="home-conv-rate">USD · BYN · VND</span>', cls:'tile-conv'},
+  {page:'page-food',     icon:'🍜',label:'Гастрономия',name:'Где поесть', desc:'120+ мест,|6 категорий',       cls:'tile-n tc-food'},
+  {page:'page-cowork',   icon:'💻',label:'Работа',    name:'Коворкинги',  desc:'20+ кафе|с Wi-Fi',            cls:'tile-n tc-cowork'},
+  {page:'page-guides',   icon:'📋',label:'Гайды',      name:'Гайды',       desc:'Пошаговые|инструкции',         cls:'tile-n tc-guides'},
+  {page:'page-services',  icon:'🔧',label:'Услуги',   name:'Услуги',      desc:'Наши|специалисты',             cls:'tile-n tc-services'},
+  {page:'page-atm',      icon:'🏧',label:'Деньги',    name:'Банкоматы',   desc:'0% комиссия|+ обменники',      cls:'tile-n tc-atm'},
+  {page:'page-tips',     icon:'💡',label:'Полезное',  name:'Советы',      desc:'150+ полезных|советов',         cls:'tile-n tc-tips'},
+  {page:'page-leisure',  icon:'🎯',label:'Отдых',     name:'Досуг',       desc:'100 лучших|мест',              cls:'tile-n tc-leisure'},
+  {page:'page-medicine', icon:'💊',label:'Здоровье',  name:'Медицина',    desc:'Аптеки, клиники,|помощь',      cls:'tile-n tc-medicine'},
+  {page:'page-emergency',icon:'🚨',label:'Безопасность',name:'SOS',         desc:'Экстренные|номера',             cls:'tile-n tc-sos'},
+  {page:'page-channels', icon:'📢',label:'Сообщество',name:'Каналы',      desc:'50+ групп|и каналов',           cls:'tile-n tc-channels'},
+  {page:'page-shops',    icon:'🛍️',label:'Шоппинг',   name:'Магазины',    desc:'Рынки, ТЦ,|продукты',           cls:'tile-n tc-shops'},
+  {page:'page-history',  icon:'📜',label:'История',   name:'История',     desc:'2000 лет|Дананга',              cls:'tile-n tc-history'},
+  {page:'page-facts',    icon:'💎',label:'Интересное',name:'Факты',       desc:'100 фактов|о Дананге',          cls:'tile-n tc-facts'},
+  {page:'page-lang',     icon:'🗣️',label:'Язык',      name:'Вьетнамский', desc:'100 слов|и фраз',              cls:'tile-n tc-lang'},
+  {page:'page-contact',   icon:'ℹ️',label:'Контакты', name:'Информация',  desc:'@andykurt_dsgn · связь с автором гайда', cls:'tile-n tile-span3 tc-info'},
 ];
 const grid=document.getElementById('home-grid');
 homeItems.forEach(item=>{
   const d=document.createElement('div');
   d.className=`home-tile ${item.cls}`;
-  d.innerHTML=`<span class="tile-arr">↗</span><div><div class="tile-header"><span class="tile-icon">${item.icon}</span><span class="tile-name">${item.name}</span></div><div class="tile-desc">${item.desc}</div></div>${item.badge?`<span class="tile-badge">${item.badge}</span>`:''}`;
-  d.addEventListener('click',()=>goTo(item.page));
+
+  if(item.page === 'page-converter'){
+    // Converter widget: click bg → go to page, click inputs → edit inline
+    d.innerHTML=`
+      <div class="hconv-header" onclick="goTo('page-converter')">
+        <span class="hconv-title">💱 Конвертер</span>
+        <span class="hconv-rate" id="home-conv-rate">USD · VND</span>
+      </div>
+      <div class="hconv-inputs">
+        <div class="hconv-field">
+          <span class="hconv-label">VND</span>
+          <input class="hconv-input" id="hconv-vnd" type="text" inputmode="numeric" placeholder="0" value="100.000">
+        </div>
+        <div class="hconv-sep">⇄</div>
+        <div class="hconv-field">
+          <span class="hconv-label">USD</span>
+          <input class="hconv-input" id="hconv-usd" type="text" inputmode="decimal" placeholder="0">
+        </div>
+      </div>`;
+    // Stop click on inputs from navigating
+    d.querySelectorAll('.hconv-input').forEach(inp => inp.addEventListener('click', e => e.stopPropagation()));
+    d.addEventListener('click', () => goTo('page-converter'));
+  } else {
+   const desc2=(item.desc||'').split('|').join('<br>');
+    d.innerHTML=`<div class="tile-header"><span class="tile-icon">${item.icon}</span><span class="tile-name">${item.name}</span></div><div class="tile-desc">${desc2}</div>`;
+    d.addEventListener('click',()=>goTo(item.page));
+  }
   grid.appendChild(d);
 });
+
+// Home converter widget logic
+(function(){
+  const hV = document.getElementById('hconv-vnd');
+  const hU = document.getElementById('hconv-usd');
+  if(!hV || !hU) return;
+  let busy = false;
+  function syncHVtoU(){
+    if(busy) return; busy=true;
+    const raw = parseInput(hV.value);
+    hU.value = raw && USD_VND ? fmtDec(raw/USD_VND,2) : '';
+    busy=false;
+  }
+  function syncHUtoV(){
+    if(busy) return; busy=true;
+    const raw = parseInput(hU.value);
+    hV.value = raw && USD_VND ? fmtVND(raw*USD_VND) : '';
+    busy=false;
+  }
+  hV.addEventListener('input', syncHVtoU);
+  hU.addEventListener('input', syncHUtoV);
+  // Init with 100 000 VND
+  setTimeout(()=>{ if(USD_VND){ hV.value=fmtVND(100000); syncHVtoU(); }}, 1200);
+})();
 
 /* ═══ CARD HELPER ═══ */
 function makeCard(item,cid){
@@ -3158,6 +3242,9 @@ function applyRates(){
   if(sub) sub.textContent=`Курс на ${ds} · 1 USD = ${usdFmt} VND · 1 ${activeCur} ≈ ${locFmt} VND`;
   const homeRate=document.getElementById('home-conv-rate');
   if(homeRate) homeRate.textContent=`1 USD = ${usdFmt} ₫`;
+  const hV=document.getElementById('hconv-vnd');
+  const hU=document.getElementById('hconv-usd');
+  if(hV && hU && !hV._touched){ hV.value=fmtVND(100000); hU.value=fmtDec(100000/USD_VND,2); }
   const fn=document.getElementById('conv-footnote');
   if(fn) fn.textContent=`Курс на ${ds} · 1 USD ≈ ${usdFmt} VND · 1 ${activeCur} ≈ ${fL(1/localRates[activeCur]*USD_VND).trim()}`;
   sfV(parseInput(iV.value));
