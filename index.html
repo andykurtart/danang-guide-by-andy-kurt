@@ -285,6 +285,25 @@ a{color:inherit;text-decoration:none}
 /* ── Detail disclaimer ── */
 .detail-disclaimer{margin:14px 0 0;padding:12px 14px;background:color-mix(in srgb,var(--accent) 4%,var(--surface));border:1px solid var(--border);border-radius:12px;font-size:.72rem;color:var(--text-dim);line-height:1.6}
 .detail-disclaimer a{color:var(--accent);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+
+/* ── Dark theme overrides ── */
+[data-theme="dark"] .home-weather-card{background:#1e2124;border-color:#2e3338}
+[data-theme="dark"] .tile-conv{background:#1e2124;border-color:#2e3338}
+[data-theme="dark"] .tc-food{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.18)}
+[data-theme="dark"] .tc-cowork{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.18)}
+[data-theme="dark"] .tc-guides{background:rgba(180,140,80,.08);border-color:rgba(180,140,80,.18)}
+[data-theme="dark"] .tc-services{background:rgba(120,120,130,.08);border-color:rgba(120,120,130,.18)}
+[data-theme="dark"] .tc-atm{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.18)}
+[data-theme="dark"] .tc-tips{background:rgba(234,179,8,.08);border-color:rgba(234,179,8,.18)}
+[data-theme="dark"] .tc-leisure{background:rgba(139,92,246,.08);border-color:rgba(139,92,246,.18)}
+[data-theme="dark"] .tc-medicine{background:rgba(236,72,153,.08);border-color:rgba(236,72,153,.18)}
+[data-theme="dark"] .tc-sos{background:rgba(220,38,38,.1);border-color:rgba(220,38,38,.22)}
+[data-theme="dark"] .tc-channels{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.18)}
+[data-theme="dark"] .tc-shops{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.18)}
+[data-theme="dark"] .tc-history{background:rgba(180,140,80,.08);border-color:rgba(180,140,80,.18)}
+[data-theme="dark"] .tc-facts{background:rgba(28,90,155,.08);border-color:rgba(28,90,155,.18)}
+[data-theme="dark"] .tc-lang{background:rgba(20,150,120,.08);border-color:rgba(20,150,120,.18)}
+[data-theme="dark"] .tc-info{background:rgba(90,48,128,.06);border-color:rgba(90,48,128,.15)}
 /* CARDS */
 .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-bottom:22px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s,border-color .15s}
@@ -749,6 +768,7 @@ tbody td:first-child{text-align:left;font-weight:500}
     <button class="curr-tab" data-cur="UAH">UAH</button>
     <button class="curr-tab" data-cur="RUB">RUB</button>
     <button class="curr-tab" data-cur="KZT">KZT</button>
+    <button class="curr-tab" data-cur="EUR">EUR</button>
   </div>
 
   <div class="content">
@@ -1427,25 +1447,14 @@ function openDetail(item){
     // Check if maps URL contains direct coordinates: ?q=lat,lon
     const coordMatch=item.maps.match(/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/);
     if(coordMatch){
-      // Direct coordinates — use immediately, no geocoding needed
+      // Direct coordinates — use Google Maps Embed with exact pin
       const lat=parseFloat(coordMatch[1]), lon=parseFloat(coordMatch[2]);
-      const d=0.004;
-      mf.src=`https://www.openstreetmap.org/export/embed.html?bbox=${lon-d},${lat-d},${lon+d},${lat+d}&layer=mapnik&marker=${lat},${lon}`;
+      mf.src=`https://maps.google.com/maps?q=${lat},${lon}&z=17&output=embed`;
     } else {
-      // Fallback: geocode by name via Nominatim
+      // Text query — use Google Maps Embed search (shows correct pin automatically)
       const qMatch=item.maps.match(/[?&]q=([^&]+)/);
-      const q=qMatch?qMatch[1]:(item.name+' Da Nang').replace(/\s+/g,'+');
-      // Show Da Nang center while loading
-      mf.src=`https://www.openstreetmap.org/export/embed.html?bbox=108.17,16.03,108.24,16.08&layer=mapnik&marker=16.054,108.202`;
-      fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q.replace(/\+/g,' ')+', Da Nang, Vietnam')}&format=json&limit=1`)
-        .then(r=>r.json())
-        .then(data=>{
-          if(data&&data[0]){
-            const lat=parseFloat(data[0].lat),lon=parseFloat(data[0].lon);
-            const d=0.004;
-            mf.src=`https://www.openstreetmap.org/export/embed.html?bbox=${lon-d},${lat-d},${lon+d},${lat+d}&layer=mapnik&marker=${lat},${lon}`;
-          }
-        }).catch(()=>{});
+      const q=qMatch?decodeURIComponent(qMatch[1].replace(/\+/g,' ')):(item.name+' Da Nang');
+      mf.src=`https://maps.google.com/maps?q=${encodeURIComponent(q)}&z=16&output=embed`;
     }
   } else {
     mb.style.display='none';
@@ -3120,10 +3129,11 @@ const CURRENCIES = {
   UAH: { name:'Украинская гривна', fallback:41.5,  color:'#1A5C9E', rgb:'26,92,158',  fmt:(v,h)=>{ const n=v<1?v.toFixed(2):v.toFixed(0); return h?`<span class="cur-sym">UAH</span>${n}`:'UAH '+n } },
   RUB: { name:'Российский рубль',  fallback:90.5,  color:'#1A6B3A', rgb:'26,107,58',  fmt:(v,h)=>{ const n=v<1?v.toFixed(2):v.toFixed(0); return h?`<span class="cur-sym">RUB</span>${n}`:'RUB '+n } },
   KZT: { name:'Казахский тенге',   fallback:520.0, color:'#7A6A00', rgb:'122,106,0',  fmt:(v,h)=>{ const n=v<1?v.toFixed(2):v.toFixed(0); return h?`<span class="cur-sym">KZT</span>${n}`:'KZT '+n } },
+  EUR: { name:'Евро',                 fallback:0.93,  color:'#003399', rgb:'0,51,153',   fmt:(v,h)=>{ const n=v<.1?v.toFixed(3):v<10?v.toFixed(2):v.toFixed(1); return h?`<span class="cur-sym">€</span>${n}`:'€ '+n } },
 };
 
 let USD_VND = 26200;
-let localRates = { BYN:2.87, UAH:41.5, RUB:90.5, KZT:520.0 };
+let localRates = { BYN:2.87, UAH:41.5, RUB:90.5, KZT:520.0, EUR:0.93 };
 let activeCur = 'BYN';
 
 function curVND(cur){ return USD_VND / localRates[cur]; }
@@ -3282,7 +3292,7 @@ function switchCurrency(cur){
 
 async function fetchRates(){
   try{
-    const r=await fetch('https://api.frankfurter.app/latest?from=USD&to=VND,BYN,UAH,RUB,KZT',{signal:AbortSignal.timeout(5000)});
+    const r=await fetch('https://api.frankfurter.app/latest?from=USD&to=VND,BYN,UAH,RUB,KZT,EUR',{signal:AbortSignal.timeout(5000)});
     if(!r.ok) throw new Error('HTTP '+r.status);
     const d=await r.json();
     if(d.rates){
@@ -3291,6 +3301,7 @@ async function fetchRates(){
       if(d.rates.UAH) localRates.UAH=d.rates.UAH;
       if(d.rates.RUB) localRates.RUB=d.rates.RUB;
       if(d.rates.KZT) localRates.KZT=d.rates.KZT;
+      if(d.rates.EUR) localRates.EUR=d.rates.EUR;
     }
   } catch(e){
     try{
@@ -3302,6 +3313,7 @@ async function fetchRates(){
         if(d2.rates.UAH) localRates.UAH=d2.rates.UAH;
         if(d2.rates.RUB) localRates.RUB=d2.rates.RUB;
         if(d2.rates.KZT) localRates.KZT=d2.rates.KZT;
+        if(d2.rates.EUR) localRates.EUR=d2.rates.EUR;
       }
     } catch(e2){}
   }
