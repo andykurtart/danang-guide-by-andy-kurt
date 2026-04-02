@@ -320,30 +320,8 @@ a{color:inherit;text-decoration:none}
 .rec-card-fav:active{transform:scale(1.3)}
 
 /* Detail page */
-.rec-detail-page{display:none;position:fixed;inset:0;background:var(--bg);z-index:310;overflow-y:auto;padding-top:52px;padding-bottom:calc(var(--tab-h)+24px)}
+.rec-detail-page{display:none;position:fixed;inset:0;background:var(--bg);z-index:310;overflow-y:auto;padding-bottom:calc(var(--tab-h)+24px)}
 .rec-detail-page.active{display:block}
-.rec-detail-hero{padding:20px 16px 16px;max-width:860px;margin:0 auto}
-.rec-detail-toprow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
-.rec-detail-name{font-size:1.2rem;font-weight:800;color:var(--text);flex:1;line-height:1.25}
-.rec-detail-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.rec-detail-btn{background:none;border:none;cursor:pointer;padding:6px;font-size:1.2rem;line-height:1;border-radius:8px;transition:background .15s;-webkit-tap-highlight-color:transparent}
-.rec-detail-btn:hover{background:var(--surface2)}
-.rec-detail-type{font-size:.64rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:16px}
-.rec-detail-links{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
-.rec-detail-link{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--surface);border:1px solid var(--border);border-radius:100px;font-size:.74rem;font-weight:600;color:var(--text-mid);text-decoration:none;transition:border-color .15s,background .15s;cursor:pointer}
-.rec-detail-link:hover{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb,var(--accent) 5%,var(--surface))}
-.rec-detail-section{max-width:860px;margin:0 auto;padding:0 16px 16px}
-.rec-detail-label{font-size:.64rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px}
-.rec-detail-text{font-size:.82rem;color:var(--text-mid);line-height:1.7;margin-bottom:16px}
-.rec-detail-hours{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:.78rem;font-weight:600;color:var(--text);margin-bottom:16px}
-
-.rec-open-btn{display:block;width:100%;padding:13px;background:var(--accent);color:var(--hero-text);border:none;border-radius:14px;font-size:.88rem;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;margin-bottom:14px;transition:opacity .15s;-webkit-tap-highlight-color:transparent}
-[data-theme="dark"] .rec-open-btn{color:var(--bg)}
-.rec-open-btn:active{opacity:.8}
-.rec-disclaimer{padding:12px 14px;background:color-mix(in srgb,var(--accent) 4%,var(--surface));border:1px solid var(--border);border-radius:12px;font-size:.72rem;color:var(--text-dim);line-height:1.6}
-.rec-disclaimer a{color:var(--accent);font-weight:600;cursor:pointer}
-.rec-back-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--text-mid);font-family:'Inter',sans-serif;padding:12px 16px;-webkit-tap-highlight-color:transparent}
-.rec-back-btn:hover{color:var(--text)}
 /* CARDS */
 .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-bottom:22px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s,border-color .15s}
@@ -1241,29 +1219,28 @@ tbody td:first-child{text-align:left;font-weight:500}
 
 <!-- ═══════════════════════════ REC DETAIL PAGE ═══════════════════════════ -->
 <div class="rec-detail-page" id="rec-detail-page">
-  <button class="rec-back-btn" id="rec-back-btn">← Назад</button>
-  <div class="rec-detail-hero">
-    <div class="rec-detail-toprow">
-      <div class="rec-detail-name" id="rdd-name"></div>
-      <div class="rec-detail-actions">
-        <button class="rec-detail-btn" id="rdd-fav" title="В избранное">☆</button>
-        <button class="rec-detail-btn" id="rdd-copy" title="Скопировать название">📋</button>
-      </div>
-    </div>
-    <div class="rec-detail-type" id="rdd-type"></div>
-    <div class="rec-detail-links" id="rdd-links"></div>
+  <div class="detail-hero">
+    <button class="detail-back" id="rec-back-btn">← Назад</button>
+    <div class="detail-tag" id="rdd-type"></div>
+    <div class="detail-name" id="rdd-name"></div>
+    <div class="detail-addr-hero">📍 <span id="rdd-addr"></span></div>
   </div>
-  <div class="rec-detail-section">
-    <div class="rec-detail-label">О заведении</div>
-    <div class="rec-detail-text" id="rdd-short"></div>
-    <div class="rec-detail-label">Подробнее</div>
-    <div class="rec-detail-text" id="rdd-full"></div>
-    <div class="rec-detail-label">Кому подойдёт</div>
-    <div class="rec-detail-text" id="rdd-audience"></div>
-    <div class="rec-detail-label">Часы работы</div>
-    <div class="rec-detail-hours" id="rdd-hours"></div>
-    <button class="rec-open-btn" id="rdd-open-btn">📍 Открыть в Google Maps</button>
-    <div class="rec-disclaimer">
+  <div class="detail-content">
+    <div class="detail-actions" id="rdd-actions"></div>
+    <div class="detail-desc-block" id="rdd-desc-block">
+      <div class="desc-label">О заведении</div>
+      <div id="rdd-short"></div>
+      <div class="desc-label">Подробнее</div>
+      <div id="rdd-full"></div>
+      <div class="desc-label">Кому подойдёт</div>
+      <div id="rdd-audience"></div>
+    </div>
+    <div class="detail-meta-grid" id="rdd-meta"></div>
+    <div class="detail-tips-box" id="rdd-tips-wrap" style="display:none">
+      <div class="detail-tips-title">💡 Советы</div>
+      <div id="rdd-tips"></div>
+    </div>
+    <div class="detail-disclaimer">
       ℹ️ Информация актуальна на момент посещения, но город быстро меняется. Если что-то не совпадает — <a onclick="goTo('page-contact');document.getElementById('rec-detail-page').classList.remove('active')">напишите автору Гайд-Хелпера</a>.
     </div>
   </div>
@@ -3732,10 +3709,18 @@ const recsData = [
     full: 'Кофейня-роустерия с акцентом на specialty: pour-over, эспрессо-напитки, авторские позиции — salted coffee, coconut coffee, кофе жарят прямо на месте. Полноценное меню еды: panini, салаты, французские тосты, пицца, десерты. Высокий открытый зал с арочными окнами, кирпичными стенами и большим количеством дневного света — по отзывам одно из самых эффектных кафе Дананга. Пространство рассчитано и на работу: удобные столы, стабильный Wi-Fi и достаточно розеток.',
     audience: 'Цифровые кочевники и фрилансеры — coffee + laptop формат. Туристы у My Khe Beach, ищущие место для завтрака и фотогеничный интерьер. Кофеманы, любящие specialty и авторский кофе.',
     hours: 'Ежедневно 7:30 – 22:00',
-    site: null,
+    site: 'https://lighthousedanang.com/',
     instagram: 'https://www.instagram.com/lighthouse_dn/',
     maps: 'https://maps.google.com/?q=16.0631,108.2486',
     gmaps: 'https://www.google.com/maps/search/Lighthouse+Cafe+Da+Nang/@16.0631,108.2486,17z',
+    tips: [
+      {icon:'🕗', text:'Лучшее время — будни с 8:00 до 10:30: мало народу, свежая выпечка, легко найти стол у окна.'},
+      {icon:'☀️', text:'В выходные после 11:00 бывает очередь — приходи чуть раньше или будь готов подождать 10–15 минут.'},
+      {icon:'☕', text:'Спроси бариста про кофе дня — они обжаривают зерно сами, и у них всегда есть интересный single origin.'},
+      {icon:'🍕', text:'Пицца здесь неожиданно хороша — не пропусти, если пришёл пообедать, а не только на кофе.'},
+      {icon:'🔌', text:'Розетки есть, но не у каждого стола — занимай места вдоль стен или на антресоли, если планируешь работать долго.'},
+      {icon:'📸', text:'Лучший кадр интерьера — с нижнего уровня в сторону арочных окон в первой половине дня, когда свет мягкий.'},
+    ],
   },
   {
     id: 'little-hanoi',
@@ -3748,9 +3733,17 @@ const recsData = [
     audience: 'Туристы, желающие попробовать настоящий egg coffee в понятной подаче. Кофейные энтузиасты и foodies, ищущие аутентичные фотогеничные напитки. Локальные жители, любящие северновьетнамскую кофейную культуру.',
     hours: 'Ежедневно 7:00 – 22:00',
     site: 'https://littlehanoieggcoffee.vn',
-    instagram: null,
+    instagram: 'https://www.instagram.com/littlehanoieggcoffee.danang/',
     maps: null,
     gmaps: 'https://www.google.com/maps/search/Little+HaNoi+Egg+Coffee+Da+Nang',
+    tips: [
+      {icon:'🥚', text:'Заказывай egg coffee горячим в первый раз — именно так раскрывается классический вкус. Холодный вариант — на второй визит.'},
+      {icon:'🕙', text:'Оптимальное время — будни с 9:00 до 11:00 или после 15:00: туристов меньше, атмосфера камернее.'},
+      {icon:'🥢', text:'Перемешивай egg coffee медленно снизу вверх — так пена смешивается с кофе постепенно, вкус раскрывается лучше.'},
+      {icon:'📷', text:'Стакан с пенкой красиво выглядит сразу после подачи — фото лучше сделать до того, как размешаешь.'},
+      {icon:'🍞', text:'Тосты с кокосовым джемом — незаметный хит меню, хорошо идут к egg coffee в качестве завтрака.'},
+      {icon:'💬', text:'Персонал говорит по-английски и охотно объяснит историю напитка — не стесняйся спрашивать.'},
+    ],
   },
   {
     id: 'danasol',
@@ -3763,9 +3756,17 @@ const recsData = [
     audience: 'Фрилансеры и удалёнщики — коворкинг-подобный формат без абонемента. Цифровые кочевники рядом с My Khe Beach, ценящие быстрый интернет. Пары, небольшие компании и семьи — комфортное место поесть в расслабленной обстановке.',
     hours: 'Ежедневно 8:00 – 18:00',
     site: 'https://danasol-dn.com',
-    instagram: null,
+    instagram: 'https://www.instagram.com/danasol.dn/',
     maps: null,
     gmaps: 'https://www.google.com/maps/search/Danasol+Eatery+Cafe+Workspace+Da+Nang',
+    tips: [
+      {icon:'🏢', text:'Сразу иди на второй этаж — там рабочая зона с тишиной, розетками у каждого стола и лучшим светом.'},
+      {icon:'🕘', text:'Приходи к открытию в 8:00 — стол у окна с видом на зелень гарантирован, народу почти нет.'},
+      {icon:'📅', text:'Закрывается в 18:00 — не самый поздний вариант для вечерней работы, планируй день с учётом этого.'},
+      {icon:'📶', text:'Wi-Fi реально 250 Мбит/с — можно смело проводить видеозвонки и работать с тяжёлыми файлами.'},
+      {icon:'🥤', text:'Смузи из свежих тропических фруктов — одна из фишек меню, стоит взять вместо обычного кофе.'},
+      {icon:'🛵', text:'Парковка для скутеров прямо у входа, велосипеды тоже можно оставить — удобно, если едешь с пляжа.'},
+    ],
   },
 ];
 
@@ -3840,48 +3841,54 @@ function renderList(){
 function openRecDetail(rec){
   const dp = document.getElementById('rec-detail-page');
   if(!dp) return;
+
+  // Hero
   document.getElementById('rdd-name').textContent = rec.name;
-  document.getElementById('rdd-type').textContent = rec.type + (rec.addr ? '  ·  📍 ' + rec.addr : '');
+  document.getElementById('rdd-type').textContent = rec.type;
+  document.getElementById('rdd-addr').textContent = rec.addr || '';
+
+  // Description block
   document.getElementById('rdd-short').textContent = rec.short;
   document.getElementById('rdd-full').textContent = rec.full;
   document.getElementById('rdd-audience').textContent = rec.audience;
-  document.getElementById('rdd-hours').innerHTML = '🕐 ' + rec.hours;
 
-  // Links
-  const linksEl = document.getElementById('rdd-links');
-  linksEl.innerHTML = '';
+  // Meta grid (часы работы)
+  const metaEl = document.getElementById('rdd-meta');
+  metaEl.innerHTML = '';
+  if(rec.hours){
+    metaEl.innerHTML = `<div class="detail-meta-item"><div class="detail-meta-label">Часы работы</div><div class="detail-meta-val">🕐 ${rec.hours}</div></div>`;
+  }
+
+  // Action buttons
+  const actEl = document.getElementById('rdd-actions');
+  actEl.innerHTML = '';
+  if(rec.gmaps || rec.maps){
+    const btn = document.createElement('button');
+    btn.className = 'btn-action btn-primary';
+    btn.innerHTML = '📍 Открыть в Google Maps';
+    btn.onclick = ()=>{ window.open(rec.gmaps || rec.maps, '_blank', 'noopener'); };
+    actEl.appendChild(btn);
+  }
   if(rec.site){
     const a = document.createElement('a');
-    a.className='rec-detail-link'; a.href=rec.site; a.target='_blank'; a.rel='noopener';
-    a.innerHTML='🌐 Сайт'; linksEl.appendChild(a);
+    a.className='btn-action btn-secondary'; a.href=rec.site; a.target='_blank'; a.rel='noopener';
+    a.innerHTML='🌐 Сайт'; actEl.appendChild(a);
   }
   if(rec.instagram){
     const a = document.createElement('a');
-    a.className='rec-detail-link'; a.href=rec.instagram; a.target='_blank'; a.rel='noopener';
-    a.innerHTML='📸 Instagram'; linksEl.appendChild(a);
+    a.className='btn-action btn-secondary'; a.href=rec.instagram; a.target='_blank'; a.rel='noopener';
+    a.innerHTML='📸 Instagram'; actEl.appendChild(a);
   }
 
-  // Fav & copy buttons
-  const favEl = document.getElementById('rdd-fav');
-  const isFav = getFavs().includes(rec.id);
-  favEl.textContent = isFav ? '★' : '☆';
-  favEl.style.color = isFav ? '#F59E0B' : '';
-  favEl.onclick = ()=>{
-    const nowFav = toggleFav(rec.id);
-    favEl.textContent = nowFav ? '★' : '☆';
-    favEl.style.color = nowFav ? '#F59E0B' : '';
-    renderList();
-  };
-  document.getElementById('rdd-copy').onclick = ()=>{
-    navigator.clipboard.writeText(rec.name).catch(()=>{});
-    const btn = document.getElementById('rdd-copy');
-    btn.textContent = '✅'; setTimeout(()=>{ btn.textContent='📋'; }, 1500);
-  };
-
-  // Open in maps button
-  document.getElementById('rdd-open-btn').onclick = ()=>{
-    window.open(rec.gmaps || rec.maps, '_blank', 'noopener');
-  };
+  // Tips
+  const tipsWrap = document.getElementById('rdd-tips-wrap');
+  const tipsEl = document.getElementById('rdd-tips');
+  if(rec.tips && rec.tips.length){
+    tipsEl.innerHTML = rec.tips.map(t=>`<div class="tip-item"><span>${t.icon}</span><span>${t.text}</span></div>`).join('');
+    tipsWrap.style.display = 'block';
+  } else {
+    tipsWrap.style.display = 'none';
+  }
 
   dp.classList.add('active');
   dp.scrollTop = 0;
