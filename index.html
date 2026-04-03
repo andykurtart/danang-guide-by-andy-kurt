@@ -307,8 +307,9 @@ a{color:inherit;text-decoration:none}
 
 /* ══ RECOMMENDATIONS ══════════════════════════════════════════════════════ */
 .rec-filter{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
-.rec-list{display:flex;flex-direction:column;gap:10px}
-.rec-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;transition:box-shadow .15s,border-color .15s;-webkit-tap-highlight-color:transparent}
+.rec-list{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:600px){.rec-list{grid-template-columns:repeat(3,1fr)}}
+.rec-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;transition:box-shadow .15s,border-color .15s;-webkit-tap-highlight-color:transparent;height:100%;box-sizing:border-box}
 .rec-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);border-color:var(--border2)}
 [data-theme="dark"] .rec-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.3)}
 .rec-card-body{flex:1;min-width:0}
@@ -1235,13 +1236,13 @@ tbody td:first-child{text-align:left;font-weight:500}
       <div class="desc-label">Кому подойдёт</div>
       <div id="rdd-audience"></div>
     </div>
-    <div class="detail-meta-grid" id="rdd-meta"></div>
+    <div class="detail-meta-grid" id="rdd-meta" style="grid-template-columns:1fr"></div>
     <div class="detail-tips-box" id="rdd-tips-wrap" style="display:none">
       <div class="detail-tips-title">💡 Советы</div>
       <div id="rdd-tips"></div>
     </div>
     <div class="detail-disclaimer">
-      ℹ️ Информация актуальна на момент посещения, но город быстро меняется. Если что-то не совпадает — <a onclick="goTo('page-contact');document.getElementById('rec-detail-page').classList.remove('active')">напишите автору Гайд-Хелпера</a>.
+      ℹ️ Из-за быстрого развития города информация может быть неполной или отличаться от действительности. Если вы заметили отличия — <a onclick="goTo('page-contact');document.getElementById('rec-detail-page').classList.remove('active')">напишите автору гайда</a>.
     </div>
   </div>
 </div>
@@ -3766,6 +3767,29 @@ const recsData = [
       {icon:'📶', text:'Wi-Fi реально 250 Мбит/с — можно смело проводить видеозвонки и работать с тяжёлыми файлами.'},
       {icon:'🥤', text:'Смузи из свежих тропических фруктов — одна из фишек меню, стоит взять вместо обычного кофе.'},
       {icon:'🛵', text:'Парковка для скутеров прямо у входа, велосипеды тоже можно оставить — удобно, если едешь с пляжа.'},
+    ],
+  },
+  {
+    id: 'hideout',
+    name: 'The Hideout Café',
+    type: '☕ Кафе',
+    typeKey: 'cafe',
+    addr: '72/24 Nguyễn Văn Thoại, Bắc Mỹ Phú, Ngũ Hành Sơn, Da Nang',
+    short: 'Уютное кафе с кофе из Далата и европейскими бранчами — тихое место для работы, завтрака или неспешного чтения вдали от суеты Дананга.',
+    full: 'Кофе варят из арабики, обжаренной в Далате, с фруктовыми и «cherry»-нотами; есть классические эспрессо-напитки, coconut coffee, avocado coffee и другие авторские вариации. Меню включает лёгкую западную еду: английский завтрак, омлеты, панкейки, бейглы (бейгл с лососем — один из главных хитов по отзывам), крепы, овсянки, smoothie bowls, смузи и свежие соки. Есть отдельный веган-секшн и адаптация под gluten-free — персонал готов подстраиваться по запросу. Небольшой уютный интерьер с индустриальным минимализмом: кирпич, мягкий свет, деревянные столы, зелень. Кафе часто называют «work-friendly» спотом — много посетителей с ноутбуками и книгами.',
+    audience: 'Цифровые кочевники и фрилансеры — ценят свободные столы, стабильный Wi-Fi и спокойную атмосферу. Туристы и лонг-стейеры — ищут качественные кофейни и бранчи в европейском стиле. Веганы и люди с dietary-ограничениями — специально отмечают наличие веган-опций и готовность персонала помочь.',
+    hours: 'Ежедневно 7:30 – 22:00',
+    site: 'https://www.tripadvisor.com/Restaurant_Review-g298085-d15594065-Reviews-The_Hideout_Cafe-Da_Nang.html',
+    instagram: 'https://www.instagram.com/thehideoutcafe.dn/',
+    maps: null,
+    gmaps: 'https://www.google.com/maps/search/The+Hideout+Caf%C3%A9+Nguy%E1%BB%85n+V%C4%83n+Tho%E1%BA%A1i+Da+Nang',
+    tips: [
+      {icon:'🥯', text:'Обязательно попробуй бейгл с лососем и капучино или coconut coffee — это signature-комбо, которое чаще всего упоминают в отзывах.'},
+      {icon:'🕙', text:'Лучшее время — будни до 10:00 или после 16:00: меньше очередей, легче найти тихий стол у окна.'},
+      {icon:'🌱', text:'Если ты веган или gluten-free — сразу скажи об этом при заказе, персонал охотно адаптирует блюда.'},
+      {icon:'📶', text:'Wi-Fi бесплатный, столы удобные для лэптопа — можно спокойно проработать несколько часов.'},
+      {icon:'📸', text:'Интерьер очень фотогеничный: кирпич, свет, зелень — хороший кадр без хаоса на фоне.'},
+      {icon:'🤫', text:'Это место для спокойного кофе, а не для вечеринок — идеально для работы, свидания или чтения.'},
     ],
   },
 ];
