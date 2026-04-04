@@ -53,6 +53,40 @@ a{color:inherit;text-decoration:none}
 #splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
 .splash-icon{width:80px;height:80px;border-radius:20px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:2.2rem;box-shadow:0 8px 32px rgba(0,0,0,.15)}
 .splash-text{font-size:.82rem;font-weight:600;color:var(--text-dim);letter-spacing:.05em;text-align:center}
+/* ── AUTH SCREEN ── */
+#auth-screen{position:fixed;inset:0;background:var(--bg);z-index:1000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+#auth-screen.visible{display:flex}
+.auth-box{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center;gap:20px}
+.auth-logo{width:72px;height:72px;border-radius:18px;overflow:hidden;flex-shrink:0}
+.auth-title{font-size:1.2rem;font-weight:800;color:var(--text);text-align:center;letter-spacing:-.02em}
+.auth-sub{font-size:.8rem;color:var(--text-dim);text-align:center;line-height:1.5;margin-top:-10px}
+.auth-input-wrap{width:100%;position:relative}
+.auth-input{width:100%;padding:14px 48px 14px 16px;border:2px solid var(--border);border-radius:14px;font-size:1rem;font-weight:600;font-family:'Inter',sans-serif;background:var(--surface);color:var(--text);outline:none;transition:border-color .2s;letter-spacing:.08em;text-align:center;box-sizing:border-box}
+.auth-input:focus{border-color:var(--accent)}
+.auth-input.error{border-color:#ef4444;animation:auth-shake .35s ease}
+.auth-eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--text-dim);padding:4px;-webkit-tap-highlight-color:transparent}
+.auth-btn{width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:14px;font-size:.95rem;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity .15s;letter-spacing:.02em}
+[data-theme="dark"] .auth-btn{color:var(--bg)}
+.auth-btn:active{opacity:.85}
+.auth-hint{font-size:.72rem;color:var(--text-dim);text-align:center;line-height:1.5}
+@keyframes auth-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+/* ── AUTH SCREEN ── */
+#auth-screen{position:fixed;inset:0;background:var(--bg);z-index:998;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;transition:opacity .4s ease,visibility .4s ease}
+#auth-screen.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.auth-box{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center;gap:20px}
+.auth-logo{width:72px;height:72px;border-radius:18px;overflow:hidden;flex-shrink:0}
+.auth-title{font-size:1.2rem;font-weight:800;color:var(--text);text-align:center;letter-spacing:-.02em}
+.auth-sub{font-size:.8rem;color:var(--text-dim);text-align:center;line-height:1.5;margin-top:-10px}
+.auth-input-wrap{width:100%;position:relative}
+.auth-input{width:100%;padding:14px 48px 14px 16px;border:2px solid var(--border);border-radius:14px;font-size:1rem;font-weight:600;font-family:'Inter',sans-serif;background:var(--surface);color:var(--text);outline:none;transition:border-color .2s;letter-spacing:.08em;text-align:center;box-sizing:border-box}
+.auth-input:focus{border-color:var(--accent)}
+.auth-input.error{border-color:#ef4444;animation:auth-shake .35s ease}
+.auth-eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--text-dim);padding:4px;-webkit-tap-highlight-color:transparent}
+.auth-btn{width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:14px;font-size:.95rem;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity .15s;letter-spacing:.02em}
+[data-theme="dark"] .auth-btn{color:var(--bg)}
+.auth-btn:active{opacity:.85}
+.auth-hint{font-size:.72rem;color:var(--text-dim);text-align:center;line-height:1.5}
+@keyframes auth-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
 
 /* ── Update banner ── */
 #update-banner{display:none;position:fixed;bottom:calc(var(--tab-h) + 10px);left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:10px 18px;border-radius:100px;font-size:.78rem;font-weight:600;align-items:center;gap:12px;z-index:500;box-shadow:0 4px 20px rgba(0,0,0,.2);white-space:nowrap}
@@ -693,6 +727,22 @@ tbody td:first-child{text-align:left;font-weight:500}
 </div>
 
 <div id="update-banner">🔄 Доступна новая версия <button onclick="applyUpdate()">Обновить</button></div>
+<div id="auth-screen">
+  <div class="auth-box">
+    <div class="auth-logo"><svg width="72" height="72" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="192" height="192" rx="34.5" fill="url(#lgA)"/><circle cx="96" cy="96" r="70.5" fill="#FFFF00"/><path d="M96 42.225L108.416 78.9L147.116 79.3875L116.103 102.525L127.616 139.5L96 117.112L64.39 139.5L75.9 102.525L44.89 79.3875L83.59 78.9L96 42.225Z" fill="#DA251D"/><defs><linearGradient id="lgA" x1="96" y1="0" x2="96" y2="192" gradientUnits="userSpaceOnUse"><stop stop-color="#DA251D"/><stop offset="1" stop-color="#C52821"/></linearGradient></defs></svg></div>
+    <div>
+      <div class="auth-title">Дананг Гайд-Хелпер</div>
+      <div class="auth-sub">Введите код доступа</div>
+    </div>
+    <div class="auth-input-wrap">
+      <input class="auth-input" id="auth-input" type="password" placeholder="••••••••" autocomplete="off" autocorrect="off" spellcheck="false">
+      <button class="auth-eye" id="auth-eye" onclick="(function(){const i=document.getElementById('auth-input');const e=document.getElementById('auth-eye');i.type=i.type==='password'?'text':'password';e.textContent=i.type==='password'?'👁':'🔒'})()">👁</button>
+    </div>
+    <button class="auth-btn" onclick="checkAuthCode()">Войти</button>
+    <div class="auth-hint">Код выдаётся при покупке доступа.<br>По вопросам: @andykurt</div>
+  </div>
+</div>
+
 <div id="splash">
   <div class="splash-icon" style="background:none;padding:0;overflow:hidden;border-radius:20px"><svg width="80" height="80" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="192" height="192" rx="34.5" fill="url(#lg80)"/><circle cx="96" cy="96" r="70.5" fill="#FFFF00"/><path d="M96 42.225L108.416 78.9L147.116 79.3875L116.103 102.525L127.616 139.5L96 117.112L64.39 139.5L75.9 102.525L44.89 79.3875L83.59 78.9L96 42.225Z" fill="#DA251D"/><defs><linearGradient id="lg80" x1="96" y1="0" x2="96" y2="192" gradientUnits="userSpaceOnUse"><stop stop-color="#DA251D"/><stop offset="1" stop-color="#C52821"/></linearGradient></defs></svg></div>
   <div class="splash-text">Гайд-Хелпер от Andy Kurt</div>
@@ -3676,14 +3726,76 @@ function applyUpdate() {
   setInterval(fetchAQI, 1800000);
 
 /* ── Splash hide — работает и в PWA на iOS ── */
-function hideSplash(){
-  const s=document.getElementById('splash');
-  if(s){ s.classList.add('hidden'); }
+// ══════════════════════════════════════════
+// ACCESS CODES — редактируй этот список в GitHub
+// Каждый код — отдельный клиент. Удали код = закрыл доступ.
+// ══════════════════════════════════════════
+const ACCESS_CODES = [
+  'DANANG-A1',
+  'DANANG-B2',
+  'DANANG-C3',
+  'DANANG-D4',
+  'DANANG-E5',
+  'DANANG-F6',
+  'DANANG-G7',
+  'DANANG-H8',
+  'DANANG-I9',
+  'DANANG-J0',
+];
+const AUTH_KEY = 'dng_auth_v1';
+
+function isAuthed(){
+  try { const s = localStorage.getItem(AUTH_KEY); return !!(s && ACCESS_CODES.includes(s)); } catch(e){ return false; }
 }
+
+function checkAuthCode(){
+  const input = document.getElementById('auth-input');
+  if(!input) return;
+  const val = (input.value || '').trim().toUpperCase();
+  if(ACCESS_CODES.includes(val)){
+    try { localStorage.setItem(AUTH_KEY, val); } catch(e){}
+    const as = document.getElementById('auth-screen');
+    if(as){
+      as.style.opacity = '0';
+      as.style.transition = 'opacity .35s ease';
+      setTimeout(()=>{ as.classList.remove('visible'); as.style.opacity = ''; }, 380);
+    }
+  } else {
+    input.classList.remove('error');
+    void input.offsetWidth;
+    input.classList.add('error');
+    input.value = '';
+    setTimeout(()=>{ input.classList.remove('error'); }, 500);
+  }
+}
+
+function hideSplash(){
+  const s = document.getElementById('splash');
+  if(s) s.classList.add('hidden');
+  const as = document.getElementById('auth-screen');
+  if(!as) return;
+  if(isAuthed()){
+    as.classList.remove('visible');
+  } else {
+    as.classList.add('visible');
+    setTimeout(()=>{ const i=document.getElementById('auth-input'); if(i) i.focus(); }, 150);
+  }
+}
+
+// Enter key support
+(function(){
+  function bindEnter(){
+    const inp = document.getElementById('auth-input');
+    if(inp) inp.addEventListener('keydown', function(e){ if(e.key==='Enter') checkAuthCode(); });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindEnter);
+  else bindEnter();
+})();
+
 // Запускаем через несколько таймеров — надёжно в любом контексте (PWA, iframe, браузер)
 setTimeout(hideSplash, 400);
-setTimeout(hideSplash, 800);
-setTimeout(hideSplash, 1500);
+setTimeout(hideSplash, 900);
+setTimeout(hideSplash, 1800);
 if(document.readyState==='loading'){
   document.addEventListener('DOMContentLoaded', ()=>setTimeout(hideSplash, 300));
 } else {
