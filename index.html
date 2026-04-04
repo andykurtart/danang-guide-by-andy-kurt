@@ -255,15 +255,17 @@ a{color:inherit;text-decoration:none}
 [data-theme="dark"] .tile-n,[data-theme="dark"] .tile-conv{background:var(--surface)}
 
 /* ── Home converter widget ── */
-.hconv-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;cursor:pointer}
+.hconv-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;cursor:pointer}
 .hconv-title{font-size:.88rem;font-weight:800;color:var(--text)}
 .hconv-rate{font-size:.7rem;color:var(--text-dim)}
-.hconv-inputs{display:flex;align-items:center;gap:8px}
-.hconv-field{flex:1;display:flex;flex-direction:column;gap:3px}
+.hconv-tabs{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+.hconv-tab{flex:1;min-width:0;padding:5px 4px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text-mid);font-size:.68rem;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;letter-spacing:.03em;-webkit-tap-highlight-color:transparent}
+.hconv-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.hconv-inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.hconv-field{display:flex;flex-direction:column;gap:3px}
 .hconv-label{font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);text-align:left}
-.hconv-input{width:100%;border:1.5px solid var(--border);border-radius:9px;padding:8px 10px;font-size:1rem;font-weight:700;color:var(--text);background:var(--bg);outline:none;text-align:right;font-family:'Inter',sans-serif;transition:border-color .15s;-moz-appearance:textfield}
+.hconv-input{width:100%;border:1.5px solid var(--border);border-radius:9px;padding:7px 8px;font-size:.9rem;font-weight:700;color:var(--text);background:var(--bg);outline:none;text-align:right;font-family:'Inter',sans-serif;transition:border-color .15s;-moz-appearance:textfield;box-sizing:border-box}
 .hconv-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 15%,transparent)}
-.hconv-sep{font-size:.9rem;color:var(--text-dim);flex-shrink:0;margin-top:14px}
 
 /* ── Tile colours (per item) ── */
 .tc-food{background:#EAEFE9;border-color:#D1D9CF}
@@ -1556,25 +1558,38 @@ homeItems.forEach(item=>{
   d.className=`home-tile ${item.cls}`;
 
   if(item.page === 'page-converter'){
-    // Converter widget: click bg → go to page, click inputs → edit inline
+    // Converter widget: currency switcher + 3 inputs (VND / USD / local)
     d.innerHTML=`
       <div class="hconv-header" onclick="goTo('page-converter')">
         <span class="hconv-title">💱 Конвертер</span>
         <span class="hconv-rate" id="home-conv-rate">USD · VND</span>
       </div>
+      <div class="hconv-tabs" id="hconv-tabs">
+        <button class="hconv-tab active" data-cur="BYN">BYN</button>
+        <button class="hconv-tab" data-cur="UAH">UAH</button>
+        <button class="hconv-tab" data-cur="RUB">RUB</button>
+        <button class="hconv-tab" data-cur="KZT">KZT</button>
+        <button class="hconv-tab" data-cur="EUR">EUR</button>
+      </div>
       <div class="hconv-inputs">
         <div class="hconv-field">
           <span class="hconv-label">VND</span>
-          <input class="hconv-input" id="hconv-vnd" type="text" inputmode="numeric" placeholder="0" value="100.000">
+          <input class="hconv-input" id="hconv-vnd" type="text" inputmode="numeric" placeholder="0">
         </div>
-        <div class="hconv-sep">⇄</div>
         <div class="hconv-field">
           <span class="hconv-label">USD</span>
           <input class="hconv-input" id="hconv-usd" type="text" inputmode="decimal" placeholder="0">
         </div>
+        <div class="hconv-field">
+          <span class="hconv-label" id="hconv-loc-label">BYN</span>
+          <input class="hconv-input" id="hconv-loc" type="text" inputmode="decimal" placeholder="0">
+        </div>
       </div>`;
-    // Stop click on inputs from navigating
     d.querySelectorAll('.hconv-input').forEach(inp => inp.addEventListener('click', e => e.stopPropagation()));
+    d.querySelector('#hconv-tabs').addEventListener('click', e => {
+      const btn = e.target.closest('.hconv-tab');
+      if(btn){ e.stopPropagation(); hconvSwitchCur(btn.dataset.cur); }
+    });
     d.addEventListener('click', () => goTo('page-converter'));
   } else {
    const desc2=(item.desc||'').split('|').join('<br>');
@@ -1586,26 +1601,52 @@ homeItems.forEach(item=>{
 
 // Home converter widget logic
 (function(){
-  const hV = document.getElementById('hconv-vnd');
-  const hU = document.getElementById('hconv-usd');
-  if(!hV || !hU) return;
-  let busy = false;
-  function syncHVtoU(){
-    if(busy) return; busy=true;
-    const raw = parseInput(hV.value);
-    hU.value = raw && USD_VND ? fmtDec(raw/USD_VND,2) : '';
-    busy=false;
+  let hActiveCur = 'BYN';
+
+  function hconvSync(source){
+    const hV = document.getElementById('hconv-vnd');
+    const hU = document.getElementById('hconv-usd');
+    const hL = document.getElementById('hconv-loc');
+    if(!hV || !hU || !hL) return;
+    const cv = USD_VND / localRates[hActiveCur];
+    const dec = (hActiveCur==='BYN'||hActiveCur==='EUR') ? 2 : 0;
+    if(source==='vnd'){
+      const raw = parseInput(hV.value);
+      hU.value = raw && USD_VND ? fmtDec(raw/USD_VND,2) : '';
+      hL.value = raw && cv ? fmtDec(raw/cv,dec) : '';
+    } else if(source==='usd'){
+      const raw = parseInput(hU.value);
+      hV.value = raw && USD_VND ? fmtVND(raw*USD_VND) : '';
+      hL.value = raw && localRates[hActiveCur] ? fmtDec(raw*localRates[hActiveCur],dec) : '';
+    } else {
+      const raw = parseInput(hL.value);
+      hV.value = raw && cv ? fmtVND(raw*cv) : '';
+      hU.value = raw && localRates[hActiveCur] ? fmtDec(raw/localRates[hActiveCur],2) : '';
+    }
   }
-  function syncHUtoV(){
-    if(busy) return; busy=true;
-    const raw = parseInput(hU.value);
-    hV.value = raw && USD_VND ? fmtVND(raw*USD_VND) : '';
-    busy=false;
-  }
-  hV.addEventListener('input', syncHVtoU);
-  hU.addEventListener('input', syncHUtoV);
-  // Init with 100 000 VND
-  setTimeout(()=>{ if(USD_VND){ hV.value=fmtVND(100000); syncHVtoU(); }}, 1200);
+
+  window.hconvSwitchCur = function(cur){
+    hActiveCur = cur;
+    const lbl = document.getElementById('hconv-loc-label');
+    if(lbl) lbl.textContent = cur;
+    document.querySelectorAll('#hconv-tabs .hconv-tab').forEach(b => b.classList.toggle('active', b.dataset.cur===cur));
+    hconvSync('vnd');
+  };
+
+  setTimeout(()=>{
+    const hV = document.getElementById('hconv-vnd');
+    const hU = document.getElementById('hconv-usd');
+    const hL = document.getElementById('hconv-loc');
+    if(!hV) return;
+    hV.value = fmtVND(100000);
+    hconvSync('vnd');
+    hV.addEventListener('input', ()=>hconvSync('vnd'));
+    hU.addEventListener('input', ()=>hconvSync('usd'));
+    hL.addEventListener('input', ()=>hconvSync('loc'));
+    hV.addEventListener('click', e=>e.stopPropagation());
+    hU.addEventListener('click', e=>e.stopPropagation());
+    hL.addEventListener('click', e=>e.stopPropagation());
+  }, 800);
 })();
 
 /* ═══ CARD HELPER ═══ */
@@ -3326,7 +3367,8 @@ function applyRates(){
   if(homeRate) homeRate.textContent=`1 USD = ${usdFmt} ₫`;
   const hV=document.getElementById('hconv-vnd');
   const hU=document.getElementById('hconv-usd');
-  if(hV && hU && !hV._touched){ hV.value=fmtVND(100000); hU.value=fmtDec(100000/USD_VND,2); }
+  const hL=document.getElementById('hconv-loc');
+  if(hV){ hV.value=fmtVND(100000); if(typeof hconvSwitchCur==='function') hconvSwitchCur(document.querySelector('#hconv-tabs .hconv-tab.active')?.dataset.cur||'BYN'); }
   const fn=document.getElementById('conv-footnote');
   if(fn) fn.textContent=`Курс на ${ds} · 1 USD ≈ ${usdFmt} VND · 1 ${activeCur} ≈ ${fL(1/localRates[activeCur]*USD_VND).trim()}`;
   sfV(parseInput(iV.value));
