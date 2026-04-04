@@ -1,4 +1,4 @@
-.<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -3726,82 +3726,20 @@ function applyUpdate() {
   setInterval(fetchAQI, 1800000);
 
 /* ── Splash hide — работает и в PWA на iOS ── */
-// ══════════════════════════════════════════
-// ACCESS CODES — редактируй этот список в GitHub
-// Каждый код — отдельный клиент. Удали код = закрыл доступ.
-// ══════════════════════════════════════════
-const ACCESS_CODES = [
-  'DANANG-A1',
-  'DANANG-B2',
-  'DANANG-C3',
-  'DANANG-D4',
-  'DANANG-E5',
-  'DANANG-F6',
-  'DANANG-G7',
-  'DANANG-H8',
-  'DANANG-I9',
-  '1234567890',
-];
-const AUTH_KEY = 'dng_auth_v1';
-
-function isAuthed(){
-  try { const s = localStorage.getItem(AUTH_KEY); return !!(s && ACCESS_CODES.includes(s)); } catch(e){ return false; }
-}
-
-function checkAuthCode(){
-  const input = document.getElementById('auth-input');
-  if(!input) return;
-  const val = (input.value || '').trim().toUpperCase();
-  if(ACCESS_CODES.includes(val)){
-    try { localStorage.setItem(AUTH_KEY, val); } catch(e){}
-    const as = document.getElementById('auth-screen');
-    if(as){
-      as.style.opacity = '0';
-      as.style.transition = 'opacity .35s ease';
-      setTimeout(()=>{ as.classList.remove('visible'); as.style.opacity = ''; }, 380);
-    }
-  } else {
-    input.classList.remove('error');
-    void input.offsetWidth;
-    input.classList.add('error');
-    input.value = '';
-    setTimeout(()=>{ input.classList.remove('error'); }, 500);
-  }
-}
-
 function hideSplash(){
-  const s = document.getElementById('splash');
+  var s = document.getElementById('splash');
   if(s) s.classList.add('hidden');
-  const as = document.getElementById('auth-screen');
-  if(!as) return;
-  if(isAuthed()){
-    as.classList.remove('visible');
-  } else {
-    as.classList.add('visible');
-    setTimeout(()=>{ const i=document.getElementById('auth-input'); if(i) i.focus(); }, 150);
-  }
 }
-
-// Enter key support
-(function(){
-  function bindEnter(){
-    const inp = document.getElementById('auth-input');
-    if(inp) inp.addEventListener('keydown', function(e){ if(e.key==='Enter') checkAuthCode(); });
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindEnter);
-  else bindEnter();
-})();
-
 // Запускаем через несколько таймеров — надёжно в любом контексте (PWA, iframe, браузер)
 setTimeout(hideSplash, 400);
 setTimeout(hideSplash, 900);
 setTimeout(hideSplash, 1800);
 if(document.readyState==='loading'){
-  document.addEventListener('DOMContentLoaded', ()=>setTimeout(hideSplash, 300));
+  document.addEventListener('DOMContentLoaded', function(){ setTimeout(hideSplash, 300); });
 } else {
   setTimeout(hideSplash, 300);
 }
-window.addEventListener('load', ()=>setTimeout(hideSplash, 200));
+window.addEventListener('load', function(){ setTimeout(hideSplash, 200); });
 
 /* ── Daily open counter (CountAPI, ключ = дата) ── */
 (function(){
@@ -4405,6 +4343,91 @@ const eventsData = [
     });
   });
 })();
+</script>
+
+<script>
+/* ══════════════════════════════════════════
+   ACCESS CODES — редактируй этот список в GitHub
+   Каждый код — отдельный клиент. Удали = закрыл доступ.
+   ══════════════════════════════════════════ */
+var ACCESS_CODES = [
+  'DANANG-A1',
+  'DANANG-B2',
+  'DANANG-C3',
+  'DANANG-D4',
+  'DANANG-E5',
+  'DANANG-F6',
+  'DANANG-G7',
+  'DANANG-H8',
+  'DANANG-I9',
+  'DANANG-J0'
+];
+var AUTH_KEY = 'dng_auth_v1';
+
+function isAuthed() {
+  try { var s = localStorage.getItem(AUTH_KEY); return !!(s && ACCESS_CODES.indexOf(s) !== -1); }
+  catch(e) { return false; }
+}
+
+function checkAuthCode() {
+  var input = document.getElementById('auth-input');
+  if (!input) return;
+  var val = input.value.trim().toUpperCase();
+  if (ACCESS_CODES.indexOf(val) !== -1) {
+    try { localStorage.setItem(AUTH_KEY, val); } catch(e) {}
+    var as = document.getElementById('auth-screen');
+    if (as) {
+      as.style.transition = 'opacity .35s';
+      as.style.opacity = '0';
+      setTimeout(function() {
+        as.style.display = 'none';
+        as.style.opacity = '';
+      }, 380);
+    }
+  } else {
+    input.classList.remove('error');
+    void input.offsetWidth;
+    input.classList.add('error');
+    input.value = '';
+    setTimeout(function() { input.classList.remove('error'); }, 600);
+  }
+}
+
+function showAuthIfNeeded() {
+  var as = document.getElementById('auth-screen');
+  if (!as) return;
+  if (isAuthed()) {
+    as.style.display = 'none';
+  } else {
+    as.style.display = 'flex';
+    setTimeout(function() {
+      var i = document.getElementById('auth-input');
+      if (i) i.focus();
+    }, 100);
+  }
+}
+
+/* Bind Enter key */
+document.addEventListener('DOMContentLoaded', function() {
+  var inp = document.getElementById('auth-input');
+  if (inp) {
+    inp.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') checkAuthCode();
+    });
+  }
+  showAuthIfNeeded();
+});
+
+/* Fallback if DOMContentLoaded already fired */
+if (document.readyState !== 'loading') {
+  showAuthIfNeeded();
+  var inp2 = document.getElementById('auth-input');
+  if (inp2) {
+    inp2.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') checkAuthCode();
+    });
+  }
+}
 </script>
 </body>
 </html>
